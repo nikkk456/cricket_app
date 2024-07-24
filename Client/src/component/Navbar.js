@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Navbar = () => {
     return (
@@ -29,7 +30,7 @@ const Navbar = () => {
                         </li>
                     </ul>
                     <form className="d-flex" role="search">
-                            <button className="btn bg-dark text-white text-sm-end" style={{borderRadius:"18px"}} type="submit">Join Now</button>
+                            <Link to="/login"><button className="btn btn-sm btn-dark text-white" style={{borderRadius:"18px"}} type="submit">Join Now</button></Link>
                     </form>
                 </div>
             </div>

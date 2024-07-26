@@ -20,7 +20,7 @@ const Login = () => {
     }
 
     return (
-        <div className='container vh-100 my-3'>
+        <div className='container  my-3'>
             <div className='bona-nova-sc-bold text-center text-red'>
                 <h1>Welcome back Captain!</h1>
             </div>

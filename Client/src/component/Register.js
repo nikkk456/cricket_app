@@ -16,18 +16,17 @@ const Register = () => {
             {/* Full Name  */}
             <div className='row'>
               <div className='col-md-6'>
-                <div data-mdb-input-init class="form-outline mb-4">
-                  <label for="form3Example3">Enter Full Name</label>
-                  <input type="text" id="form3Example3" class="form-control "
+                <div data-mdb-input-init className="form-outline mb-4">
+                  <label htmlFor="formName">Enter Full Name</label>
+                  <input type="text" id="form3Example3" className="form-control "
                     placeholder="Enter Your First Name" required />
                 </div>
               </div>
               <div className='col-md-6'>
-                <div data-mdb-input-init class="form-outline mb-4">
-                  <label for="form3Example3">Gender</label>
-                  <select class="form-select form-select-md" aria-label="Small select example">
-                    <option selected>Male</option>
-                    <option value="1">Male</option>
+                <div data-mdb-input-init className="form-outline mb-4">
+                  <label htmlFor="formGender">Gender</label>
+                  <select className="form-select form-select-md" aria-label="Small select example">
+                    <option defaultValue>Male</option>
                     <option value="2">Female</option>
                     <option value="3">Others</option>
                   </select>
@@ -36,7 +35,7 @@ const Register = () => {
             </div>
             <div className='row'>
               <div className='col-md-6'>
-                <div data-mdb-input-init class="form-outline mb-4">
+                <div data-mdb-input-init className="form-outline mb-4">
                   <label htmlFor="inputDateOfBirth">Date of Birth</label>
                   <input
                     type="date"
@@ -50,12 +49,12 @@ const Register = () => {
                 </div>
               </div>
               <div className='col-md-6'>
-                <div data-mdb-input-init class="form-outline mb-4">
-                  <label htmlFor="inputDateOfBirth">Phone Number</label>
+                <div data-mdb-input-init className="form-outline mb-4">
+                  <label htmlFor="inputPhoneNumber">Phone Number</label>
                   <input
                     type="number"
                     className="form-control"
-                    id="inputDateOfBirth"
+                    id="inputPhoneNumber"
                     placeholder="98xxxxxxxx"
                   />
                 </div>
@@ -63,46 +62,46 @@ const Register = () => {
             </div>
             <div className='row'>
               <div className='col-md-6'>
-                <div data-mdb-input-init class="form-outline mb-4">
-                  <label for="form3Example3">Email address</label>
-                  <input type="email" id="form3Example3" class="form-control "
+                <div data-mdb-input-init className="form-outline mb-4">
+                  <label htmlFor="form3Example3">Email address</label>
+                  <input type="email" id="formEmail" className="form-control "
                     placeholder="Enter a valid email address" />
                 </div>
               </div>
               <div className='col-md-6'>
-                <div data-mdb-input-init class="form-outline mb-3">
-                  <label for="form3Example4">Password</label>
-                  <input type="password" id="form3Example4" class="form-control"
+                <div data-mdb-input-init className="form-outline mb-3">
+                  <label htmlFor="form3Example4">Password</label>
+                  <input type="password" id="formPassword" className="form-control"
                     placeholder="Enter password" />
                 </div>
               </div>
             </div>
-            <div data-mdb-input-init class="form-outline mb-4">
-              <label for="form3Example3">Enter Residential Address</label>
-              <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder='Address'></textarea>
+            <div data-mdb-input-init className="form-outline mb-4">
+              <label htmlFor="formAddress">Enter Residential Address</label>
+              <textarea className="form-control" id="exampleFormControlTextarea1" rows="3" placeholder='Address'></textarea>
             </div>
             <div className='row'>
               <div className='col-md-6'>
-                <div data-mdb-input-init class="form-outline mb-4">
-                  <label for="form3Example3">State</label>
-                  <input type="text" id="form3Example3" class="form-control "
+                <div data-mdb-input-init className="form-outline mb-4">
+                  <label htmlFor="formState">State</label>
+                  <input type="text" id="formState" className="form-control "
                     placeholder="Enter Your State" required />
                 </div>
               </div>
               <div className='col-md-6'>
-                <div data-mdb-input-init class="form-outline mb-4">
-                  <label for="form3Example3">City</label>
-                  <input type="text" id="form3Example3" class="form-control "
+                <div data-mdb-input-init className="form-outline mb-4">
+                  <label htmlFor="form3Example3">City</label>
+                  <input type="text" id="formCity" className="form-control "
                     placeholder="Enter Your City" required />
                 </div>
               </div>
             </div>
 
-            <div class="text-center text-lg-start mt-3 pt-2">
-              <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-sm btn-dark text-white"
+            <div className="text-center text-lg-start mt-3 pt-2">
+              <button type="button" data-mdb-button-init data-mdb-ripple-init className="btn btn-sm btn-dark text-white"
                 style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}>Register</button>
-              <p class="small fw-bold mt-2 pt-1 mb-0">Already have an account? <a href="/login"
-                class="link-danger">Login Now</a></p>
+              <p className="small fw-bold mt-2 pt-1 mb-0">Already have an account? <a href="/login"
+                className="link-danger">Login Now</a></p>
             </div>
 
           </form>

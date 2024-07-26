@@ -1,9 +1,11 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 const Navbar = () => {
+    const location = useLocation();
+    const showNavbar = !location.pathname.includes('/dashboard');
     return (
-        <nav className="navbar navbar-expand-lg bg-body-tertiary">
+        <nav className={showNavbar ? "navbar navbar-expand-lg bg-body-tertiary":"d-none"}>
             <div className="container-fluid">
                 <a className="navbar-brand" href="/"><b>Cricket</b></a>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

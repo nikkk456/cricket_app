@@ -1,8 +1,11 @@
 import React from 'react'
+import { useLocation } from 'react-router-dom'
 
 const Footer = () => {
+    const location = useLocation();
+    const showNavbar = !location.pathname.includes('/dashboard');
     return (
-        <div style={{backgroundColor: '#cccccc'}} className='mt-3'>
+        <div style={{backgroundColor: '#cccccc'}} className={showNavbar?'mt-3':"d-none"}>
             <div className='container'>
                 <footer className="py-5">
                     <div className="row">

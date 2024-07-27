@@ -1,6 +1,53 @@
-import React from 'react'
+import React, { useState } from 'react'
+import axios from 'axios'
+
+  
 
 const Register = () => {
+  const [registerValue, setRegisterValue] = useState({
+    name: '',
+    gender: '',
+    dob: '',
+    number: '',
+    email: '',
+    password: '',
+    address: '',
+    state: '',
+    city: '',
+  });
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    const newErrors = {};
+    const dobRegex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/;
+    if (!registerValue.name) newErrors.name = 'Full Name is required';
+    if (!registerValue.gender) newErrors.gender = 'Gender is required';
+    if (!registerValue.dob) {
+      newErrors.dob = 'Date of Birth is required';
+    } 
+    if (!registerValue.number || !/^\d{10}$/.test(registerValue.number)) newErrors.number = 'Valid Phone Number is required';
+    if (!registerValue.email || !/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(registerValue.email)) newErrors.email = 'Valid Email is required';
+    if (!registerValue.password || registerValue.password.length < 6) newErrors.password = 'Password must be at least 6 characters long';
+    if (!registerValue.address) newErrors.address = 'Address is required';
+    if (!registerValue.state) newErrors.state = 'State is required';
+    if (!registerValue.city) newErrors.city = 'City is required';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+  const registeruser = (event)=>{
+      event.preventDefault();
+      if (!validate()) return;
+      console.log(registerValue);
+      axios.post("http://localhost:8080/signup",registerValue).then((res)=>{
+        console.log(res);
+      }).catch((err) =>{
+        console.log(err);
+      });
+  }
+  const handlechange = (event)=>{
+    setRegisterValue({...registerValue , [event.target.name]:event.target.value});
+  }
   return (
     <div className='container my-3'>
       <div className='bona-nova-sc-bold text-center text-red'>
@@ -11,25 +58,28 @@ const Register = () => {
           <img src='./Image/signup_image.jpg' alt='signup_image' style={{ width: "100%" }} />
         </div>
         <div className='col-md-8'>
-          <form style={{ width: "80%", borderRadius: "15px", boxShadow: "0 0 9px 1px grey" }} className='p-4'>
+          <form style={{ width: "80%", borderRadius: "15px", boxShadow: "0 0 9px 1px grey" }} className='p-4' onSubmit={registeruser}>
 
             {/* Full Name  */}
             <div className='row'>
               <div className='col-md-6'>
                 <div data-mdb-input-init className="form-outline mb-4">
                   <label htmlFor="formName">Enter Full Name</label>
-                  <input type="text" id="form3Example3" className="form-control "
+                  <input type="text" name="name" onChange={handlechange} id="form3Example3" className="form-control "
                     placeholder="Enter Your First Name" required />
+                  {errors.name && <small className="text-danger">{errors.name}</small>}
                 </div>
               </div>
               <div className='col-md-6'>
                 <div data-mdb-input-init className="form-outline mb-4">
                   <label htmlFor="formGender">Gender</label>
-                  <select className="form-select form-select-md" aria-label="Small select example">
-                    <option defaultValue>Male</option>
-                    <option value="2">Female</option>
-                    <option value="3">Others</option>
+                  <select name="gender" onChange={handlechange} className="form-select form-select-md" aria-label="Small select example" required>
+                    <option value="">Select Gender...</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="others">Others</option>
                   </select>
+                  {errors.gender && <small className="text-danger">{errors.gender}</small>}
                 </div>
               </div>
             </div>
@@ -38,25 +88,28 @@ const Register = () => {
                 <div data-mdb-input-init className="form-outline mb-4">
                   <label htmlFor="inputDateOfBirth">Date of Birth</label>
                   <input
+                   name="dob" onChange={handlechange}
                     type="date"
                     className="form-control"
                     id="inputDateOfBirth"
-                    // value={dob}
-                    // onChange={(e) => setDob(e.target.value)}
-                    // onChange={(e) => setDob(e.target.value)}
                     placeholder="Select date of birth"
+                    required
                   />
+                  {errors.dob && <small className="text-danger">{errors.dob}</small>}
                 </div>
               </div>
               <div className='col-md-6'>
                 <div data-mdb-input-init className="form-outline mb-4">
                   <label htmlFor="inputPhoneNumber">Phone Number</label>
                   <input
+                    name="number" onChange={handlechange}
                     type="number"
                     className="form-control"
                     id="inputPhoneNumber"
                     placeholder="98xxxxxxxx"
+                    required
                   />
+                  {errors.number && <small className="text-danger">{errors.number}</small>}
                 </div>
               </div>
             </div>
@@ -64,41 +117,46 @@ const Register = () => {
               <div className='col-md-6'>
                 <div data-mdb-input-init className="form-outline mb-4">
                   <label htmlFor="form3Example3">Email address</label>
-                  <input type="email" id="formEmail" className="form-control "
-                    placeholder="Enter a valid email address" />
+                  <input type="email" name="email" onChange={handlechange} id="formEmail" className="form-control "
+                    placeholder="Enter a valid email address" required />
+                    {errors.email && <small className="text-danger">{errors.email}</small>}
                 </div>
               </div>
               <div className='col-md-6'>
                 <div data-mdb-input-init className="form-outline mb-3">
                   <label htmlFor="form3Example4">Password</label>
-                  <input type="password" id="formPassword" className="form-control"
-                    placeholder="Enter password" />
+                  <input type="password" name="password" onChange={handlechange} id="formPassword" className="form-control"
+                    placeholder="Enter password" required />
+                    {errors.password && <small className="text-danger">{errors.password}</small>}
                 </div>
               </div>
             </div>
             <div data-mdb-input-init className="form-outline mb-4">
               <label htmlFor="formAddress">Enter Residential Address</label>
-              <textarea className="form-control" id="exampleFormControlTextarea1" rows="3" placeholder='Address'></textarea>
+              <textarea name="address" onChange={handlechange} className="form-control" id="exampleFormControlTextarea1" rows="3" placeholder='Address' required></textarea>
+              {errors.address && <small className="text-danger">{errors.address}</small>}
             </div>
             <div className='row'>
               <div className='col-md-6'>
                 <div data-mdb-input-init className="form-outline mb-4">
                   <label htmlFor="formState">State</label>
-                  <input type="text" id="formState" className="form-control "
+                  <input type="text" name="state" onChange={handlechange} id="formState" className="form-control "
                     placeholder="Enter Your State" required />
+                    {errors.state && <small className="text-danger">{errors.state}</small>}
                 </div>
               </div>
               <div className='col-md-6'>
                 <div data-mdb-input-init className="form-outline mb-4">
                   <label htmlFor="form3Example3">City</label>
-                  <input type="text" id="formCity" className="form-control "
+                  <input type="text" name="city" onChange={handlechange} id="formCity" className="form-control "
                     placeholder="Enter Your City" required />
+                    {errors.city && <small className="text-danger">{errors.city}</small>}
                 </div>
               </div>
             </div>
 
             <div className="text-center text-lg-start mt-3 pt-2">
-              <button type="button" data-mdb-button-init data-mdb-ripple-init className="btn btn-sm btn-dark text-white"
+              <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-sm btn-dark text-white"
                 style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}>Register</button>
               <p className="small fw-bold mt-2 pt-1 mb-0">Already have an account? <a href="/login"
                 className="link-danger">Login Now</a></p>

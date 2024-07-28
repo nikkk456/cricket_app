@@ -1,8 +1,10 @@
-import React from 'react'
-import { Routes, Route, Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Routes, Route, Link, useLocation } from 'react-router-dom'
 import About from './About'
+import ListOfFriend from './Friends/ListOfFriend'
 
 const Ministat = () => {
+    const location = useLocation();
     return (
         <div className='container'>
             <div className="text-center mt-3 d-flex justify-content-center">
@@ -25,13 +27,13 @@ const Ministat = () => {
                 <div className='col-auto'>
                     <ul className="nav nav-underline">
                         <li className="nav-item mx-2">
-                        <Link className="nav-link active" to="about">About</Link>
+                        <Link className={location.pathname.includes('/about')?"nav-link active":'nav-link'} to="about">About</Link>
                         </li>
                         <li className="nav-item mx-2">
-                            <a className="nav-link" href="#">Stats</a>
+                            <a className={location.pathname.includes('/stats')?"nav-link active":'nav-link'} href="#">Stats</a>
                         </li>
                         <li className="nav-item mx-2">
-                            <a className="nav-link" href="#">Friends</a>
+                            <Link className={location.pathname.includes('/friends')?"nav-link active":"nav-link"} to="friends">Friends</Link>
                         </li>
                         <li className="nav-item mx-2">
                             <a className="nav-link disabled" aria-disabled="true">Join Academy</a>
@@ -42,6 +44,7 @@ const Ministat = () => {
             <hr/>
             <Routes>
                 <Route path = "about" element={<About/>}/>
+                <Route path = "friends" element={<ListOfFriend/>}/>
             </Routes>
             
 

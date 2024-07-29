@@ -1,4 +1,7 @@
+import axios from 'axios';
 import React, { useState } from 'react';
+import Cookies from 'js-cookie';
+
 
 const Login = () => {
     const [loginData, setLoginData] = useState({
@@ -16,7 +19,12 @@ const Login = () => {
     };
 
     const handleSubmit = ()=>{
-        console.log(loginData)
+        axios.post("http://localhost:8080/login",loginData).then((response)=>{
+            console.log(response);
+            Cookies.set('uid', response.data.token, { expires: 1/24, secure: true, sameSite: 'strict' });
+        }).catch((err)=>{
+            console.log(err);
+        });
     }
 
     return (

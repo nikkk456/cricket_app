@@ -1,17 +1,14 @@
 const express = require("express");
-const mysql = require("mysql");
 const cors = require("cors");
+const bodyParser = require('body-parser');
+const conn = require("./dbcon");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 const app = express();
 app.use(cors());
 app.use(express.json());
-
-const conn = mysql.createConnection({
-    host: "62.72.28.103",
-    user: "u908545758_cricket_app",
-    password: "Cricket_app&7677",
-    database:"u908545758_cricket_app"
-});
-
+app.use(bodyParser.json());
+const JWT_SECRET = 'your-secret-key';
 app.listen(8080, () => {
     console.log("listening");
 });
@@ -21,7 +18,7 @@ app.post("/signup", (req, res) => {
 
     // Validate all required fields
     if (!name || !gender || !email || !number || !dob || !address || !city || !state || !password) {
-        return res.status(400).json({ error: "All fields are required" });
+        return res.status(400).json({ msg: "All fields are required" });
     }
 
     // Check if email already exists
@@ -29,7 +26,7 @@ app.post("/signup", (req, res) => {
     conn.query(checkEmailQuery, [email], (err, result) => {
         
         if (result.length > 0) {
-            return res.status(400).json({ error: "Email already exists" });
+            return res.status(400).json({ msg: "Email already exists" });
         }
 
         // If email doesn't exist, insert the new user
@@ -39,7 +36,44 @@ app.post("/signup", (req, res) => {
             if (err) {
                 return res.status(500).json(err);
             }
-            return res.status(201).json(data);
+            return res.status(201).json({msg:"Account created successfully"});
         });
     });
 });
+
+app.post("/login",(req,res)=>{
+    const {email,password} = req.body;
+    if(!email || !password){
+        return res.status(400).json({data:"All fields are required"});
+    }
+    const query_login = "SELECT * From users where email = ? and password = ?";
+    const values = [email,password];
+    conn.query(query_login,[email , password],(err,result)=>{
+       
+        if (err) {
+            return res.status(500).json(err);
+        }
+        if(result.length>0){
+            const user = result[0];
+            const token = jwt.sign({ username: user.username, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
+            // console.log(result);
+            return res.status(200).json({msg:"login successfully",token:token});
+        }
+        return res.status(200).json({msg:"Enter valid crendentials"});
+
+    });
+});
+
+const verifytoken = (req,res,next )=>{
+    const token = req.headers['authorization'];
+    if(!token){
+        return res.status(403).json({ msg: "No token provided" });
+    }
+    jwt.verify(token,JWT_SECRET,(err,decode)=>{
+        if (err) {
+            return res.status(500).json({ msg: "Failed to authenticate token" });
+        }
+        res.user = decode;
+        next();
+    });
+}

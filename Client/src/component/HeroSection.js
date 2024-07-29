@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-
+import { AuthContext } from '../context/AuthContext';
 const HeroSection = () => {
+    const {isAuthenticated} = useContext(AuthContext)
     const navigate = useNavigate();
     const handleClick=()=>{
-        navigate('/login')
+        isAuthenticated?navigate('/dashboard/profile/about'):navigate('/login')
     }
     return (
         <>

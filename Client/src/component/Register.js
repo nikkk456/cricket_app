@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 
   
 
@@ -16,10 +17,11 @@ const Register = () => {
     city: '',
   });
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
+  const [response,Setresponse] = useState();
 
   const validate = () => {
     const newErrors = {};
-    const dobRegex = /^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{4}$/;
     if (!registerValue.name) newErrors.name = 'Full Name is required';
     if (!registerValue.gender) newErrors.gender = 'Gender is required';
     if (!registerValue.dob) {
@@ -41,8 +43,17 @@ const Register = () => {
       console.log(registerValue);
       axios.post("http://localhost:8080/signup",registerValue).then((res)=>{
         console.log(res);
+        if(res.status = 201){
+          navigate("/login");
+        }
       }).catch((err) =>{
         console.log(err);
+        if(err.response.status == 400){
+        Setresponse(err.response.data.msg);
+        console.log(err.response.data.msg);
+        }else{
+          Setresponse(err.msg);
+        }
       });
   }
   const handlechange = (event)=>{
@@ -153,8 +164,8 @@ const Register = () => {
                     {errors.city && <small className="text-danger">{errors.city}</small>}
                 </div>
               </div>
+              {response && <small className="text-danger">{response}</small>}
             </div>
-
             <div className="text-center text-lg-start mt-3 pt-2">
               <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn btn-sm btn-dark text-white"
                 style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}>Register</button>

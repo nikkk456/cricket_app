@@ -1,6 +1,6 @@
 import React from 'react'
 import MiniUserprofile from './MiniUserprofile'
-import SuggestedFriends from '../SuggestedFriends'
+import SuggestedFriends from './SuggestedFriends'
 
 const ListOfFriend = () => {
     return (

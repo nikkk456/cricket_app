@@ -1,9 +1,11 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 
 const Login = () => {
+    const navigate = useNavigate();
     const [loginData, setLoginData] = useState({
         email: "",
         password: "",
@@ -22,6 +24,7 @@ const Login = () => {
         axios.post("http://localhost:8080/login",loginData).then((response)=>{
             console.log(response);
             Cookies.set('uid', response.data.token, { expires: 1/24, secure: true, sameSite: 'strict' });
+            navigate("/dashboard/profile/about");
         }).catch((err)=>{
             console.log(err);
         });

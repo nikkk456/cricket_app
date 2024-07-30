@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
+import OTPInput from './OTPInput';
 
 
 
 const Register = () => {
   const [showloader, setShowLoader] = useState(false);
+  const [showOTP, setShowOTP] = useState(false)
   const [registerValue, setRegisterValue] = useState({
     name: '',
     gender: '',
@@ -40,24 +42,26 @@ const Register = () => {
   };
   const registeruser = (event) => {
     event.preventDefault();
-    setShowLoader(true);
-    if (!validate()) return;
-    console.log(registerValue);
-    axios.post("http://localhost:8080/signup", registerValue).then((res) => {
-      console.log(res);
-      setShowLoader(false);
-      if (res.status = 201) {
-        navigate("/login");
-      }
-    }).catch((err) => {
-      console.log(err);
-      if (err.response.status == 400) {
-        Setresponse(err.response.data.msg);
-        console.log(err.response.data.msg);
-      } else {
-        Setresponse(err.msg);
-      }
-    });
+    setShowOTP(true);
+    //Isko ab tu email verification ke baad on kardio
+    // setShowLoader(true);
+    // if (!validate()) return;
+    // console.log(registerValue);
+    // axios.post("http://localhost:8080/signup", registerValue).then((res) => {
+    //   console.log(res);
+    //   setShowLoader(false);
+    //   if (res.status = 201) {
+    //     navigate("/login");
+    //   }
+    // }).catch((err) => {
+    //   console.log(err);
+    //   if (err.response.status == 400) {
+    //     Setresponse(err.response.data.msg);
+    //     console.log(err.response.data.msg);
+    //   } else {
+    //     Setresponse(err.msg);
+    //   }
+    // });
   }
   const handlechange = (event) => {
     setRegisterValue({ ...registerValue, [event.target.name]: event.target.value });
@@ -72,10 +76,8 @@ const Register = () => {
           <img src='./Image/signup_image.jpg' alt='signup_image' style={{ width: "100%" }} />
         </div>
         {
-          showloader ?
-            <center>
-              <dotlottie-player src="https://lottie.host/a1e65e84-40ca-4f74-8765-000cb7526060/XNSH3SyBF0.json" background="transparent" speed="1" style={{ width: "150px", height: "150px" }} loop autoplay></dotlottie-player>
-            </center>
+          showOTP ?
+            <div className='col-md-8'><OTPInput/></div>
             :
             <div className='col-md-8'>
               <form style={{ width: "80%", borderRadius: "15px", boxShadow: "0 0 9px 1px grey" }} className='p-4' onSubmit={registeruser}>

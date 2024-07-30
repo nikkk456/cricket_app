@@ -41,7 +41,7 @@ const Register = () => {
       event.preventDefault();
       if (!validate()) return;
       console.log(registerValue);
-      axios.post("http://localhost:8080/signup",registerValue).then((res)=>{
+      axios.post("http://localhost:8080/api/user/register",registerValue).then((res)=>{
         console.log(res);
         if(res.status = 201){
           navigate("/login");

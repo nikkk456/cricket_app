@@ -19,9 +19,9 @@ const Login = () => {
     };
 
     const handleSubmit = ()=>{
-        axios.post("http://localhost:8080/login",loginData).then((response)=>{
+        axios.post("http://localhost:8080/api/user/login",loginData).then((response)=>{
             console.log(response);
-            Cookies.set('uid', response.data.token, { expires: 1/24, secure: true, sameSite: 'strict' });
+            Cookies.set('uid', response.data.token, { expires: 7, secure: true, sameSite: 'strict' });
         }).catch((err)=>{
             console.log(err);
         });

@@ -8,4 +8,13 @@ const conn = mysql.createPool({
     database: "u908545758_cricket_app"
 });
 
+// conn.connect(err => {
+//     if (err) {
+//         console.error('Error connecting to the database:', err);
+//         return;
+//     }
+//     console.log('Connected to the database');
+// });
+
+
 module.exports = conn;

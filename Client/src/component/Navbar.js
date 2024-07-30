@@ -1,11 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-
+import { AuthContext } from '../context/AuthContext';
 const Navbar = () => {
     const location = useLocation();
     const showNavbar = !location.pathname.includes('/dashboard');
+    const { isAuthenticated } = useContext(AuthContext);
+
+    console.log("isAuthenticated", isAuthenticated);
     return (
-        <nav className={showNavbar ? "navbar navbar-expand-lg bg-body-tertiary":"d-none"}>
+        <nav className={showNavbar ? "navbar navbar-expand-lg bg-body-tertiary" : "d-none"}>
             <div className="container-fluid">
                 <a className="navbar-brand" href="/"><b>Cricket</b></a>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,13 +29,20 @@ const Navbar = () => {
                             <ul className="dropdown-menu">
                                 <li><a className="dropdown-item" href="#">Action</a></li>
                                 <li><a className="dropdown-item" href="#">Another action</a></li>
-                                <li><hr className="dropdown-divider"/></li>
+                                <li><hr className="dropdown-divider" /></li>
                                 <li><a className="dropdown-item" href="#">Something else here</a></li>
                             </ul>
                         </li>
                     </ul>
                     <form className="d-flex" role="search">
-                            <Link to="/login"><button className="btn btn-sm btn-dark text-white" style={{borderRadius:"18px"}} type="submit">Join Now</button></Link>
+                        {
+                            isAuthenticated ?
+                                    <a href="/dashboard/profile/about" className="d-flex align-items-center justify-content-center p-3 link-body-emphasis text-decoration-none">
+                                        <img src="https://github.com/mdo.png" alt="mdo" width="24" height="24" className="rounded-circle" />
+                                    </a>
+                                :
+                                <Link to="/login"><button className="btn btn-sm btn-dark text-white" style={{ borderRadius: "18px" }} type="submit">Join Now</button></Link>
+                        }
                     </form>
                 </div>
             </div>

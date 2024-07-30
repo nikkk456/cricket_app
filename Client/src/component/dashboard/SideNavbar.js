@@ -7,7 +7,7 @@ const SideNavbar = ({ setMinimised, minimised }) => {
     return (
         <div className="d-flex flex-column flex-shrink-0 p-3 vh-100" style={{ width: "280px", backgroundColor: "#dcdada" }}>
 
-            <h5 style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }} > <b>Welcome</b> <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <h5 style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }} > <b>Welcome</b> <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </h5>
 
             <hr />

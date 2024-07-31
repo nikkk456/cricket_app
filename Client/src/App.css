@@ -96,5 +96,11 @@ height: 100%;
 .form-control:focus{box-shadow:none;border:2px solid black}
 .validate{border-radius:20px;height:40px;background-color:black;border:1px solid white;width:140px}
 
-
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
 

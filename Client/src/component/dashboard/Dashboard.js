@@ -2,6 +2,7 @@ import React from 'react'
 import {Route, Routes} from 'react-router-dom'
 import UserProfile from './UserProfile/UserProfile';
 import SideNavbarMin from './SideNavbarMin';
+import UserChat from './Chat/UserChat';
 
 const Dashboard = () => {
     return (
@@ -12,8 +13,8 @@ const Dashboard = () => {
             <div className='col' style={{marginLeft:"65px"}}>
                 <Routes>
                 <Route path= "profile/*" element={<UserProfile/>} />
+                <Route path= "chat/*" element={<UserChat/>} />
                 </Routes>
-                {/* <Profile/> */}
             </div>
         </div>
         </div>

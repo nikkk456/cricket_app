@@ -1,11 +1,13 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Cookies from 'js-cookie';
 import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 
 
 const Login = () => {
     const navigate = useNavigate();
+    const {login} = useContext(AuthContext);
     const [showPassword, setShowPassword] = useState(false);
     const [loginData, setLoginData] = useState({
         email: "",
@@ -26,8 +28,7 @@ const Login = () => {
 
     const handleSubmit = ()=>{
         axios.post("http://localhost:8080/api/user/login",loginData).then((response)=>{
-            console.log(response);
-            Cookies.set('uid', response.data.token, { expires: 7, secure: true, sameSite: 'strict' });
+            login(response.data.token);
         }).catch((err)=>{
             console.log(err);
         });

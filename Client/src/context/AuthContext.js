@@ -14,8 +14,18 @@ export const AuthProvider = ({ children }) => {
       }
     }, []);
 
+    const login = (uid) => {
+      Cookies.set('uid', uid, { expires: 7, secure: true, sameSite: 'strict' })
+      setIsAuthenticated(true);
+    };
+
+    const logout = () => {
+      Cookies.remove('uid');
+      setIsAuthenticated(false);
+    };
+
     return (
-        <AuthContext.Provider value={{ isAuthenticated }}>
+        <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
           {children}
         </AuthContext.Provider>
       );

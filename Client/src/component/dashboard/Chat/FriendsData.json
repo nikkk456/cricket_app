@@ -1,0 +1,81 @@
+[
+    {
+        "name":"Nikhil Mishra",
+        "lastMessage": "Hello Bhai",
+        "captain": false,
+        "image-link": ""
+    },
+    {
+        "name":"Sumit Kumar",
+        "lastMessage": "yrr pata nhi",
+        "captain": false,
+        "image-link": ""
+    },
+    {
+        "name":"Sananda Roy",
+        "lastMessage": "Match ?",
+        "captain": true,
+        "image-link": ""
+    },
+    {
+        "name":"Harsh Sharma",
+        "lastMessage": "Kab aara hai",
+        "captain": false,
+        "image-link": ""
+    },
+    {
+        "name":"Khemu",
+        "lastMessage": "L** lele mera",
+        "captain": true,
+        "image-link": ""
+    },
+    {
+        "name":"Aditya kumar",
+        "lastMessage": "Nhi aata bhai",
+        "captain": false,
+        "image-link": ""
+    },
+    {
+        "name":"Isha Saini",
+        "lastMessage": "Nobody",
+        "captain": false,
+        "image-link": ""
+    },
+    {
+        "name":"Mohd. Karim",
+        "lastMessage": "Ahamdullah",
+        "captain": true,
+        "image-link": ""
+    },
+    
+    {
+        "name":"Nasrat",
+        "lastMessage": "allah hu akbar",
+        "captain": false,
+        "image-link": ""
+    },
+    {
+        "name":"Faiz",
+        "lastMessage": "Gulabi hai kya?",
+        "captain": false,
+        "image-link": ""
+    },
+    {
+        "name":"Khushi",
+        "lastMessage": "Arpit bala ko jaanta hai?",
+        "captain": false,
+        "image-link": ""
+    },
+    {
+        "name":"Umang Gupta",
+        "lastMessage": "Aaj nhi khelunga",
+        "captain": true,
+        "image-link": ""
+    },
+    {
+        "name":"Girish",
+        "lastMessage": "Aaja Bhai",
+        "captain": false,
+        "image-link": ""
+    }
+]

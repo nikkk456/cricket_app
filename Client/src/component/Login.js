@@ -12,8 +12,8 @@ const Login = () => {
         password: "",
         rememberMe: false
     });
-    const handleShow = ()=>{
-
+    const handleShow = () => {
+        setShowPassword(!showPassword);
     }
 
     const handleChange = (e) => {

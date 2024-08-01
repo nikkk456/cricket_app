@@ -7,10 +7,7 @@ const UserChat = () => {
     <div className='container-fluid'>
       <div className='row'>
       <SideBar/>
-      <div className='col-md-8'>
-        <h1>Hello</h1>
-        <ChatBox/>
-      </div>
+      <ChatBox/>
       </div>
     </div>
   )

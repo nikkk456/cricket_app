@@ -4,16 +4,20 @@ import UserChatProfile from './UserChatProfile';
 import friendsData from './FriendsData.json';
 import teamsData from './TeamData.json'
 
-const SideBar = () => {
+const SideBar = ({setSelectedFriend}) => {
     const location = useLocation();
     const [searchTerm, setSearchTerm] = useState('');
 
     const filteredFriends = friendsData.filter(friend =>
         friend.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    const handleFriendClick = (friend)=>{
+        console.log("The friend is clicked ");
+        setSelectedFriend(friend)
+    }
 
     return (
-        <div style={{ width: "30%", backgroundColor: "#f0f0f0", padding: "20px" }} className='vh-100'>
+        <div style={{ width: "35%", backgroundColor: "#f0f0f0", padding: "20px" }} className='vh-100'>
             <div className='container-fluid'>
                 <div className='row'>
                     <h1>Cricket Chats</h1>
@@ -52,8 +56,8 @@ const SideBar = () => {
                         <div className='row chat-list mt-3 no-scrollbar' style={{ height: "60vh", overflowY: "scroll" }}>
                         {
                             filteredFriends.map((data, index) => (
-                                <div className=''>
-                                    <UserChatProfile captain={data.captain} name={data.name} key={index} lastMessage={data.lastMessage} lastActive="12:14" />
+                                <div className='' key={index} onClick={() => handleFriendClick(data)}>
+                                    <UserChatProfile captain={data.captain} name={data.name} key={index} lastMessage={data.chats && data.chats.length > 0 ? data.chats[data.chats.length - 1].message : "Hello"}  lastActive="12:14" />
                                 </div>
                             ))
                         }

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const UserChatProfile = ({ captain, name, lastMessage, lastActive }) => {
+const UserChatProfile = ({ captain, name, lastMessage = "Hello", lastActive }) => {
     return (
         <div className='row my-2'>
             <div className='col-md-4 rounded-circle' style={{ width: "20%", display: "flex", alignItems: "center" }}>

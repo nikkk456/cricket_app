@@ -103,4 +103,48 @@ height: 100%;
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+/* ChatBox.css */
+.chat-box {
+  border: 1px solid #ccc;
+  padding: 10px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.message {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.message.left {
+  justify-content: flex-start;
+}
+
+.message.right {
+  justify-content: flex-end;
+}
+
+.message-content-left {
+  max-width: 60%;
+  padding: 10px;
+  border-radius: 0px 10px 10px 10px;
+}
+.message-content-right {
+  max-width: 60%;
+  padding: 10px;
+  border-radius: 10px 0px 10px 10px;
+}
+
+.message.left .message-content-left {
+  background-color: #373737;
+  text-align: left;
+  color: white;
+}
+
+.message.right .message-content-right {
+  background-color: #203f31;
+  text-align: right;
+  color: white;
+}
+
 

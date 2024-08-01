@@ -1,79 +1,682 @@
 [
     {
-        "name":"Nikhil Mishra",
-        "lastMessage": "Hello Bhai",
+        "name": "Apoorve",
+        "lastMessage": "Good Bro",
         "captain": false,
-        "image-link": ""
+        "image-link": "",
+        "chats": [
+            {
+                "sender": "Nikhil",
+                "receiver": "Apoorve",
+                "message": "Hey Apoorve, how are you?",
+                "timestamp": "2024-08-01T10:00:00Z"
+            },
+            {
+                "sender": "Apoorve",
+                "receiver": "Nikhil",
+                "message": "I'm good, Nikhil. How about you?",
+                "timestamp": "2024-08-01T10:01:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Apoorve",
+                "message": "I'm doing well, thanks! Have you reviewed my assignment?",
+                "timestamp": "2024-08-01T10:02:00Z"
+            },
+            {
+                "sender": "Apoorve",
+                "receiver": "Nikhil",
+                "message": "Yes, I have. We'll get back to you shortly.",
+                "timestamp": "2024-08-01T10:03:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Apoorve",
+                "message": "Great, looking forward to it!",
+                "timestamp": "2024-08-01T10:04:00Z"
+            },
+            {
+                "sender": "Apoorve",
+                "receiver": "Nikhil",
+                "message": "Do you have any questions in the meantime?",
+                "timestamp": "2024-08-01T10:05:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Apoorve",
+                "message": "Not at the moment, just waiting for the feedback.",
+                "timestamp": "2024-08-01T10:06:00Z"
+            },
+            {
+                "sender": "Apoorve",
+                "receiver": "Nikhil",
+                "message": "Alright, I'll let you know soon.",
+                "timestamp": "2024-08-01T10:07:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Apoorve",
+                "message": "Thanks, Apoorve!",
+                "timestamp": "2024-08-01T10:08:00Z"
+            },
+            {
+                "sender": "Apoorve",
+                "receiver": "Nikhil",
+                "message": "You're welcome, Nikhil.",
+                "timestamp": "2024-08-01T10:09:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Apoorve",
+                "message": "By the way, do you have any tips for improving my coding skills?",
+                "timestamp": "2024-08-01T10:10:00Z"
+            },
+            {
+                "sender": "Apoorve",
+                "receiver": "Nikhil",
+                "message": "Sure, practice regularly and try to build small projects.",
+                "timestamp": "2024-08-01T10:11:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Apoorve",
+                "message": "That's helpful, thanks!",
+                "timestamp": "2024-08-01T10:12:00Z"
+            },
+            {
+                "sender": "Apoorve",
+                "receiver": "Nikhil",
+                "message": "No problem. Also, participate in coding challenges.",
+                "timestamp": "2024-08-01T10:13:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Apoorve",
+                "message": "I will. Any particular platform you recommend?",
+                "timestamp": "2024-08-01T10:14:00Z"
+            },
+            {
+                "sender": "Apoorve",
+                "receiver": "Nikhil",
+                "message": "Try HackerRank and LeetCode.",
+                "timestamp": "2024-08-01T10:15:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Apoorve",
+                "message": "Got it. Thanks, Apoorve!",
+                "timestamp": "2024-08-01T10:16:00Z"
+            },
+            {
+                "sender": "Apoorve",
+                "receiver": "Nikhil",
+                "message": "You're welcome!",
+                "timestamp": "2024-08-01T10:17:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Apoorve",
+                "message": "What are you currently working on?",
+                "timestamp": "2024-08-01T10:18:00Z"
+            },
+            {
+                "sender": "Apoorve",
+                "receiver": "Nikhil",
+                "message": "I'm working on a new feature for our app.",
+                "timestamp": "2024-08-01T10:19:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Apoorve",
+                "message": "That sounds interesting! Can you share more details?",
+                "timestamp": "2024-08-01T10:20:00Z"
+            },
+            {
+                "sender": "Apoorve",
+                "receiver": "Nikhil",
+                "message": "It's still under wraps, but it's going to improve user experience.",
+                "timestamp": "2024-08-01T10:21:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Apoorve",
+                "message": "Looking forward to seeing it!",
+                "timestamp": "2024-08-01T10:22:00Z"
+            },
+            {
+                "sender": "Apoorve",
+                "receiver": "Nikhil",
+                "message": "Thanks! We'll keep you posted.",
+                "timestamp": "2024-08-01T10:23:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Apoorve",
+                "message": "Great, thanks Apoorve.",
+                "timestamp": "2024-08-01T10:24:00Z"
+            },
+            {
+                "sender": "Apoorve",
+                "receiver": "Nikhil",
+                "message": "Have a good day, Nikhil.",
+                "timestamp": "2024-08-01T10:25:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Apoorve",
+                "message": "You too!",
+                "timestamp": "2024-08-01T10:26:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Apoorve",
+                "message": "Hey Apoorve, quick question. How do I handle state management in React?",
+                "timestamp": "2024-08-01T10:27:00Z"
+            },
+            {
+                "sender": "Apoorve",
+                "receiver": "Nikhil",
+                "message": "You can use the Context API or Redux for state management.",
+                "timestamp": "2024-08-01T10:28:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Apoorve",
+                "message": "Which one do you recommend for a small project?",
+                "timestamp": "2024-08-01T10:29:00Z"
+            },
+            {
+                "sender": "Apoorve",
+                "receiver": "Nikhil",
+                "message": "For small projects, Context API is simpler to use.",
+                "timestamp": "2024-08-01T10:30:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Apoorve",
+                "message": "Thanks! I'll try that.",
+                "timestamp": "2024-08-01T10:31:00Z"
+            },
+            {
+                "sender": "Apoorve",
+                "receiver": "Nikhil",
+                "message": "You're welcome. Let me know if you need any help.",
+                "timestamp": "2024-08-01T10:32:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Apoorve",
+                "message": "Sure thing. Appreciate it!",
+                "timestamp": "2024-08-01T10:33:00Z"
+            },
+            {
+                "sender": "Apoorve",
+                "receiver": "Nikhil",
+                "message": "No problem. Good luck with your project!",
+                "timestamp": "2024-08-01T10:34:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Apoorve",
+                "message": "Thanks! Have a nice day.",
+                "timestamp": "2024-08-01T10:35:00Z"
+            }
+        ]
     },
     {
-        "name":"Sumit Kumar",
+        "name": "Sumit Kumar",
         "lastMessage": "yrr pata nhi",
         "captain": false,
-        "image-link": ""
+        "image-link": "",
+        "chats": [
+            {
+                "sender": "Nikhil",
+                "receiver": "Sumit",
+                "message": "Hey Sumit, how's everything going?",
+                "timestamp": "2024-08-01T11:00:00Z"
+            },
+            {
+                "sender": "Sumit",
+                "receiver": "Nikhil",
+                "message": "Hey Nikhil! All good here, just finished a big project. How about you?",
+                "timestamp": "2024-08-01T11:01:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Sumit",
+                "message": "Nice! I've been busy with some frontend work. What was your project about?",
+                "timestamp": "2024-08-01T11:02:00Z"
+            },
+            {
+                "sender": "Sumit",
+                "receiver": "Nikhil",
+                "message": "It was a data visualization tool for our sales team. Pretty intense!",
+                "timestamp": "2024-08-01T11:03:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Sumit",
+                "message": "Sounds interesting! Did you use any specific library for that?",
+                "timestamp": "2024-08-01T11:04:00Z"
+            },
+            {
+                "sender": "Sumit",
+                "receiver": "Nikhil",
+                "message": "Yeah, we used D3.js. It was a bit challenging but worth it.",
+                "timestamp": "2024-08-01T11:05:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Sumit",
+                "message": "I've heard good things about D3.js. I'll have to try it out sometime.",
+                "timestamp": "2024-08-01T11:06:00Z"
+            },
+            {
+                "sender": "Sumit",
+                "receiver": "Nikhil",
+                "message": "Definitely! If you need any tips, just let me know.",
+                "timestamp": "2024-08-01T11:07:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Sumit",
+                "message": "Thanks, Sumit! By the way, are you coming to the meetup next week?",
+                "timestamp": "2024-08-01T11:08:00Z"
+            },
+            {
+                "sender": "Sumit",
+                "receiver": "Nikhil",
+                "message": "Yes, I'll be there. Looking forward to it.",
+                "timestamp": "2024-08-01T11:09:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Sumit",
+                "message": "Great! We should catch up then.",
+                "timestamp": "2024-08-01T11:10:00Z"
+            },
+            {
+                "sender": "Sumit",
+                "receiver": "Nikhil",
+                "message": "Absolutely. Let's plan for it.",
+                "timestamp": "2024-08-01T11:11:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Sumit",
+                "message": "Cool. By the way, do you know any good resources for learning TypeScript?",
+                "timestamp": "2024-08-01T11:12:00Z"
+            },
+            {
+                "sender": "Sumit",
+                "receiver": "Nikhil",
+                "message": "Sure, I found the official TypeScript documentation and a course on Udemy to be really helpful.",
+                "timestamp": "2024-08-01T11:13:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Sumit",
+                "message": "Awesome, I'll check those out. Thanks!",
+                "timestamp": "2024-08-01T11:14:00Z"
+            },
+            {
+                "sender": "Sumit",
+                "receiver": "Nikhil",
+                "message": "No problem. Happy learning!",
+                "timestamp": "2024-08-01T11:15:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Sumit",
+                "message": "Thanks! Catch you later, Sumit.",
+                "timestamp": "2024-08-01T11:16:00Z"
+            },
+            {
+                "sender": "Sumit",
+                "receiver": "Nikhil",
+                "message": "Bye Nikhil!",
+                "timestamp": "2024-08-01T11:17:00Z"
+            }
+        ]
+        
     },
     {
-        "name":"Sananda Roy",
+        "name": "Sananda Roy",
         "lastMessage": "Match ?",
         "captain": true,
-        "image-link": ""
+        "image-link": "",
+        "chats":[
+            {
+                "sender": "Nikhil",
+                "receiver": "Sananda",
+                "message": "Hey Sananda, how's your day going?",
+                "timestamp": "2024-08-01T12:00:00Z"
+            },
+            {
+                "sender": "Sananda",
+                "receiver": "Nikhil",
+                "message": "Hi Nikhil! It's going well, just finished a meeting. How about you?",
+                "timestamp": "2024-08-01T12:01:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Sananda",
+                "message": "Pretty good, working on a new project. What was your meeting about?",
+                "timestamp": "2024-08-01T12:02:00Z"
+            },
+            {
+                "sender": "Sananda",
+                "receiver": "Nikhil",
+                "message": "We were discussing the upcoming product launch. Lots to prepare!",
+                "timestamp": "2024-08-01T12:03:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Sananda",
+                "message": "Exciting! Do you need any help with the preparations?",
+                "timestamp": "2024-08-01T12:04:00Z"
+            },
+            {
+                "sender": "Sananda",
+                "receiver": "Nikhil",
+                "message": "Thanks for the offer! I might take you up on that. How's your new project going?",
+                "timestamp": "2024-08-01T12:05:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Sananda",
+                "message": "It's going well so far. I'm working on a feature to improve user experience.",
+                "timestamp": "2024-08-01T12:06:00Z"
+            },
+            {
+                "sender": "Sananda",
+                "receiver": "Nikhil",
+                "message": "That's awesome! Which feature are you focusing on?",
+                "timestamp": "2024-08-01T12:07:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Sananda",
+                "message": "We're enhancing the search functionality to make it more intuitive.",
+                "timestamp": "2024-08-01T12:08:00Z"
+            },
+            {
+                "sender": "Sananda",
+                "receiver": "Nikhil",
+                "message": "Nice! A good search feature can really make a difference.",
+                "timestamp": "2024-08-01T12:09:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Sananda",
+                "message": "Absolutely. By the way, are you free this weekend? We could catch up.",
+                "timestamp": "2024-08-01T12:10:00Z"
+            },
+            {
+                "sender": "Sananda",
+                "receiver": "Nikhil",
+                "message": "I think so. Let's plan for Saturday afternoon?",
+                "timestamp": "2024-08-01T12:11:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Sananda",
+                "message": "Perfect. Let's meet at our usual place.",
+                "timestamp": "2024-08-01T12:12:00Z"
+            },
+            {
+                "sender": "Sananda",
+                "receiver": "Nikhil",
+                "message": "Sounds good! Looking forward to it.",
+                "timestamp": "2024-08-01T12:13:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Sananda",
+                "message": "Me too! By the way, have you tried the new café downtown?",
+                "timestamp": "2024-08-01T12:14:00Z"
+            },
+            {
+                "sender": "Sananda",
+                "receiver": "Nikhil",
+                "message": "Not yet. Is it good?",
+                "timestamp": "2024-08-01T12:15:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Sananda",
+                "message": "Yes, it's great! We should go there sometime.",
+                "timestamp": "2024-08-01T12:16:00Z"
+            },
+            {
+                "sender": "Sananda",
+                "receiver": "Nikhil",
+                "message": "Definitely! Let's check it out next time.",
+                "timestamp": "2024-08-01T12:17:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Sananda",
+                "message": "Sounds like a plan. See you on Saturday!",
+                "timestamp": "2024-08-01T12:18:00Z"
+            },
+            {
+                "sender": "Sananda",
+                "receiver": "Nikhil",
+                "message": "See you! Take care, Nikhil.",
+                "timestamp": "2024-08-01T12:19:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Sananda",
+                "message": "You too, Sananda!",
+                "timestamp": "2024-08-01T12:20:00Z"
+            }
+        ]
+        
     },
     {
-        "name":"Harsh Sharma",
+        "name": "Harsh Sharma",
         "lastMessage": "Kab aara hai",
         "captain": false,
-        "image-link": ""
+        "image-link": "",
+        "chats": [
+            {
+                "sender": "Nikhil",
+                "receiver": "Harsh",
+                "message": "Hey Harsh, how's it going?",
+                "timestamp": "2024-08-01T09:00:00Z"
+            },
+            {
+                "sender": "Harsh",
+                "receiver": "Nikhil",
+                "message": "Hi Nikhil! I'm doing well, just busy with work. How about you?",
+                "timestamp": "2024-08-01T09:01:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Harsh",
+                "message": "Same here, a lot of deadlines to meet.",
+                "timestamp": "2024-08-01T09:02:00Z"
+            },
+            {
+                "sender": "Harsh",
+                "receiver": "Nikhil",
+                "message": "I can relate! By the way, did you watch the latest match?",
+                "timestamp": "2024-08-01T09:03:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Harsh",
+                "message": "Yes, it was intense! What a finish.",
+                "timestamp": "2024-08-01T09:04:00Z"
+            },
+            {
+                "sender": "Harsh",
+                "receiver": "Nikhil",
+                "message": "Absolutely! Who was your favorite player?",
+                "timestamp": "2024-08-01T09:05:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Harsh",
+                "message": "I think the opener did a great job. What about you?",
+                "timestamp": "2024-08-01T09:06:00Z"
+            },
+            {
+                "sender": "Harsh",
+                "receiver": "Nikhil",
+                "message": "I agree. The bowler in the last over was also impressive.",
+                "timestamp": "2024-08-01T09:07:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Harsh",
+                "message": "Definitely. By the way, do you need help with the project?",
+                "timestamp": "2024-08-01T09:08:00Z"
+            },
+            {
+                "sender": "Harsh",
+                "receiver": "Nikhil",
+                "message": "Actually, yes. I'm stuck with the API integration.",
+                "timestamp": "2024-08-01T09:09:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Harsh",
+                "message": "No worries. I can help you with that. Let's schedule a call.",
+                "timestamp": "2024-08-01T09:10:00Z"
+            },
+            {
+                "sender": "Harsh",
+                "receiver": "Nikhil",
+                "message": "That would be great! How about this afternoon?",
+                "timestamp": "2024-08-01T09:11:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Harsh",
+                "message": "Sure, let's do 3 PM.",
+                "timestamp": "2024-08-01T09:12:00Z"
+            },
+            {
+                "sender": "Harsh",
+                "receiver": "Nikhil",
+                "message": "Perfect. Thanks, Nikhil!",
+                "timestamp": "2024-08-01T09:13:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Harsh",
+                "message": "You're welcome, Harsh.",
+                "timestamp": "2024-08-01T09:14:00Z"
+            },
+            {
+                "sender": "Harsh",
+                "receiver": "Nikhil",
+                "message": "See you at 3 PM then.",
+                "timestamp": "2024-08-01T09:15:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Harsh",
+                "message": "See you!",
+                "timestamp": "2024-08-01T09:16:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Harsh",
+                "message": "Hey Harsh, have you checked out the new tech blog?",
+                "timestamp": "2024-08-01T10:00:00Z"
+            },
+            {
+                "sender": "Harsh",
+                "receiver": "Nikhil",
+                "message": "Not yet, but it's on my list. Is it good?",
+                "timestamp": "2024-08-01T10:01:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Harsh",
+                "message": "Yes, very informative. Lots of new insights on AI.",
+                "timestamp": "2024-08-01T10:02:00Z"
+            },
+            {
+                "sender": "Harsh",
+                "receiver": "Nikhil",
+                "message": "Sounds interesting. I'll definitely read it.",
+                "timestamp": "2024-08-01T10:03:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Harsh",
+                "message": "Cool. Let me know what you think.",
+                "timestamp": "2024-08-01T10:04:00Z"
+            },
+            {
+                "sender": "Harsh",
+                "receiver": "Nikhil",
+                "message": "Will do. Thanks for the recommendation!",
+                "timestamp": "2024-08-01T10:05:00Z"
+            },
+            {
+                "sender": "Nikhil",
+                "receiver": "Harsh",
+                "message": "Anytime, Harsh.",
+                "timestamp": "2024-08-01T10:06:00Z"
+            }
+        ]
     },
     {
-        "name":"Khemu",
+        "name": "Khemu",
         "lastMessage": "L** lele mera",
         "captain": true,
         "image-link": ""
     },
     {
-        "name":"Aditya kumar",
+        "name": "Aditya kumar",
         "lastMessage": "Nhi aata bhai",
         "captain": false,
         "image-link": ""
     },
     {
-        "name":"Isha Saini",
+        "name": "Isha Saini",
         "lastMessage": "Nobody",
         "captain": false,
         "image-link": ""
     },
     {
-        "name":"Mohd. Karim",
+        "name": "Mohd. Karim",
         "lastMessage": "Ahamdullah",
         "captain": true,
         "image-link": ""
     },
-    
     {
-        "name":"Nasrat",
+        "name": "Nasrat",
         "lastMessage": "allah hu akbar",
         "captain": false,
         "image-link": ""
     },
     {
-        "name":"Faiz",
+        "name": "Faiz",
         "lastMessage": "Gulabi hai kya?",
         "captain": false,
         "image-link": ""
     },
     {
-        "name":"Khushi",
+        "name": "Khushi",
         "lastMessage": "Arpit bala ko jaanta hai?",
         "captain": false,
         "image-link": ""
     },
     {
-        "name":"Umang Gupta",
+        "name": "Umang Gupta",
         "lastMessage": "Aaj nhi khelunga",
         "captain": true,
         "image-link": ""
     },
     {
-        "name":"Girish",
+        "name": "Girish",
         "lastMessage": "Aaja Bhai",
         "captain": false,
         "image-link": ""

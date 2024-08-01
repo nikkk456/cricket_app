@@ -1,0 +1,218 @@
+[
+    {
+      "sender": "Nikhil",
+      "receiver": "Apoorve",
+      "message": "Hey Apoorve, how are you?",
+      "timestamp": "2024-08-01T10:00:00Z"
+    },
+    {
+      "sender": "Apoorve",
+      "receiver": "Nikhil",
+      "message": "I'm good, Nikhil. How about you?",
+      "timestamp": "2024-08-01T10:01:00Z"
+    },
+    {
+      "sender": "Nikhil",
+      "receiver": "Apoorve",
+      "message": "I'm doing well, thanks! Have you reviewed my assignment?",
+      "timestamp": "2024-08-01T10:02:00Z"
+    },
+    {
+      "sender": "Apoorve",
+      "receiver": "Nikhil",
+      "message": "Yes, I have. We'll get back to you shortly.",
+      "timestamp": "2024-08-01T10:03:00Z"
+    },
+    {
+      "sender": "Nikhil",
+      "receiver": "Apoorve",
+      "message": "Great, looking forward to it!",
+      "timestamp": "2024-08-01T10:04:00Z"
+    },
+    {
+      "sender": "Apoorve",
+      "receiver": "Nikhil",
+      "message": "Do you have any questions in the meantime?",
+      "timestamp": "2024-08-01T10:05:00Z"
+    },
+    {
+      "sender": "Nikhil",
+      "receiver": "Apoorve",
+      "message": "Not at the moment, just waiting for the feedback.",
+      "timestamp": "2024-08-01T10:06:00Z"
+    },
+    {
+      "sender": "Apoorve",
+      "receiver": "Nikhil",
+      "message": "Alright, I'll let you know soon.",
+      "timestamp": "2024-08-01T10:07:00Z"
+    },
+    {
+      "sender": "Nikhil",
+      "receiver": "Apoorve",
+      "message": "Thanks, Apoorve!",
+      "timestamp": "2024-08-01T10:08:00Z"
+    },
+    {
+      "sender": "Apoorve",
+      "receiver": "Nikhil",
+      "message": "You're welcome, Nikhil.",
+      "timestamp": "2024-08-01T10:09:00Z"
+    },
+    {
+      "sender": "Nikhil",
+      "receiver": "Apoorve",
+      "message": "By the way, do you have any tips for improving my coding skills?",
+      "timestamp": "2024-08-01T10:10:00Z"
+    },
+    {
+      "sender": "Apoorve",
+      "receiver": "Nikhil",
+      "message": "Sure, practice regularly and try to build small projects.",
+      "timestamp": "2024-08-01T10:11:00Z"
+    },
+    {
+      "sender": "Nikhil",
+      "receiver": "Apoorve",
+      "message": "That's helpful, thanks!",
+      "timestamp": "2024-08-01T10:12:00Z"
+    },
+    {
+      "sender": "Apoorve",
+      "receiver": "Nikhil",
+      "message": "No problem. Also, participate in coding challenges.",
+      "timestamp": "2024-08-01T10:13:00Z"
+    },
+    {
+      "sender": "Nikhil",
+      "receiver": "Apoorve",
+      "message": "I will. Any particular platform you recommend?",
+      "timestamp": "2024-08-01T10:14:00Z"
+    },
+    {
+      "sender": "Apoorve",
+      "receiver": "Nikhil",
+      "message": "Try HackerRank and LeetCode.",
+      "timestamp": "2024-08-01T10:15:00Z"
+    },
+    {
+      "sender": "Nikhil",
+      "receiver": "Apoorve",
+      "message": "Got it. Thanks, Apoorve!",
+      "timestamp": "2024-08-01T10:16:00Z"
+    },
+    {
+      "sender": "Apoorve",
+      "receiver": "Nikhil",
+      "message": "You're welcome!",
+      "timestamp": "2024-08-01T10:17:00Z"
+    },
+    {
+      "sender": "Nikhil",
+      "receiver": "Apoorve",
+      "message": "What are you currently working on?",
+      "timestamp": "2024-08-01T10:18:00Z"
+    },
+    {
+      "sender": "Apoorve",
+      "receiver": "Nikhil",
+      "message": "I'm working on a new feature for our app.",
+      "timestamp": "2024-08-01T10:19:00Z"
+    },
+    {
+      "sender": "Nikhil",
+      "receiver": "Apoorve",
+      "message": "That sounds interesting! Can you share more details?",
+      "timestamp": "2024-08-01T10:20:00Z"
+    },
+    {
+      "sender": "Apoorve",
+      "receiver": "Nikhil",
+      "message": "It's still under wraps, but it's going to improve user experience.",
+      "timestamp": "2024-08-01T10:21:00Z"
+    },
+    {
+      "sender": "Nikhil",
+      "receiver": "Apoorve",
+      "message": "Looking forward to seeing it!",
+      "timestamp": "2024-08-01T10:22:00Z"
+    },
+    {
+      "sender": "Apoorve",
+      "receiver": "Nikhil",
+      "message": "Thanks! We'll keep you posted.",
+      "timestamp": "2024-08-01T10:23:00Z"
+    },
+    {
+      "sender": "Nikhil",
+      "receiver": "Apoorve",
+      "message": "Great, thanks Apoorve.",
+      "timestamp": "2024-08-01T10:24:00Z"
+    },
+    {
+      "sender": "Apoorve",
+      "receiver": "Nikhil",
+      "message": "Have a good day, Nikhil.",
+      "timestamp": "2024-08-01T10:25:00Z"
+    },
+    {
+      "sender": "Nikhil",
+      "receiver": "Apoorve",
+      "message": "You too!",
+      "timestamp": "2024-08-01T10:26:00Z"
+    },
+    {
+      "sender": "Nikhil",
+      "receiver": "Apoorve",
+      "message": "Hey Apoorve, quick question. How do I handle state management in React?",
+      "timestamp": "2024-08-01T10:27:00Z"
+    },
+    {
+      "sender": "Apoorve",
+      "receiver": "Nikhil",
+      "message": "You can use the Context API or Redux for state management.",
+      "timestamp": "2024-08-01T10:28:00Z"
+    },
+    {
+      "sender": "Nikhil",
+      "receiver": "Apoorve",
+      "message": "Which one do you recommend for a small project?",
+      "timestamp": "2024-08-01T10:29:00Z"
+    },
+    {
+      "sender": "Apoorve",
+      "receiver": "Nikhil",
+      "message": "For small projects, Context API is simpler to use.",
+      "timestamp": "2024-08-01T10:30:00Z"
+    },
+    {
+      "sender": "Nikhil",
+      "receiver": "Apoorve",
+      "message": "Thanks! I'll try that.",
+      "timestamp": "2024-08-01T10:31:00Z"
+    },
+    {
+      "sender": "Apoorve",
+      "receiver": "Nikhil",
+      "message": "You're welcome. Let me know if you need any help.",
+      "timestamp": "2024-08-01T10:32:00Z"
+    },
+    {
+      "sender": "Nikhil",
+      "receiver": "Apoorve",
+      "message": "Sure thing. Appreciate it!",
+      "timestamp": "2024-08-01T10:33:00Z"
+    },
+    {
+      "sender": "Apoorve",
+      "receiver": "Nikhil",
+      "message": "No problem. Good luck with your project!",
+      "timestamp": "2024-08-01T10:34:00Z"
+    },
+    {
+      "sender": "Nikhil",
+      "receiver": "Apoorve",
+      "message": "Thanks! Have a nice day.",
+      "timestamp": "2024-08-01T10:35:00Z"
+    }
+]  

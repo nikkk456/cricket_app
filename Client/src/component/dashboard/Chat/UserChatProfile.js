@@ -2,7 +2,7 @@ import React from 'react'
 
 const UserChatProfile = ({ captain, name, lastMessage = "Hello", lastActive }) => {
     return (
-        <div className='row my-2'>
+        <div className='row my-2' style={{cursor:"pointer"}}>
             <div className='col-md-4 rounded-circle' style={{ width: "20%", display: "flex", alignItems: "center" }}>
                 <img src="https://github.com/mdo.png" className='rounded-circle me-2' alt='...' style={{ width: "100%", border: "3px solid black" }} />
             </div>

@@ -146,5 +146,8 @@ height: 100%;
   text-align: right;
   color: white;
 }
+.dropdown-toggle::after {
+  display: none;
+}
 
 

@@ -20,7 +20,8 @@ const SideBar = ({setSelectedFriend}) => {
         <div style={{ width: "35%", backgroundColor: "#f0f0f0", padding: "20px" }} className='vh-100'>
             <div className='container-fluid'>
                 <div className='row'>
-                    <h1>Cricket Chats</h1>
+                    <h2>Cricket Chats</h2>
+                    <small>Unite.Play.Conquer!</small>
                     <div className="input-group my-3">
                         <input
                             type="text"

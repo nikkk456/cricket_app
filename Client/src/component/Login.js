@@ -8,7 +8,7 @@ import Toast from './Toast'
 
 const Login = () => {
     const navigate = useNavigate();
-    const [showToast, setShowToast] = useState(true);
+    const [showToast, setShowToast] = useState(false);
     const {login} = useContext(AuthContext);
     const [showPassword, setShowPassword] = useState(false);
     const [loginData, setLoginData] = useState({
@@ -30,7 +30,7 @@ const Login = () => {
 
     const handleSubmit = ()=>{
         axios.post("http://localhost:8080/api/user/login",loginData).then((response)=>{
-            login(response.data.token);
+            login(response.data);
             navigate("/")
         }).catch((err)=>{
             console.log(err);

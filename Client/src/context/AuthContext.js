@@ -14,8 +14,10 @@ export const AuthProvider = ({ children }) => {
       }
     }, []);
 
-    const login = (uid) => {
-      Cookies.set('uid', uid, { expires: 7, secure: true, sameSite: 'strict' })
+    const login = (data) => {
+      Cookies.set('uid', data.token, { expires: 7, secure: true, sameSite: 'strict' })
+      Cookies.set('user_id', data.user_id, { expires: 7, secure: true, sameSite: 'strict' })
+
       setIsAuthenticated(true);
     };
 

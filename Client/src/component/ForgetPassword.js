@@ -1,14 +1,47 @@
-import React, { useState } from 'react'
+import React, { useState ,useRef} from 'react'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
+import OTPInput from './OTPInput';
+
 
 const ForgetPassword = () => {
     const [email, setEmail] = useState("");
+    const navigate = useNavigate();
+    const [showOTP, setShowOTP] = useState(false)
+    const otpRef = useRef(null);
 
     const handleSubmit = (e)=>{
         e.preventDefault();
-        console.log("The email is ", email)
+        const value = {email:email};
+        axios.post("http://localhost:8080/api/user/forgot_pass",value).then((response)=>{
+            console.log(response);
+            if(response.status = 200){
+                setShowOTP(true);
+            }
+            
+        }).catch((err)=>{
+            console.log(err);
+        })
     }
+    const handleOTPSubmit = ()=>{
+        const otpValue = otpRef.current.getOTP();
+        const value = {email:email,otp:otpValue};
+        axios.post("http://localhost:8080/api/user/verifyotp",value).then((res)=>{
+            if(res.status==200){
+                navigate('/login', { state: { email: email, forgot: 1 } });
+            }
+        }).catch((err)=>{
+            console.log(err);
+        })
+    }
+
     return (
+        
         <div className='row justify-content-center vh-100 align-items-center' style={{ width: "98%" }}>
+            {
+            showOTP ?
+            <div className='col-md-4'> <OTPInput ref={otpRef} onButtonClick={handleOTPSubmit}  /></div>
+                :
             <div className="col-md-4 col-md-offset-4 p-5" style={{ border: "1px solid black", borderRadius: "10px" }}>
                 <div className="text-center">
                     <h3><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" className="bi bi-lock-fill" viewBox="0 0 16 16">
@@ -18,7 +51,7 @@ const ForgetPassword = () => {
                     <p>You can reset your password here.</p>
                     <div className="panel-body">
 
-                        <form id="register-form" role="form" autocomplete="off" className="form" method="post">
+                        <form id="register-form" role="form" autoComplete="off" className="form" method="post">
 
                             <div className="form-group">
                                 <div className="input-group mb-3">
@@ -38,6 +71,8 @@ const ForgetPassword = () => {
                     </div>
                 </div>
             </div>
+                }      
+
         </div>
     )
 }

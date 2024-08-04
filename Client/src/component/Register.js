@@ -94,11 +94,7 @@ const Register = () => {
         </div>
         {
           showOTP ?
-            <div className='col-md-8'> <OTPInput ref={otpRef} />
-            <div className="mt-4">
-                <button className="btn btn-dark px-4 validate" onClick={handleOTPSubmit}>Validate</button>
-              </div>
-            </div>
+            <div className='col-md-8'> <OTPInput ref={otpRef} onButtonClick={handleOTPSubmit}/></div>
             :
             <div className='col-md-8'>
               <form style={{ width: "80%", borderRadius: "15px", boxShadow: "0 0 9px 1px grey" }} className='p-4' onSubmit={registeruser}>

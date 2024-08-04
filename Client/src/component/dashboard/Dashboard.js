@@ -3,6 +3,8 @@ import {Route, Routes} from 'react-router-dom'
 import UserProfile from './UserProfile/UserProfile';
 import SideNavbarMin from './SideNavbarMin';
 import UserChat from './Chat/UserChat';
+import Notification from './Notification/Notification';
+import FindFriend from './FindFriend/FindFriend';
 
 const Dashboard = () => {
     return (
@@ -14,6 +16,8 @@ const Dashboard = () => {
                 <Routes>
                 <Route path= "profile/*" element={<UserProfile/>} />
                 <Route path= "chat/*" element={<UserChat/>} />
+                <Route path= "notification/*" element={<Notification/>} />
+                <Route path= "findfriend/*" element={<FindFriend/>} />
                 </Routes>
             </div>
         </div>

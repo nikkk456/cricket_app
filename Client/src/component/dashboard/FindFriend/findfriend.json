@@ -1,0 +1,53 @@
+[
+    {
+      "name": "Rahul Sharma",
+      "playingStyle": "Batsman",
+      "profilePicture": "https://randomuser.me/api/portraits/men/1.jpg"
+    },
+    {
+      "name": "Vikram Singh",
+      "playingStyle": "Bowler",
+      "profilePicture": "https://randomuser.me/api/portraits/men/2.jpg"
+    },
+    {
+      "name": "Amit Verma",
+      "playingStyle": "Wicketkeeper",
+      "profilePicture": "https://randomuser.me/api/portraits/men/3.jpg"
+    },
+    {
+      "name": "Rohit Kumar",
+      "playingStyle": "All-rounder",
+      "profilePicture": "https://randomuser.me/api/portraits/men/4.jpg"
+    },
+    {
+      "name": "Suresh Patil",
+      "playingStyle": "Batsman",
+      "profilePicture": "https://randomuser.me/api/portraits/men/5.jpg"
+    },
+    {
+      "name": "Anil Desai",
+      "playingStyle": "Bowler",
+      "profilePicture": "https://randomuser.me/api/portraits/men/6.jpg"
+    },
+    {
+      "name": "Karan Mehta",
+      "playingStyle": "Wicketkeeper",
+      "profilePicture": "https://randomuser.me/api/portraits/men/7.jpg"
+    },
+    {
+      "name": "Deepak Gupta",
+      "playingStyle": "All-rounder",
+      "profilePicture": "https://randomuser.me/api/portraits/men/8.jpg"
+    },
+    {
+      "name": "Naveen Joshi",
+      "playingStyle": "Batsman",
+      "profilePicture": "https://randomuser.me/api/portraits/men/9.jpg"
+    },
+    {
+      "name": "Rakesh Pandey",
+      "playingStyle": "Bowler",
+      "profilePicture": "https://randomuser.me/api/portraits/men/10.jpg"
+    }
+  ]
+  

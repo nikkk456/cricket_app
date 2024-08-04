@@ -17,44 +17,18 @@ const About = () => {
             ...playerProfileData
         }));
     }, [playerProfileData]);
-    // setProfile(playerProfileData);
-    // useEffect(() => {
-    //     const fetchdata = async () => {
-    //         settoken(Cookies.get('uid'));
-    //         setUserid(Cookies.get('user_id'));
-    //         const value = { user_id: Cookies.get('user_id') };
-    //         await axios.post("http://localhost:8080/api/user/profile", value, {
-    //             headers: {
-    //                 'Authorization': Cookies.get('uid')
-    //             }
-    //         })
-    //             .then((response) => {
-    //                 if (response.data && response.data.length > 0) {
-    //                     console.log("This is response data", response);
-    //                     setProfile({ ...response.data[0] });
-    //                     console.log(input);
-    //                 } else {
-    //                     console.log("Response data is empty or not as expected.");
-    //                 }
-    //             })
-    //             .catch((err) => {
-    //                 console.log(err);
-    //             });
-    //     }
-    //     fetchdata();
-    // }, []);
-
-
     const handlechange = (e) => {
         setPlayerProfile({ ...playerProfile, [e.target.name]: e.target.value });
-        console.log(playerProfile);
     }
 
     const submitprofile = () => {
-        profile.height = playerProfile.height;
-        profile.weight = playerProfile.weight;
-        console.log(profile);
-        axios.post("http://localhost:8080/api/user/profile_update", profile, {
+        const updated_value = {
+            ...profile,
+            ...playerProfile
+        };
+        console.log(playerProfile);
+
+        axios.post("http://localhost:8080/api/user/profile_update", updated_value, {
             headers: {
                 Authorization: Cookies.get('uid'),
                 userid: Cookies.get('user_id')

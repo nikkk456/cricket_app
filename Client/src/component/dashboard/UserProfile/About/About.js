@@ -47,13 +47,17 @@ const About = () => {
 
     const handlechange = (e) => {
         setPlayerProfile({ ...playerProfile, [e.target.name]: e.target.value });
+        console.log(playerProfile);
     }
 
     const submitprofile = () => {
+        profile.height = playerProfile.height;
+        profile.weight = playerProfile.weight;
+        console.log(profile);
         axios.post("http://localhost:8080/api/user/profile_update", profile, {
             headers: {
-                Authorization: token,
-                userid: userid
+                Authorization: Cookies.get('uid'),
+                userid: Cookies.get('user_id')
             }
         }).then((response) => {
             console.log(response);

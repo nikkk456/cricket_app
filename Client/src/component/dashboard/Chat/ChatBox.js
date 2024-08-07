@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const ChatBox = ({ selectedFriend }) => {
+const ChatBox = ({ selectedFriend, setSelectedFriend }) => {
   const chatContainerRef = useRef(null);
   const navigate = useNavigate();
   useEffect(() => {
@@ -29,7 +29,10 @@ const ChatBox = ({ selectedFriend }) => {
     </div>;
   }
 
-  const { name, chats } = selectedFriend;
+  var { name, chats } = selectedFriend;
+  const handleDeleteChat = ()=>{
+    setSelectedFriend({ ...selectedFriend, chats: [] });
+  }
   return (
     <div className='vh-100' style={{ width: "65%" }}>
       {/* Username and info Header  */}
@@ -49,7 +52,7 @@ const ChatBox = ({ selectedFriend }) => {
           </a>
           <ul className="dropdown-menu text-small shadow">
             <li><Link className="dropdown-item" to="/playerprofile/1/about">View Profile</Link></li>
-            <li><a className="dropdown-item" href="#">Clear Chat</a></li>
+            <li><a className="dropdown-item" href="#" onClick={handleDeleteChat}>Clear Chat</a></li>
             <li><hr className="dropdown-divider" /></li>
             <li><a className="dropdown-item" href="#">Report User</a></li>
           </ul>
@@ -59,7 +62,7 @@ const ChatBox = ({ selectedFriend }) => {
       {/* Chat BOX started Here  */}
       <div className='row'>
         <div className="chat-box no-scrollbar" ref={chatContainerRef}>
-          {chats.map((msg, index) => (
+          { chats.length!=0? chats.map((msg, index) => (
             <div key={index} className={`message ${msg.sender === 'Nikhil' ? 'left' : 'right'}`}>
               {
                 msg.sender === 'Nikhil' ? <>
@@ -82,7 +85,12 @@ const ChatBox = ({ selectedFriend }) => {
                 </>
               }
             </div>
-          ))}
+          )):<div className='row justify-content-center align-items-center'>
+              <div>
+              <h2>Type a message to start a conversation</h2>
+              </div>
+          </div>
+            }
         </div>
       </div>
 

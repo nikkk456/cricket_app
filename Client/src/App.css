@@ -152,3 +152,43 @@ height: 100%;
 }
 
 
+/* From here the responsiveness starts */
+.features-card {
+  width: 19rem;
+  border-radius: 15px;
+  height: 400px;
+}
+.features-row{
+  overflow-x: auto;
+  height: 415px;
+  flex-wrap: nowrap;
+}
+.top-team-row{
+  overflow-x: auto;
+  height: 375px;
+  flex-wrap: nowrap;
+}
+
+/* For Mobile Screen */
+@media only screen and (max-width: 767px) {
+  .features-card {
+    width: 12rem;
+    height: 350px;
+  }
+  .features-row{
+    overflow-x: auto;
+    height: 375px;
+    flex-wrap: nowrap;
+  }
+  .background-image {
+    height: auto; /* Adjusts height to maintain aspect ratio */
+  }
+  .background-image::before {
+    background-size: contain;
+    background-position: top;
+  }
+
+}
+
+
+

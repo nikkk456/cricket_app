@@ -2,7 +2,7 @@ import React from 'react'
 
 const TopTeamCard = ({ Team_Name, Team_Rank }) => {
     return (
-        <div className="card" style={{ width: "18rem", borderRadius:"15px" }}>
+        <div className="card" style={{ width: "19rem", borderRadius:"15px", height:"350px" }}>
             <img src="./Image/cricket_team.jpg" className="card-img-top" alt="cricket team" style={{borderRadius:"15px"}} />
             <div className="card-body">
                 <h5 className="card-title text-center">{Team_Name}</h5>

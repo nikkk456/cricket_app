@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
       Cookies.remove('uid');
+      Cookies.remove('user_id');
       setIsAuthenticated(false);
     };
 

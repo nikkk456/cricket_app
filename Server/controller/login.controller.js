@@ -26,7 +26,7 @@ const loginuser = (req,res)=>{
             if (!isMatch) {
                 return res.status(400).json({ msg: "Invalid credentials" });
             }
-            const token = jwt.sign({ username: user.username, email: user.email }, JWT_SECRET, { expiresIn: '1d' });
+            const token = jwt.sign({ username: user.username, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
             return res.status(200).json({msg:"login successfully",token:token,user_id:user.id});
         });
 

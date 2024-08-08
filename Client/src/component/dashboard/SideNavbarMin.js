@@ -1,9 +1,17 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import SideNavbar from './SideNavbar'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { AuthContext } from '../../context/AuthContext';
 
 const SideNavbarMin = () => {
     const location = useLocation();
+    const navigate = useNavigate();
+    const {logout} = useContext(AuthContext);
+
+    const handleLogout = ()=>{
+        logout();
+        navigate("/");
+    }
     return (
         <>
             <div className="d-flex flex-column flex-shrink-0  vh-100 position-fixed" style={{ width: "4.5rem", backgroundColor: "#dcdada" }}>
@@ -60,10 +68,10 @@ const SideNavbarMin = () => {
                         <img src="https://github.com/mdo.png" alt="mdo" width="24" height="24" className="rounded-circle" />
                     </a>
                     <ul className="dropdown-menu text-small shadow">
-                        <li><a className="dropdown-item" href="#">Settings</a></li>
-                        <li><a className="dropdown-item" href="#">Profile</a></li>
+                        <li><a className="dropdown-item" href="/dashboard/accountsetting">Settings</a></li>
+                        <li><a className="dropdown-item" href="/dashboard/profile/about">Profile</a></li>
                         <li><hr className="dropdown-divider" /></li>
-                        <li><a className="dropdown-item" href="#">Log out</a></li>
+                        <li><div className="dropdown-item" style={{cursor:"pointer"}} onClick={handleLogout}>Log out</div></li>
                     </ul>
                 </div>
             </div>

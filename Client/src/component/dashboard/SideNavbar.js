@@ -1,10 +1,18 @@
-import React from 'react'
-import { Link, useLocation } from 'react-router-dom';
+import React, { useContext } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 
 const SideNavbar = ({ setMinimised, minimised }) => {
     const location = useLocation();
     const handleMinimised = () => {
         setMinimised(!minimised);
+    }
+    const navigate = useNavigate();
+    const {logout} = useContext(AuthContext);
+
+    const handleLogout = ()=>{
+        logout();
+        navigate("/");
     }
     return (
         <div className="d-flex flex-column flex-shrink-0 p-3 vh-100" style={{ width: "280px", backgroundColor: "#dcdada" }}>
@@ -72,10 +80,10 @@ const SideNavbar = ({ setMinimised, minimised }) => {
                     <strong>Captain</strong>
                 </a>
                 <ul className="dropdown-menu text-small shadow">
-                    <li><a className="dropdown-item" href="#">Settings</a></li>
-                    <li><a className="dropdown-item" href="#">Profile</a></li>
+                    <li><a className="dropdown-item" href="/dashboard/accountsetting">Settings</a></li>
+                    <li><a className="dropdown-item" href="/dashboard/profile/about">Profile</a></li>
                     <li><hr className="dropdown-divider" /></li>
-                    <li><a className="dropdown-item" href="#">Log out</a></li>
+                    <li><div className="dropdown-item" style={{cursor:"pointer"}} onClick={handleLogout}>Log out</div></li>
                 </ul>
             </div>
 

@@ -83,6 +83,12 @@ const Register = () => {
       console.log(err);
     })
   };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      registeruser();
+    }
+  };
   return (
     <div className='container my-3'>
       <div className='bona-nova-sc-bold text-center text-red'>
@@ -186,7 +192,7 @@ const Register = () => {
                     <div data-mdb-input-init className="form-outline mb-4">
                       <label htmlFor="form3Example3">City</label>
                       <input type="text" name="city" onChange={handlechange} id="formCity" className="form-control "
-                        placeholder="Enter Your City" required />
+                        placeholder="Enter Your City" required onKeyDown={handleKeyDown} />
                       {errors.city && <small className="text-danger">{errors.city}</small>}
                     </div>
                   </div>

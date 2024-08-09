@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import EmojiPicker from 'emoji-picker-react';
+import { Link, useNavigate } from 'react-router-dom';
 
-const ChatBox = ({ selectedFriend }) => {
+const ChatBox = ({ selectedFriend, setSelectedFriend }) => {
   const chatContainerRef = useRef(null);
+  const navigate = useNavigate();
   useEffect(() => {
     //To get recent messages on screen and then scroll up for older chats
     if (chatContainerRef.current) {
@@ -27,7 +29,10 @@ const ChatBox = ({ selectedFriend }) => {
     </div>;
   }
 
-  const { name, chats } = selectedFriend;
+  var { name, chats } = selectedFriend;
+  const handleDeleteChat = ()=>{
+    setSelectedFriend({ ...selectedFriend, chats: [] });
+  }
   return (
     <div className='vh-100' style={{ width: "65%" }}>
       {/* Username and info Header  */}
@@ -35,7 +40,7 @@ const ChatBox = ({ selectedFriend }) => {
         <div className='col-md-4 rounded-circle' style={{ width: "9%", display: "flex", alignItems: "center" }}>
           <img src="https://github.com/mdo.png" className='rounded-circle me-2' alt='...' style={{ width: "100%" }} />
         </div>
-        <div className='col-md-6' style={{ display: "flex", alignItems: "center", cursor:"pointer" }}>
+        <div className='col-md-6' style={{ display: "flex", alignItems: "center", cursor:"pointer" }} onClick={()=>{navigate('/playerprofile/1/about')}}>
           <h5>{name}</h5>
         </div>
         <div className='col-md-1' style={{ width: "40%", display: "flex", justifyContent: "end", alignItems: "center" }}>
@@ -46,8 +51,8 @@ const ChatBox = ({ selectedFriend }) => {
             </svg>
           </a>
           <ul className="dropdown-menu text-small shadow">
-            <li><a className="dropdown-item" href="#">View Profile</a></li>
-            <li><a className="dropdown-item" href="#">Clear Chat</a></li>
+            <li><Link className="dropdown-item" to="/playerprofile/1/about">View Profile</Link></li>
+            <li><a className="dropdown-item" href="#" onClick={handleDeleteChat}>Clear Chat</a></li>
             <li><hr className="dropdown-divider" /></li>
             <li><a className="dropdown-item" href="#">Report User</a></li>
           </ul>
@@ -57,7 +62,7 @@ const ChatBox = ({ selectedFriend }) => {
       {/* Chat BOX started Here  */}
       <div className='row'>
         <div className="chat-box no-scrollbar" ref={chatContainerRef}>
-          {chats.map((msg, index) => (
+          { chats.length!=0? chats.map((msg, index) => (
             <div key={index} className={`message ${msg.sender === 'Nikhil' ? 'left' : 'right'}`}>
               {
                 msg.sender === 'Nikhil' ? <>
@@ -80,7 +85,12 @@ const ChatBox = ({ selectedFriend }) => {
                 </>
               }
             </div>
-          ))}
+          )):<div className='row justify-content-center align-items-center'>
+              <div>
+              <h2>Type a message to start a conversation</h2>
+              </div>
+          </div>
+            }
         </div>
       </div>
 

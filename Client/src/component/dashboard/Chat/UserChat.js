@@ -8,7 +8,7 @@ const UserChat = () => {
     <div className='container-fluid'>
       <div className='row'>
       <SideBar setSelectedFriend={setSelectedFriend}/>
-      <ChatBox selectedFriend={selectedFriend}/>
+      <ChatBox selectedFriend={selectedFriend} setSelectedFriend={setSelectedFriend}/>
       </div>
     </div>
   )

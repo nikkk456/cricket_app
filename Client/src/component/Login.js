@@ -40,6 +40,12 @@ const Login = () => {
     }
     
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+          handleSubmit();
+        }
+      };
+
     return (
         <>
             {
@@ -94,12 +100,13 @@ const Login = () => {
 
                         {/* Password input */}
                         <div className="form-outline mb-3">
-                        
+                        {forgot?<label className="form-label" htmlFor="form3Example4">Confirm Password</label>:
                             <label className="form-label" htmlFor="form3Example4">Password</label>
                         
                             <div className="input-group mb-3">
-                                <input type={showPassword ? "text" : "password"} name='password' id="form3Example4" className="form-control" placeholder="Enter password" onChange={handleChange} 
+                                <input type={showPassword ? "text" : "password"} name='password' id="form3Example4" className="form-control" placeholder="Enter password" onChange={handleChange} onKeyDown={handleKeyDown}  
                                  />
+                                 {/* This is the feature to show the password  */}
                                 <span className="input-group-text" id="basic-addon2" onClick={handleShow}>
                                     {
                                         showPassword?<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-eye" viewBox="0 0 16 16">

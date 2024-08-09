@@ -28,7 +28,7 @@ const ForgetPassword = () => {
         const value = {email:email,otp:otpValue};
         axios.post("http://localhost:8080/api/user/verifyotp",value).then((res)=>{
             if(res.status==200){
-                navigate('/login', { state: { email: email, forgot: 1 } });
+                navigate('/SetNewPassword', { state: { email: email, forgot: 1 } });
             }
         }).catch((err)=>{
             console.log(err);

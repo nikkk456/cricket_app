@@ -9,9 +9,7 @@ import Toast from './Toast'
 
 const Login = () => {
     const navigate = useNavigate();
-    const location = useLocation();
-    const forgot = location.state?.forgot || 0;
-    const email = location.state?.email || '';
+   
     const [showToast, setShowToast] = useState(false);
     const {login} = useContext(AuthContext);
     const [showPassword, setShowPassword] = useState(false);
@@ -40,21 +38,7 @@ const Login = () => {
             console.log(err);
         });
     }
-    const handleSubmit2 = ()=>{
-        console.log(loginData);
-        if(loginData.password!=loginData.forgetpassword){
-            return   ;
-        }
-        const values = {email:email,password:loginData.password};
-        axios.post("http://localhost:8080/api/user/resetpass",values).then((res)=>{
-            console.log(res);
-            if(res.status==200){
-                navigate("/login");
-            }
-        }).catch((err)=>{
-            console.log(err);
-        })
-    }
+    
 
     return (
         <>
@@ -72,9 +56,9 @@ const Login = () => {
                 <div className='col-md-8'>
                     <form style={{ width: "60%", borderRadius: "15px", boxShadow: "0 0 9px 1px grey" }} className='p-4'>
                         {/* Sign in with Google and Facebook */}
-                        {
-                            forgot?"":
-                            <>
+                        
+                          
+                            
                         <div className="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
                             <p className="lead fw-normal mb-0 me-3">Sign in with</p>
                             <button type="button" className="btn btn-dark btn-floating mx-1 rounded-circle">
@@ -93,32 +77,26 @@ const Login = () => {
                         <div className="divider d-flex align-items-center my-4">
                             <p className="text-center fw-bold mx-3 mb-0">Or</p>
                         </div>
-                        </>
-                        }
+                        
+                        
                         
 
                         
                         {/* Email input */}
-                        {
-                            forgot?
-                            <div className="form-outline mb-4">
-                            <label className="form-label" >Password</label>
-                            <input type="text" name='forgetpassword'  className="form-control"
-                                placeholder="Enter password" onChange={handleChange}  value={''}/>
-                        </div>
+                        
                             :
                         <div className="form-outline mb-4">
                             <label className="form-label" htmlFor="form3Example3">Email address</label>
                             <input type="email" name='email' id="form3Example3" className="form-control"
                                 placeholder="Enter a valid email address" onChange={handleChange}  />
                         </div>
-                        }
+                        
 
                         {/* Password input */}
                         <div className="form-outline mb-3">
-                        {forgot?<label className="form-label" htmlFor="form3Example4">Confirm Password</label>:
+                        
                             <label className="form-label" htmlFor="form3Example4">Password</label>
-                        }
+                        
                             <div className="input-group mb-3">
                                 <input type={showPassword ? "text" : "password"} name='password' id="form3Example4" className="form-control" placeholder="Enter password" onChange={handleChange} 
                                  />
@@ -138,12 +116,7 @@ const Login = () => {
                             </div>
                         </div>
 
-                    { forgot?
-                    <div className="text-center text-lg-start mt-4 pt-2">
-                    <button type="button" className="btn btn-sm btn-dark text-white"
-                        style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }} onClick={handleSubmit2}>Submit</button>
-                    </div>
-                    :<>
+                    
                         <div className="d-flex justify-content-between align-items-center">
                             {/* Checkbox */}
                             <div className="form-check mb-0">
@@ -161,9 +134,7 @@ const Login = () => {
                             <p className="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="/register"
                                 className="link-danger">Register</a></p>
                         </div>
-                        </>
-                        }
-
+                       
                     </form>
                 </div>
             </div>

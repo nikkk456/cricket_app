@@ -1,21 +1,33 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useLocation ,useNavigate} from 'react-router-dom';
+
 
 const SetNewPassword = () => {
-    const [newPassword, setNewPassword] = useState('');
-    const [renewPassword, setReNewPassword] = useState('');
+    const [loginData,setloginData] = useState({});
+    const location = useLocation();
+    const navigate = useNavigate();
+    const forgot = location.state?.forgot || 0;
+    const email = location.state?.email || '';
 
-    const handleNewPasswordChange = (e) => {
-        setNewPassword(e.target.value);
+    const handlechange = (e) => {
+        setloginData({...loginData,[e.target.name]:e.target.value});
     };
 
-    const handleReNewPasswordChange = (e) => {
-        setReNewPassword(e.target.value);
-    };
-
-    const isPasswordMatch = newPassword && newPassword === renewPassword;
-
-    const handleSubmit = ()=>{
-
+    const handleSubmit = (e)=>{
+        e.preventDefault();
+        if(loginData.password!=loginData.confirmpassword){
+            return   ;
+        }
+        const values = {email:email,password:loginData.password};
+        axios.post("http://localhost:8080/api/user/resetpass",values).then((res)=>{
+            console.log(res);
+            if(res.status==200){
+                navigate("/login");
+            }
+        }).catch((err)=>{
+            console.log(err);
+        })
     }
 
     return (
@@ -30,26 +42,24 @@ const SetNewPassword = () => {
                             <input
                                 type="password"
                                 className="form-control mt-2"
+                                name='password'
                                 id="typePassword"
                                 placeholder='New Password'
-                                value={newPassword}
-                                onChange={handleNewPasswordChange}
+                                onChange={handlechange}
                             />
                             <label className='mt-3'>Retype New Password</label>
                             <input
                                 type="password"
+                                name='confirmpassword'
                                 className="form-control mt-2"
                                 id="retypePassword"
                                 placeholder='Re-type New Password'
-                                value={renewPassword}
-                                onChange={handleReNewPasswordChange}
+                                onChange={handlechange}
                             />
                             <div className="form-group mt-3">
                                 <button
                                     name="recover-submit"
                                     className="btn btn-dark"
-                                    type="submit"
-                                    disabled={!isPasswordMatch}
                                     onClick={handleSubmit}
                                 >
                                     Reset Password

@@ -1,14 +1,19 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './FriendList.module.css';
 
 const FriendList = ({ name, playingStyle, imageUrl, index }) => {
     // Determine background color based on index
+    const navigate = useNavigate();
     const bgColor = index % 2 === 0 ? 'rgb(244 240 240);' : 'rgb(239 239 239);'; // Light grey and light white
 
+    const handleClick = ()=>{
+        navigate('/playerprofile/:id/about')
+    }
     return (
         <div 
             className={`d-flex align-items-center py-2 px-3 my-2 friendListItem ${styles.friendListItem}`}
-            style={{ backgroundColor: bgColor }}
+            style={{ backgroundColor: bgColor }} onClick={handleClick}
         >
             <div className='me-3'>
                 <img 

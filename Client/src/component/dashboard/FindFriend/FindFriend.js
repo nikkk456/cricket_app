@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import findFriend from './findfriend.json'
 import FriendList from './FriendList';
 import Cookies from 'js-cookie';
-import NoFriend from './NoFriend';
 import axios from 'axios';
+import CricketLoader from '../../loader/CricketLoader.js';
 
 const FindFriend = () => {
     const user_id ={"user_id":Cookies.get('user_id')};
@@ -12,6 +11,7 @@ const FindFriend = () => {
     const [searchfrien ,setsearchfrien] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [showFriend, setShowFriend] = useState(false);
+    const [suggestfriend,setSuggestfriend] = useState(false);
     
     useEffect(()=>{
         axios.post("http://localhost:8080/api/friends/list",user_id,{
@@ -19,8 +19,8 @@ const FindFriend = () => {
                 authorization:Cookies.get("uid")
             }
         }).then((response)=>{
-            // console.log(response);
             setfriendslist(Object.values(response.data.result));
+            setSuggestfriend(true);
         }).catch((err)=>{
             console.log(err);
         });
@@ -31,7 +31,6 @@ const FindFriend = () => {
                 return "All Rounder";
             case "wicket_keeper_batsman":
                 return "Wicket Keeper Batsman";
-            // Add more cases as needed
             default:
                 return role ? role.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : "----";
         }
@@ -47,7 +46,6 @@ const FindFriend = () => {
             console.log(err);
         });
     }
-    console.log(friendslist);
     
     return (
         <div className='container-fluid'>
@@ -78,7 +76,7 @@ const FindFriend = () => {
                                 <div className='no-scrollbar' style={{ overflowY: "auto", maxHeight: "90vh" }}>
                                     {
                                         searchfrien.map((data, index) => (
-                                            <FriendList name={data.name} id={data.id} playingStyle={formatPlayingRole(data.playing_role)} index={index}/>
+                                            <FriendList name={data.name} playerId={data.id} playingStyle={formatPlayingRole(data.playing_role)} index={index}/>
                                         ))
                                     }
                                 </div>
@@ -97,13 +95,18 @@ const FindFriend = () => {
                    <div className="row pt-4 pb-2" >
                         <h5 className='mb-2' >Suggested Friends</h5>
                         </div>
+                        { suggestfriend?
                         <div className='no-scrollbar mt-2' style={{ overflowY: "auto", maxHeight: "90vh" }}>
-                            {
+                            { 
                                 friendslist.map((data, index) => (
-                                    <FriendList name={data.name} id={data.id} playingStyle={formatPlayingRole(data.playing_role)} index={index}/>
+                                    <FriendList name={data.name} playerId={data.id} playingStyle={formatPlayingRole(data.playing_role)} index={index}/>
                                 ))
                             }
+                        </div>:
+                        <div className='col-md-4' style={{position: 'absolute',width: '-webkit-fill-available', display: 'flex',justifyContent: 'center',top: '50%',transform: 'translateY(-50%)'}}>
+                        <CricketLoader/>
                         </div>
+                        }   
                 </div>
             </div>
         </div>

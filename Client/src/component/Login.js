@@ -83,14 +83,7 @@ const Login = () => {
                         <div className="divider d-flex align-items-center my-4">
                             <p className="text-center fw-bold mx-3 mb-0">Or</p>
                         </div>
-                        
-                        
-                        
-
-                        
                         {/* Email input */}
-                        
-                            :
                         <div className="form-outline mb-4">
                             <label className="form-label" htmlFor="form3Example3">Email address</label>
                             <input type="email" name='email' id="form3Example3" className="form-control"

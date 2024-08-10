@@ -9,6 +9,7 @@ import Dashboard from './component/dashboard/Dashboard';
 import ForgetPassword from './component/ForgetPassword';
 import SetNewPassword from './component/SetNewPassword';
 import PlayerProfile from './component/PlayerProfile';
+import NotFound from './component/NotFound';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path = "/setnewpassword" element={<SetNewPassword/>}/>
         <Route path = "/dashboard/*" element={<Dashboard/>}/>
         <Route path = "/playerprofile/:id/*" element={<PlayerProfile/>}/>
+        <Route path = "*" element={<NotFound/>}/>
       </Routes>
       <Footer/>
     </>

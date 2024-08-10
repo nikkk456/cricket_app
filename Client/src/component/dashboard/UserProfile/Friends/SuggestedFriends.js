@@ -8,7 +8,7 @@ const SuggestedFriends = ({captain}) => {
             </div>
             <div className='col-md-4 d-flex mx-2' style={{ flexDirection: "column" }}>
                 <h5 style={{ margin: "0px" }}>
-                    Friend Name (Team Name) {captain === "true" ? <span class="badge text-bg-success rounded-circle" style={{fontSize:"x-small"}}>C</span> : ""}
+                    Friend Name (Team Name) {captain === "true" ? <span className="badge text-bg-success rounded-circle" style={{fontSize:"x-small"}}>C</span> : ""}
                 </h5>
                 <p>
                     Playing style

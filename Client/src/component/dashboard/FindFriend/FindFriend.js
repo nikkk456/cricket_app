@@ -76,7 +76,7 @@ const FindFriend = () => {
                                 <div className='no-scrollbar' style={{ overflowY: "auto", maxHeight: "90vh" }}>
                                     {
                                         searchfrien.map((data, index) => (
-                                            <FriendList name={data.name} playerId={data.id} playingStyle={formatPlayingRole(data.playing_role)} index={index}/>
+                                            <FriendList name={data.name} playerId={data.id} playingStyle={formatPlayingRole(data.playing_role)} index={index} key={data.id}/>
                                         ))
                                     }
                                 </div>
@@ -99,7 +99,7 @@ const FindFriend = () => {
                         <div className='no-scrollbar mt-2' style={{ overflowY: "auto", maxHeight: "90vh" }}>
                             { 
                                 friendslist.map((data, index) => (
-                                    <FriendList name={data.name} playerId={data.id} playingStyle={formatPlayingRole(data.playing_role)} index={index}/>
+                                    <FriendList name={data.name} playerId={data.id} playingStyle={formatPlayingRole(data.playing_role)} index={index} key={data.id}/>
                                 ))
                             }
                         </div>:

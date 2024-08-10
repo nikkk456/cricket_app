@@ -1,15 +1,58 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import findFriend from './findfriend.json'
 import FriendList from './FriendList';
+import Cookies from 'js-cookie';
 import NoFriend from './NoFriend';
+import axios from 'axios';
 
 const FindFriend = () => {
+    const user_id ={"user_id":Cookies.get('user_id')};
+    const [searchValue,setSearchValue] = useState({});
+    const [friendslist,setfriendslist ]= useState([]);
+    const [searchfrien ,setsearchfrien] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [showFriend, setShowFriend] = useState(false);
+    
+    useEffect(()=>{
+        axios.post("http://localhost:8080/api/friends/list",user_id,{
+            headers:{
+                authorization:Cookies.get("uid")
+            }
+        }).then((response)=>{
+            // console.log(response);
+            setfriendslist(Object.values(response.data.result));
+        }).catch((err)=>{
+            console.log(err);
+        });
+    },[]);
+    const formatPlayingRole = (role) => {
+        switch(role) {
+            case "all_rounder":
+                return "All Rounder";
+            case "wicket_keeper_batsman":
+                return "Wicket Keeper Batsman";
+            // Add more cases as needed
+            default:
+                return role ? role.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) : "----";
+        }
+    };
+
+    const searchfriend = (e)=>{
+        setSearchValue({...searchValue,[e.target.name]:e.target.value});
+        console.log(searchValue);
+        axios.post("http://localhost:8080/api/friends/searchfriends",searchValue).then((response)=>{
+            setsearchfrien(Object.values(response.data.result));
+            setShowFriend(true);
+        }).catch((err)=>{
+            console.log(err);
+        });
+    }
+    console.log(friendslist);
+    
     return (
         <div className='container-fluid'>
             <div className='row'>
-                <div className='col-md-6'>
+                <div className='col-md-8'>
                     <div className='row' style={{ backgroundColor: "grey" }}>
                         <div className="input-group my-3">
                             <input
@@ -19,8 +62,8 @@ const FindFriend = () => {
                                 aria-label="Friend's username"
                                 aria-describedby="basic-addon2"
                                 style={{ borderRadius: "10px 0px 0px 10px" }}
-                                value={searchTerm}
-                                onChange={e => setSearchTerm(e.target.value)}
+                                name='searchvalue'
+                                onChange={searchfriend}
                             />
                             <span className="input-group-text" id="basic-addon2" style={{ borderRadius: "0px 10px 10px 0px" }} onClick={() => { setShowFriend(true) }}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16">
@@ -34,8 +77,8 @@ const FindFriend = () => {
                             <div className='row'>
                                 <div className='no-scrollbar' style={{ overflowY: "auto", maxHeight: "90vh" }}>
                                     {
-                                        findFriend.map((data, index) => (
-                                            <FriendList name={data.name} playingStyle={data.playingStyle} imageUrl={data.profilePicture} />
+                                        searchfrien.map((data, index) => (
+                                            <FriendList name={data.name} id={data.id} playingStyle={formatPlayingRole(data.playing_role)} index={index}/>
                                         ))
                                     }
                                 </div>
@@ -50,20 +93,17 @@ const FindFriend = () => {
                             // <NoFriend/>
                     }
                 </div>
-                <div className='col-md-1'>
-
-                </div>
-                <div className='col-md-5'>
-                    <div className='row rounded border mt-2'>
-                        <h5>Suggested Friends</h5>
-                        <div className='no-scrollbar' style={{ overflowY: "auto", maxHeight: "90vh" }}>
+                <div className='col-md-4'>
+                   <div className="row pt-4 pb-2" >
+                        <h5 className='mb-2' >Suggested Friends</h5>
+                        </div>
+                        <div className='no-scrollbar mt-2' style={{ overflowY: "auto", maxHeight: "90vh" }}>
                             {
-                                findFriend.map((data, index) => (
-                                    <FriendList name={data.name} playingStyle={data.playingStyle} imageUrl={data.profilePicture} />
+                                friendslist.map((data, index) => (
+                                    <FriendList name={data.name} id={data.id} playingStyle={formatPlayingRole(data.playing_role)} index={index}/>
                                 ))
                             }
                         </div>
-                    </div>
                 </div>
             </div>
         </div>

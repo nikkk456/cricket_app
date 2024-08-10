@@ -19,6 +19,9 @@ app.listen(8080, () => {
 
 // Routes
 const users_route = require("./routes/user.routes.js");
+const friend = require("./routes/friends.routes.js");
+
+app.use("/api/friends",friend);
 app.use("/api/user", users_route);
 
 

@@ -100,7 +100,7 @@ const Login = () => {
 
                         {/* Password input */}
                         <div className="form-outline mb-3">
-                        {forgot?<label className="form-label" htmlFor="form3Example4">Confirm Password</label>:
+                        
                             <label className="form-label" htmlFor="form3Example4">Password</label>
                         
                             <div className="input-group mb-3">

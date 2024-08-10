@@ -1,24 +1,38 @@
-import React from 'react'
+import React from 'react';
+import styles from './FriendList.module.css';
 
-const FriendList = ({name, playingStyle, imageUrl}) => {
+const FriendList = ({ name, playingStyle, imageUrl, index }) => {
+    // Determine background color based on index
+    const bgColor = index % 2 === 0 ? 'rgb(244 240 240);' : 'rgb(239 239 239);'; // Light grey and light white
+
     return (
-        <div className='row my-2 border-bottom' style={{ cursor: "pointer" }}>
-            <div className='col-md-3 rounded-circle' style={{ width: "17%", display: "flex", alignItems: "center" }}>
-                <img src={imageUrl || "https://github.com/mdo.png"} className='rounded-circle me-2' alt='...' style={{ width: "100%" }} />
+        <div 
+            className={`d-flex align-items-center py-2 px-3 my-2 friendListItem ${styles.friendListItem}`}
+            style={{ backgroundColor: bgColor }}
+        >
+            <div className='me-3'>
+                <img 
+                    src={imageUrl || "https://github.com/mdo.png"} 
+                    className='rounded-circle' 
+                    alt={name} 
+                    style={{ width: "50px", height: "50px", objectFit: "cover" }} 
+                />
             </div>
-            <div className='col-md-6 d-flex mx-2' style={{ flexDirection: "column" }}>
-                <h5 style={{ margin: "0px" }}>
+            <div className='flex-grow-1'>
+                <h6 className='mb-0' style={{ fontWeight: "600", color: "#050505" }}>
                     {name || 'Friend Name'}
-                </h5>
-                <p>
-                    {playingStyle||'Playing style'}
+                </h6>
+                <p className='mb-0' style={{ fontSize: "13px", color: "#65676B" }}>
+                    {playingStyle || 'Playing style'}
                 </p>
             </div>
-            <div className='col-md-3 d-flex' style={{ justifyContent: "end", alignItems: "center" }}>
-                <button type='button' className='btn btn-dark'>Connect</button>
+            <div>
+                <button type='button' className='btn btn-light btn-sm' style={{ border: "1px solid #ddd", fontWeight: "500" }}>
+                    Connect
+                </button>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default FriendList
+export default FriendList;

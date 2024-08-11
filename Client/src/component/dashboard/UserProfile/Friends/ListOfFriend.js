@@ -39,9 +39,9 @@ const ListOfFriend = () => {
                     <h4>Friend List</h4>
                 </div>
                 <div className='col-md-6 col-6 d-flex justify-content-end'>
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" style={{width:"75%"}} />
-                        <button class="btn btn-dark" type="submit">Search</button>
+                    <form className="d-flex" role="search">
+                        <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" style={{width:"75%"}} />
+                        <button className="btn btn-dark" type="submit">Search</button>
                     </form>
                 </div>
             </div>

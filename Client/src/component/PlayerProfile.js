@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import Cookies from 'js-cookie'
-import { Link, Route, Routes, useLocation } from 'react-router-dom';
+import { Link, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import About from './dashboard/UserProfile/About/About';
 import Stats from './dashboard/UserProfile/Stats/Stats';
 
@@ -9,11 +9,12 @@ const PlayerProfile = () => {
     const [showModal, setShowModal] = useState(false);
     const [userData, setUserData] = useState();
     const location = useLocation();
-    const playerId = location.state?.playerId || '';
-    // console.log("This is in PlayerProfile",playerId);
+    // const playerId = location.state?.playerId || '';
+    const { id } = useParams();
+    console.log("This is in PlayerProfile",id);
 
     useEffect(() => {
-        const value = { user_id: playerId };
+        const value = { user_id: id };
         const fetchData = async () => {
             await axios.post("http://localhost:8080/api/user/profile", value, {
                 headers: {
@@ -32,7 +33,7 @@ const PlayerProfile = () => {
             });
         }
         fetchData();
-    }, []);
+    }, [id]);
 
     const handleImageClick = () => {
         setShowModal(true);
@@ -52,7 +53,7 @@ const PlayerProfile = () => {
             {/* This is for profile picture section */}
             <div className="text-center" style={{ marginTop: "-60px", position: "relative" }}>
                 <img
-                    src={"https://github.com/mdo.png"}
+                    src={userData?userData.profilePicture:"https://github.com/mdo.png"}
                     className="rounded-circle mt-n5"
                     alt="Profile"
                     style={{ width: "100px", height: "100px", border: "5px solid white" }}
@@ -136,7 +137,7 @@ const PlayerProfile = () => {
                 </div>
                 <hr />
                 <Routes>
-                    <Route path="about" element={<About userData={userData} />} /> Isme About me ek object bhej dio containing every details of fetched user saari chije apne aap set ho jaaengi
+                    <Route path="about" element={<About userData={userData} />} />
                     <Route path="stats" element={<Stats />} />
                 </Routes>
 

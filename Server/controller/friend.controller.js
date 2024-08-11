@@ -4,18 +4,12 @@ const friendslist = (req, res) => {
     const getlist = `
         SELECT u.id, name, playing_role
         FROM users u
-        JOIN users_profile up ON u.id = up.user_id
-        WHERE u.city = (
-            SELECT city
-            FROM users
-            WHERE users.id = ?
-        )
-        AND u.id != ?
-    `;
+        LEFT JOIN users_profile up ON u.id = up.user_id
+        WHERE u.id != ? `;
 
     const userId = req.body.user_id;
 
-    conn.query(getlist, [userId, userId], (err, result) => {
+    conn.query(getlist, [userId], (err, result) => {
         if (err) {
             return res.status(500).send(err);
         }

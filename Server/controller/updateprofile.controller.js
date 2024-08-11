@@ -1,14 +1,15 @@
-
 const conn = require("../bdcon/dbcon.js");
-const profile_update = (req,res)=>{
+
+const profile_update = (req, res) => {
     const userid = req.headers['userid'];
     const checkexisting = "SELECT * FROM users_profile WHERE user_id = ?";
-    
+
     conn.query(checkexisting, [userid], (err, data) => {
         if (err) {
             return res.status(500).json(err);
         }
-        
+
+        // Prepare values including profilePicture
         const values = [
             req.body.playing_role,
             req.body.preferred_playing_position,
@@ -24,27 +25,30 @@ const profile_update = (req,res)=>{
             req.body.timing,
             req.body.instagram_links,
             req.body.facebook_links,
+            req.body.profilePicture,  // Add this line
             userid
         ];
-    
+
         if (data.length > 0) {  // User profile exists, perform update
             const update_query = `UPDATE users_profile SET 
-                playing_role = ?, 
-                preferred_playing_position = ?, 
-                batting_style = ?, 
-                bowling_style = ?, 
-                height = ?, 
-                weight = ?, 
-                experience = ?, 
-                highest_level_played = ?, 
-                previous_Team = ?, 
-                achievement = ?, 
-                availability_days = ?, 
-                timing = ?, 
-                instagram_links = ?, 
-                facebook_links = ? 
-                WHERE user_id = ?`;
-    
+                                    playing_role = ?, 
+                                    preferred_playing_position = ?, 
+                                    batting_style = ?, 
+                                    bowling_style = ?, 
+                                    height = ?, 
+                                    weight = ?, 
+                                    experience = ?, 
+                                    highest_level_played = ?, 
+                                    previous_Team = ?, 
+                                    achievement = ?, 
+                                    availability_days = ?, 
+                                    timing = ?, 
+                                    instagram_links = ?, 
+                                    facebook_links = ?, 
+                                    profilePicture = ? 
+                                    WHERE user_id = ?`;
+
+
             conn.query(update_query, values, (err, result) => {
                 if (err) {
                     return res.status(500).json(err);
@@ -53,9 +57,9 @@ const profile_update = (req,res)=>{
             });
         } else {  // User profile does not exist, perform insert
             const insert_query = `INSERT INTO users_profile 
-                (playing_role, preferred_playing_position, batting_style, bowling_style, height, weight, experience, highest_level_played, previous_Team, achievement, availability_days, timing, instagram_links, facebook_links, user_id) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-    
+                (playing_role, preferred_playing_position, batting_style, bowling_style, height, weight, experience, highest_level_played, previous_Team, achievement, availability_days, timing, instagram_links, facebook_links, profilePicture, user_id) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
             conn.query(insert_query, values, (err, result) => {
                 if (err) {
                     return res.status(500).json(err);
@@ -66,4 +70,4 @@ const profile_update = (req,res)=>{
     });
 }
 
-module.exports = profile_update
+module.exports = profile_update;

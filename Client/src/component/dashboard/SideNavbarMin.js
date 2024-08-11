@@ -8,7 +8,7 @@ const SideNavbarMin = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const {logout} = useContext(AuthContext);
-    const { playerProfileData, setPlayerProfileData } = useContext(PlayerProfileContext);
+    const { playerProfileData } = useContext(PlayerProfileContext);
 
     const handleLogout = ()=>{
         logout();
@@ -71,7 +71,7 @@ const SideNavbarMin = () => {
                     </a>
                     <ul className="dropdown-menu text-small shadow">
                         <li><a className="dropdown-item" href="/dashboard/accountsetting">Settings</a></li>
-                        <li><a className="dropdown-item" href="/dashboard/profile/about">Profile</a></li>
+                        <li><a className="dropdown-item" href="/">Home</a></li>
                         <li><hr className="dropdown-divider" /></li>
                         <li><div className="dropdown-item" style={{cursor:"pointer"}} onClick={handleLogout}>Log out</div></li>
                     </ul>

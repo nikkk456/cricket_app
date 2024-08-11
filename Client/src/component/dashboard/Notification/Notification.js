@@ -3,7 +3,6 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import notification from './Notification.json';
 import NotificationMessage from './NotificationMessage';
-import SuggestedFriend from './SuggestedFriend';
 import FriendList from '../FindFriend/FriendList';
 
 const Notification = () => {
@@ -106,7 +105,7 @@ const Notification = () => {
               {
                 friendList ? friendList.map((data, index) => (
                   <><FriendList name={data.name} playerId={data.id} playingStyle={formatPlayingRole(data.playing_role)} index={index} imageUrl={data.profilePicture} /></>
-                )) : ""
+                )) : "Loading.."
               }
             </div>
           </div>

@@ -44,27 +44,6 @@ const Profile = () => {
                 style={{ width: "100px", height: "100px", border: "5px solid white" }}
                 onClick={handleImageClick}
             />
-            {/* <svg
-                onClick={handleIconClick}
-                xmlns="http://www.w3.org/2000/svg"
-                width="25"
-                height="25"
-                fill="currentColor"
-                className="bi bi-pencil"
-                viewBox="0 0 16 16"
-                style={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    cursor: "pointer",
-                    backgroundColor: "white",
-                    borderRadius: "50%",
-                    padding: "5px"
-                }}
-            >
-                <path d="M12.146.854a.5.5 0 0 1 .708 0l1.292 1.292a.5.5 0 0 1 0 .708l-9 9a.5.5 0 0 1-.168.11l-3.5 1a.5.5 0 0 1-.641-.641l1-3.5a.5.5 0 0 1 .11-.168l9-9zM11.207 2L3 10.207V11h.793L13 3.793 11.207 2zM2 12.5V14h1.5l.5-.5h-2zm10-10L12.5 1.5 14 3l-1.5 1.5L12 3z" />
-            </svg> */}
             <svg xmlns="http://www.w3.org/2000/svg" onClick={handleIconClick} style={{
                     position: "absolute",
                     top: "50%",

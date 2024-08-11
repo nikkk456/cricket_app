@@ -30,9 +30,20 @@ const About = ({userData}) => {
             ...playerProfile
         };
         console.log(playerProfile);
+        const formData = new FormData();
+        for (const key in updated_value) {
+            if (key !== 'profilePicture') {
+                formData.append(key, updated_value[key]);
+            }
+        }
 
-        axios.post("http://localhost:8080/api/user/profile_update", updated_value, {
+        if (updated_value.profilePicture) {
+            formData.append('profilePicture', updated_value.profilePicture);
+        }
+
+        axios.post("http://localhost:8080/api/user/profile_update", formData, {
             headers: {
+                'Content-Type': 'multipart/form-data',
                 Authorization: Cookies.get('uid'),
                 userid: Cookies.get('user_id')
             }

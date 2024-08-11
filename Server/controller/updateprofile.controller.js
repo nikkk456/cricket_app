@@ -9,6 +9,9 @@ const profile_update = (req, res) => {
             return res.status(500).json(err);
         }
 
+        // Construct the profile picture URL
+        const profilePicture = req.file ? `${req.protocol}://${req.get('host')}/uploads/profile_pictures/${req.file.filename}` : null;
+
         // Prepare values including profilePicture
         const values = [
             req.body.playing_role,
@@ -25,7 +28,7 @@ const profile_update = (req, res) => {
             req.body.timing,
             req.body.instagram_links,
             req.body.facebook_links,
-            req.body.profilePicture,  // Add this line
+            profilePicture,  // Use URL instead of base64 string
             userid
         ];
 
@@ -47,7 +50,6 @@ const profile_update = (req, res) => {
                                     facebook_links = ?, 
                                     profilePicture = ? 
                                     WHERE user_id = ?`;
-
 
             conn.query(update_query, values, (err, result) => {
                 if (err) {

@@ -1,14 +1,17 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const app = express();
+
 
 app.use(cors());
 
 // Middleware configuration for JSON body parsing
 app.use(express.json({ limit: '10mb' }));
-
 // Middleware configuration for URL-encoded body parsing
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Middleware to parse URL-encoded bodies
 app.use((req, res, next) => {

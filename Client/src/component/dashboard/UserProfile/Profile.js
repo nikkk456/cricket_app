@@ -1,20 +1,30 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { PlayerProfileContext } from '../../../context/PlayerProfileContext';
 
 const Profile = () => {
     const { playerProfileData, setPlayerProfileData } = useContext(PlayerProfileContext);
     const fileInputRef = useRef(null);
     const [showModal, setShowModal] = useState(false);
+    const [tempchangepic,settempchangepic] = useState({
+        profilepic:""
+    });
+    useEffect(() => {
+        console.log(tempchangepic.profilepic);  // This will log the updated profile picture URL
+    }, [tempchangepic]);  // Runs whenever tempchangepic changes
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                // Update the profile picture URL in the context
+                settempchangepic(prevState => ({
+                    ...prevState,            // Spread the previous state
+                    profilepic: reader.result // Update the profilepic property
+                }));
+                console.log(tempchangepic.profilepic);
                 setPlayerProfileData(prevData => ({
                     ...prevData,
-                    profilePicture: reader.result
+                    profilePicture: file
                 }));
             };
             reader.readAsDataURL(file);
@@ -33,12 +43,12 @@ const Profile = () => {
         setShowModal(false);
     };
 
-    console.log()
+    console.log(playerProfileData.profilePicture);
 
     return (
         <div className="text-center" style={{ marginTop: "-60px", position: "relative" }}>
             <img
-                src={playerProfileData.profilePicture || "https://github.com/mdo.png"}
+                src={ tempchangepic.profilepic ||  playerProfileData.profilePicture }
                 className="rounded-circle mt-n5"
                 alt="Profile"
                 style={{ width: "100px", height: "100px", border: "5px solid white" }}

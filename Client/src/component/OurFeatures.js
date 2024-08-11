@@ -5,7 +5,7 @@ const OurFeatures = () => {
         <div className='container mt-4'>
             <h2 className='mb-2 playfair-display-sc-bold'>Our Top Features</h2>
             <div className='row no-scrollbar features-row'>
-                <div className='col-md-4 col-6'>
+                <div className='col-md-4 col-6' style={{display:"flex", justifyContent:"center"}}>
                     <div className="card features-card " >
                         <img src="./Image/Team_Create.png" className="card-img-top" alt="cricket team" style={{ borderRadius: "15px" }} />
                         <div className="card-body">
@@ -15,7 +15,7 @@ const OurFeatures = () => {
                         </div>
                     </div>
                 </div>
-                <div className='col-md-4 col-6'>
+                <div className='col-md-4 col-6' style={{display:"flex", justifyContent:"center"}}>
                     <div className="card features-card " >
                         <img src="./Image/cricket_chat.png" className="card-img-top" alt="cricket team" style={{ borderRadius: "15px" }} />
                         <div className="card-body">
@@ -24,7 +24,7 @@ const OurFeatures = () => {
                         </div>
                     </div>
                 </div>
-                <div className='col-md-4 col-6'>
+                <div className='col-md-4 col-6' style={{display:"flex", justifyContent:"center"}}>
                     <div className="card features-card " >
                         <img src="./Image/match_analysis.png" className="card-img-top" alt="cricket team" style={{ borderRadius: "15px" }} />
                         <div className="card-body">
@@ -33,7 +33,7 @@ const OurFeatures = () => {
                         </div>
                     </div>
                 </div>
-                <div className='col-md-4 col-6'>
+                <div className='col-md-4 col-6' style={{display:"flex", justifyContent:"center"}}>
                     <div className="card features-card " >
                         <img src="./Image/cricket_scorecard.png" className="card-img-top" alt="cricket team" style={{ borderRadius: "15px" }} />
                         <div className="card-body">
@@ -42,7 +42,7 @@ const OurFeatures = () => {
                         </div>
                     </div>
                 </div>
-                <div className='col-md-4'>
+                <div className='col-md-4 col-6' style={{display:"flex", justifyContent:"center"}}>
                     <div className="card features-card " >
                         <img src="./Image/cricket_team.jpg" className="card-img-top" alt="cricket team" style={{ borderRadius: "15px" }} />
                         <div className="card-body">

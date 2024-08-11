@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import io from 'socket.io-client';
 import axios from 'axios';
 import Cookies from 'js-cookie'
 import { Link, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import About from './dashboard/UserProfile/About/About';
 import Stats from './dashboard/UserProfile/Stats/Stats';
+import { PlayerProfileContext } from '../context/PlayerProfileContext';
+import { SocketContext } from '../context/SocketContext';
+
 
 const PlayerProfile = () => {
     const [showModal, setShowModal] = useState(false);
@@ -12,6 +16,9 @@ const PlayerProfile = () => {
     // const playerId = location.state?.playerId || '';
     const { id } = useParams();
     console.log("This is in PlayerProfile",id);
+    const curent_user = Cookies.get('user_id');
+    const socket = useContext(SocketContext);
+    console.log("This is socket=====", socket);
 
     useEffect(() => {
         const value = { user_id: id };
@@ -34,6 +41,14 @@ const PlayerProfile = () => {
         }
         fetchData();
     }, [id]);
+
+    const sendFriendRequest = () => {
+        console.log("friend request is send...");
+        socket.emit('sendFriendRequest', {
+            sender_id: curent_user,
+            receiver_id: id
+        });
+    };
 
     const handleImageClick = () => {
         setShowModal(true);
@@ -61,7 +76,7 @@ const PlayerProfile = () => {
                 />
 
                 <div className='row align-items-center'>
-                    <h2 className="mt-3 text-center">{userData?userData.name:"Captain Name"} <button className='btn btn-dark float-right'>Connect</button></h2>
+                    <h2 className="mt-3 text-center">{userData?userData.name:"Captain Name"} <button className='btn btn-dark float-right' onClick={sendFriendRequest}>Connect</button></h2>
                     <p className="text-center">{
                         userData? <>{
                             userData.instagram_links && userData.facebook_links ?

@@ -48,7 +48,7 @@ const Profile = () => {
     return (
         <div className="text-center" style={{ marginTop: "-60px", position: "relative" }}>
             <img
-                src={ tempchangepic.profilepic ||  playerProfileData.profilePicture }
+                src={ tempchangepic.profilepic || "https://github.com/mdo.png" ||  playerProfileData.profilePicture  }
                 className="rounded-circle mt-n5"
                 alt="Profile"
                 style={{ width: "100px", height: "100px", border: "5px solid white" }}

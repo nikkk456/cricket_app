@@ -3,7 +3,7 @@ import React from 'react'
 const AboutUs = () => {
     return (
         <div className='container mt-3'>
-            <h2>About Us</h2>
+            <h2 className='playfair-display-sc-bold'>About Us</h2>
             <div className='row'>
                 <div className='col-md-8'>
                     <p>

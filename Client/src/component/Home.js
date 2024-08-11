@@ -3,6 +3,7 @@ import HeroSection from './HeroSection'
 import TopCricketTeam from './TopCricketTeam'
 import OurFeatures from './OurFeatures'
 import AboutUs from './AboutUs'
+import FAQ from './FAQ'
 
 const Home = () => {
   return (
@@ -11,6 +12,7 @@ const Home = () => {
       <AboutUs/>
       <OurFeatures/>
       <TopCricketTeam/>
+      <FAQ/>
     </div>
   )
 }

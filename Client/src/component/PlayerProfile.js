@@ -93,7 +93,7 @@ const PlayerProfile = () => {
                             </div>
                             <div className="modal-body">
                                 <img
-                                    src={"https://github.com/mdo.png"}
+                                    src={userData?userData.profilePicture:"https://github.com/mdo.png"}
                                     className="img-fluid"
                                     alt="Profile"
                                 />
@@ -140,8 +140,6 @@ const PlayerProfile = () => {
                     <Route path="about" element={<About userData={userData} />} />
                     <Route path="stats" element={<Stats />} />
                 </Routes>
-
-
             </div>
         </div>
     )

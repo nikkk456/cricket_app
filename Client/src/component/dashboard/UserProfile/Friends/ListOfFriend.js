@@ -61,7 +61,7 @@ const ListOfFriend = () => {
                 {
                     friendList? friendList.map((data, index)=>{
                         return (
-                            <FriendList name={data.name} playerId={data.id} playingStyle={formatPlayingRole(data.playing_role)} index={index}/>
+                            <FriendList name={data.name} playerId={data.id} playingStyle={formatPlayingRole(data.playing_role)} index={index} imageUrl={data.profilePicture}/>
                         )
                     }):""
                 }

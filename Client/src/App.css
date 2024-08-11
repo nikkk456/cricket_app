@@ -169,6 +169,11 @@ height: 100%;
   flex-wrap: nowrap;
 }
 
+.hero-button{
+  width: 20%;
+  border-radius: 20px;
+}
+
 /* For Mobile Screen */
 @media only screen and (max-width: 767px) {
   .features-card {
@@ -186,6 +191,9 @@ height: 100%;
   .background-image::before {
     background-size: contain;
     background-position: top;
+  }
+  .hero-button{
+    width: 30%;
   }
 
 }

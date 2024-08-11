@@ -21,7 +21,7 @@ const HeroSection = () => {
                                     <small>Start Your Cricket Journey Now!</small>
                                 </div>
                                 <div className='row justify-content-center my-2'>
-                                    <button type="button" className='btn btn-sm btn-dark text-white' style={{width:"20%", borderRadius:"20px"}} onClick={handleClick}>
+                                    <button type="button" className='btn btn-sm btn-dark text-white hero-button' onClick={handleClick}>
                                         Start Playing
                                     </button>
                                 </div>

@@ -2,11 +2,13 @@ import React, { useContext } from 'react'
 import SideNavbar from './SideNavbar'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { AuthContext } from '../../context/AuthContext';
+import { PlayerProfileContext } from '../../context/PlayerProfileContext';
 
 const SideNavbarMin = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const {logout} = useContext(AuthContext);
+    const { playerProfileData } = useContext(PlayerProfileContext);
 
     const handleLogout = ()=>{
         logout();
@@ -65,11 +67,11 @@ const SideNavbarMin = () => {
                 <hr />
                 <div className="dropdown border-top">
                     <a href="#" className="d-flex align-items-center justify-content-center p-3 link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://github.com/mdo.png" alt="mdo" width="24" height="24" className="rounded-circle" />
+                        <img src={playerProfileData.profilePicture || "https://github.com/mdo.png"} alt="mdo" width="24" height="24" className="rounded-circle" />
                     </a>
                     <ul className="dropdown-menu text-small shadow">
                         <li><a className="dropdown-item" href="/dashboard/accountsetting">Settings</a></li>
-                        <li><a className="dropdown-item" href="/dashboard/profile/about">Profile</a></li>
+                        <li><a className="dropdown-item" href="/">Home</a></li>
                         <li><hr className="dropdown-divider" /></li>
                         <li><div className="dropdown-item" style={{cursor:"pointer"}} onClick={handleLogout}>Log out</div></li>
                     </ul>

@@ -1,10 +1,12 @@
 import React, { useContext } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext';
+import { PlayerProfileContext } from '../context/PlayerProfileContext';
 const Navbar = () => {
     const location = useLocation();
     const showNavbar = !location.pathname.includes('/dashboard');
     const { isAuthenticated } = useContext(AuthContext);
+    const {playerProfileData} = useContext(PlayerProfileContext)
 
     console.log("isAuthenticated", isAuthenticated);
     return (
@@ -30,7 +32,7 @@ const Navbar = () => {
                         {
                             isAuthenticated ?
                                     <a href="/dashboard/profile/about" className="d-flex align-items-center justify-content-center p-3 link-body-emphasis text-decoration-none">
-                                        <img src="https://github.com/mdo.png" alt="mdo" width="24" height="24" className="rounded-circle" />
+                                        <img src={playerProfileData.profilePicture || "https://github.com/mdo.png"}alt="mdo" width="24" height="24" className="rounded-circle" />
                                     </a>
                                 :
                                 <Link to="/login"><button className="btn btn-sm btn-dark text-white" style={{ borderRadius: "18px" }} type="submit">Join Now</button></Link>

@@ -1,8 +1,9 @@
 const conn = require("../bdcon/dbcon");
 const searchfriend = (req,res)=>{
-    searchquery = "Select users.id , name , playing_role from users left join users_profile on users.id = users_profile.user_id where users.id = ? OR users.name Like ? OR number Like ?";
+    searchquery = "Select users.id , name , playing_role, profilePicture from users left join users_profile on users.id = users_profile.user_id where (users.id = ? OR users.name Like ? OR number Like ?) AND users.id != ?";
+    userId = req.headers['userId'];
     const searchValue = `%${req.body.searchvalue}%`; // Use '%' for LIKE clauses
-    conn.query(searchquery, [req.body.searchvalue, searchValue, searchValue], (err, result) => {
+    conn.query(searchquery, [req.body.searchvalue, searchValue, searchValue, userId ], (err, result) => {
         if (err) {
             res.status(500).json(err);
         } else {

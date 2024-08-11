@@ -6,8 +6,7 @@ import { PlayerProfileContext } from '../../../../context/PlayerProfileContext';
 import { Link } from 'react-router-dom';
 import { useLocation ,useNavigate} from 'react-router-dom';
 
-const About = () => {
-    const [userData, setuserData] = useState({}); 
+const About = ({userData}) => {
     const [profile, setProfile] = useState({});
     const [playerProfile, setPlayerProfile] = useState({});
     const { playerProfileData, setPlayerProfileData } = useContext(PlayerProfileContext);
@@ -21,26 +20,6 @@ const About = () => {
         }));
     }, [playerProfileData]);
 
-    useEffect(() => {
-        const value = { user_id: playerId };
-        const fetchData = async () => {
-            await axios.post("http://localhost:8080/api/user/profile", value, {
-                headers: {
-                    'Authorization': Cookies.get('uid')
-                }
-            }).then((res) => {
-                if (res.status === 201) {
-                    setuserData(res.data[0]);
-                }
-                else {
-                    console.log("Error while fetching the response ");
-                }
-            }).catch((err) => {
-                console.log(err);
-            });
-        }
-        fetchData();
-    }, []);
     const handlechange = (e) => {
         setPlayerProfile({ ...playerProfile, [e.target.name]: e.target.value });
     }

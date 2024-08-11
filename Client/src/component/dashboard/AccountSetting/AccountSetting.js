@@ -1,9 +1,11 @@
-import React, {useState} from 'react'
+import React, {useContext, useState} from 'react'
+import { PlayerProfileContext } from '../../../context/PlayerProfileContext';
 
 const AccountSetting = () => {
     const [phone_no, setphone] = useState(false);
     const [Password, setPassword] = useState(false);
     const [forminput,setforminput] = useState({new_password:'',confirm_password:''});
+    const {playerProfileData} = useContext(PlayerProfileContext);
     const handlechange = (e)=>{
       setforminput({...forminput,[e.target.name]:e.target.value});
     }
@@ -13,12 +15,12 @@ const AccountSetting = () => {
                 <h3 className='text-center'>Your account settings</h3>
                 <div className='row mt-5'>
                     <div className='col-md-6'>
-                        <h5>Phone Number <small>(You can't Change your email)</small> </h5>
-                        <p>9876543456</p>
+                        <h5>Phone Number <small>(You can't Change your phone_no)</small> </h5>
+                        <p>{playerProfileData.number}</p>
                     </div>
                     <div className='col-md-6'>
                         <h5>Email adress <small>(You can't Change your email)</small></h5>
-                        <p>mishranp3@gmail.com</p>
+                        <p>{playerProfileData.email}</p>
                     </div>
                 </div>
                 <div className='row mt-3'>
@@ -35,7 +37,7 @@ const AccountSetting = () => {
                     </div>
                     <div className='col-md-6'>
                         <h5>Deactivate Your account</h5>
-                        <button className="btn btn-dark my-2" style={{ width: "40%" }}>Delete Now</button>
+                        <button className="btn btn-danger my-2" style={{ width: "40%" }}>Delete Now</button>
                     </div>
                 </div>
             </div>

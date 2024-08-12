@@ -19,6 +19,7 @@ const FindFriend = () => {
                 authorization:Cookies.get("uid")
             }
         }).then((response)=>{
+            console.log("This is suggested friend list Data ", response)
             setfriendslist(Object.values(response.data.result));
             setSuggestfriend(true);
         }).catch((err)=>{

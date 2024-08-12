@@ -1,17 +1,14 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import notification from './Notification.json';
 import NotificationMessage from './NotificationMessage';
 import FriendList from '../FindFriend/FriendList';
-import { SocketContext } from '../../../context/SocketContext';
 const Notification = () => {
   const user_id = { "user_id": Cookies.get('user_id') };
   const [filter, setFilter] = useState('all');
   const [friendList, setFriendsList] = useState();
-  const socket = useContext(SocketContext);
-
-  console.log("This is socket", socket);
+  
   useEffect(() => {
     axios.post("http://localhost:8080/api/friends/list", user_id, {
       headers: {
@@ -23,18 +20,6 @@ const Notification = () => {
       console.log(err);
     });
   }, []);
-  useEffect(() => {
-    if(!socket){
-      console.log("Socket is not initialised yet");
-    }
-    socket.on('receiveNotification', (data) => {
-      alert(data.message); // Handle notification (e.g., show in UI)
-    });
-
-    return () => {
-      socket.off('receiveNotification');
-    };
-  }, [socket]);
   const formatPlayingRole = (role) => {
     switch (role) {
       case "all_rounder":

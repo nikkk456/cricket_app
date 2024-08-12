@@ -10,8 +10,22 @@ import ForgetPassword from './component/ForgetPassword';
 import SetNewPassword from './component/SetNewPassword';
 import PlayerProfile from './component/PlayerProfile';
 import NotFound from './component/NotFound';
+import { useContext, useEffect } from 'react';
+import { SocketContext } from './context/SocketContext';
 
 function App() {
+  const socket = useContext(SocketContext);
+
+console.log("This is socket", socket);
+  useEffect(() => {
+    if(!socket){
+      console.log("Socket is not initialised yet");
+    }else{
+      socket.on('receiveNotification', (data) => {
+        alert(data.message); // Handle notification (e.g., show in UI)
+      });
+    }
+  }, [socket]);
   return (
     <>
       <Navbar />

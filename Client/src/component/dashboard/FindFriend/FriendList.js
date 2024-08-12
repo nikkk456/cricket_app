@@ -5,7 +5,6 @@ import styles from './FriendList.module.css';
 const FriendList = ({ name, playingStyle, imageUrl, index , playerId }) => {
     // Determine background color based on index
     const navigate = useNavigate();
-    const bgColor = index % 2 === 0 ? 'rgb(244 240 240);' : 'rgb(239 239 239);'; // Light grey and light white
 
     const handleClick = ()=>{
         navigate(`/playerprofile/${playerId}/about`,{ state: { playerId: playerId } });
@@ -13,7 +12,7 @@ const FriendList = ({ name, playingStyle, imageUrl, index , playerId }) => {
     return (
         <div 
             className={`d-flex align-items-center py-2 px-3 my-2 friendListItem ${styles.friendListItem}`}
-            style={{ backgroundColor: bgColor }} onClick={handleClick}
+            style={{ backgroundColor: index % 2 === 0 ? 'rgb(244 240 240)' : 'rgb(239 239 239)' }} onClick={handleClick}
         >
             <div className='me-3'>
                 <img 

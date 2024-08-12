@@ -2,7 +2,7 @@ const conn = require("../bdcon/dbcon");
 
 const friendslist = (req, res) => {
     const getlist = `
-        SELECT u.id, name, playing_role
+        SELECT u.id, name, playing_role, profilePicture
         FROM users u
         LEFT JOIN users_profile up ON u.id = up.user_id
         WHERE u.id != ? `;

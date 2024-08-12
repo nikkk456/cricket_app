@@ -5,6 +5,7 @@ import notification from './Notification.json';
 import NotificationMessage from './NotificationMessage';
 import FriendList from '../FindFriend/FriendList';
 const Notification = () => {
+  const [showLoader, setShowLoader] = useState(true);
   const user_id = { "user_id": Cookies.get('user_id') };
   const [filter, setFilter] = useState('all');
   const [friendList, setFriendsList] = useState();
@@ -15,6 +16,7 @@ const Notification = () => {
         authorization: Cookies.get("uid")
       }
     }).then((response) => {
+      setShowLoader(false);
       setFriendsList(Object.values(response.data.result));
     }).catch((err) => {
       console.log(err);
@@ -103,9 +105,9 @@ const Notification = () => {
             <h3 className='mx-1'>Suggested Captains</h3>
             <div style={{ maxHeight: "50vh", overflowY: "auto", borderRadius: "10px", boxShadow: "0px 0px 6px 1px grey" }} className='no-scrollbar'>
               {
-                friendList ? friendList.map((data, index) => (
+                showLoader ?<dotlottie-player src="https://lottie.host/fb5d52f2-d675-4352-a182-ee4e1c88bea9/SpTQ74uC8Z.json" background="transparent" speed="1" style={{ width: "300px", height: "100px" }} loop autoplay></dotlottie-player>: friendList.map((data, index) => (
                   <><FriendList name={data.name} playerId={data.id} playingStyle={formatPlayingRole(data.playing_role)} index={index} imageUrl={data.profilePicture} /></>
-                )) : "Loading.."
+                )) 
               }
             </div>
           </div>

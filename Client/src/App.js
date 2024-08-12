@@ -10,17 +10,16 @@ import ForgetPassword from './component/ForgetPassword';
 import SetNewPassword from './component/SetNewPassword';
 import PlayerProfile from './component/PlayerProfile';
 import NotFound from './component/NotFound';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { SocketContext } from './context/SocketContext';
 
 function App() {
   const socket = useContext(SocketContext);
-
-console.log("This is socket", socket);
+  console.log("This is socket", socket);
   useEffect(() => {
-    if(!socket){
+    if (!socket) {
       console.log("Socket is not initialised yet");
-    }else{
+    } else {
       socket.on('receiveNotification', (data) => {
         alert(data.message); // Handle notification (e.g., show in UI)
       });
@@ -30,16 +29,16 @@ console.log("This is socket", socket);
     <>
       <Navbar />
       <Routes>
-        <Route path = "/" element={<Home/>}/>
-        <Route path = "/login" element={<Login/>}/>
-        <Route path = "/register" element={<Register/>}/>
-        <Route path = "/forgetpassword" element={<ForgetPassword/>}/>
-        <Route path = "/setnewpassword" element={<SetNewPassword/>}/>
-        <Route path = "/dashboard/*" element={<Dashboard/>}/>
-        <Route path = "/playerprofile/:id/*" element={<PlayerProfile/>}/>
-        <Route path = "*" element={<NotFound/>}/>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgetpassword" element={<ForgetPassword />} />
+        <Route path="/setnewpassword" element={<SetNewPassword />} />
+        <Route path="/dashboard/*" element={<Dashboard />} />
+        <Route path="/playerprofile/:id/*" element={<PlayerProfile />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
-      <Footer/>
+      <Footer />
     </>
   );
 }

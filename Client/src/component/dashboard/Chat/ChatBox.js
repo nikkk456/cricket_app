@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const ChatBox = ({ selectedFriend, setSelectedFriend }) => {
+const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat }) => {
   const chatContainerRef = useRef(null);
   const navigate = useNavigate();
   useEffect(() => {
@@ -30,39 +30,47 @@ const ChatBox = ({ selectedFriend, setSelectedFriend }) => {
   }
 
   var { name, chats } = selectedFriend;
-  const handleDeleteChat = ()=>{
+  const handleDeleteChat = () => {
     setSelectedFriend({ ...selectedFriend, chats: [] });
   }
   return (
-    <div className='vh-100' style={{ width: "65%" }}>
+    <div className='vh-100 chat-chatbox'>
       {/* Username and info Header  */}
       <div className='row text-white' style={{ backgroundColor: "rgb(92 92 93)", height: "10%" }}>
-        <div className='col-md-4 rounded-circle' style={{ width: "9%", display: "flex", alignItems: "center" }}>
+        {
+          mobileChat ?
+            <div className='col-1 p-0' style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-chevron-left" viewBox="0 0 16 16" onClick={()=>{setSelectedFriend(null)}}>
+                <path fillRule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+              </svg>
+            </div> : ""
+        }
+        <div className='col-md-4 col-4 rounded-circle chat-profile'>
           <img src="https://github.com/mdo.png" className='rounded-circle me-2' alt='...' style={{ width: "100%" }} />
         </div>
-        <div className='col-md-6' style={{ display: "flex", alignItems: "center", cursor:"pointer" }} onClick={()=>{navigate('/playerprofile/1/about')}}>
+        <div className='col-md-6 col-6' style={{ display: "flex", alignItems: "center", cursor: "pointer" }} onClick={() => { navigate('/playerprofile/1/about') }}>
           <h5>{name}</h5>
         </div>
-        <div className='col-md-1' style={{ width: "40%", display: "flex", justifyContent: "end", alignItems: "center" }}>
-        <div className="dropdown">
-          <a href="#" className="d-flex align-items-center justify-content-center align-items-center link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16" style={{ fill: "white", cursor: "pointer" }}>
-              <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
-            </svg>
-          </a>
-          <ul className="dropdown-menu text-small shadow">
-            <li><Link className="dropdown-item" to="/playerprofile/1/about">View Profile</Link></li>
-            <li><a className="dropdown-item" href="#" onClick={handleDeleteChat}>Clear Chat</a></li>
-            <li><hr className="dropdown-divider" /></li>
-            <li><a className="dropdown-item" href="#">Report User</a></li>
-          </ul>
-        </div>
+        <div className='col-md-1 chat-triple-dot'>
+          <div className="dropdown">
+            <a href="#" className="d-flex align-items-center justify-content-center align-items-center link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="bi bi-three-dots-vertical" viewBox="0 0 16 16" style={{ fill: "white", cursor: "pointer" }}>
+                <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+              </svg>
+            </a>
+            <ul className="dropdown-menu text-small shadow">
+              <li><Link className="dropdown-item" to="/playerprofile/1/about">View Profile</Link></li>
+              <li><a className="dropdown-item" href="#" onClick={handleDeleteChat}>Clear Chat</a></li>
+              <li><hr className="dropdown-divider" /></li>
+              <li><a className="dropdown-item" href="#">Report User</a></li>
+            </ul>
+          </div>
         </div>
       </div>
       {/* Chat BOX started Here  */}
       <div className='row'>
         <div className="chat-box no-scrollbar" ref={chatContainerRef}>
-          { chats.length!=0? chats.map((msg, index) => (
+          {chats.length != 0 ? chats.map((msg, index) => (
             <div key={index} className={`message ${msg.sender === 'Nikhil' ? 'left' : 'right'}`}>
               {
                 msg.sender === 'Nikhil' ? <>
@@ -85,18 +93,18 @@ const ChatBox = ({ selectedFriend, setSelectedFriend }) => {
                 </>
               }
             </div>
-          )):<div className='row justify-content-center align-items-center'>
-              <div>
+          )) : <div className='row justify-content-center align-items-center'>
+            <div>
               <h2>Type a message to start a conversation</h2>
-              </div>
+            </div>
           </div>
-            }
+          }
         </div>
       </div>
 
       {/* Footer of chatBox  */}
       <div className='row' style={{ backgroundColor: "rgb(92 92 93)" }}>
-        <div className='col-md-1' style={{ display: "flex", justifyContent: "center", alignItems: "center", position: "relative" }}>
+        <div className='col-md-1 col-1 chat-emoji'>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="25"
@@ -116,7 +124,7 @@ const ChatBox = ({ selectedFriend, setSelectedFriend }) => {
             </div>
           )}
         </div>
-        <div className='col-md-10 my-2'>
+        <div className='col-md-10 col-10 my-2'>
           <input
             type="text"
             className="form-control"
@@ -128,8 +136,8 @@ const ChatBox = ({ selectedFriend, setSelectedFriend }) => {
             onChange={(e) => setInputValue(e.target.value)}
           />
         </div>
-        <div className='col-md-1' style={{ display: "flex", alignItems: "center" }}>
-          <svg viewBox="0 0 24 24" height="24" width="24" preserveAspectRatio="xMidYMid meet" fill="currentColor" style={{ fill: "white" }} version="1.1" x="0px" y="0px" enable-background="new 0 0 24 24">
+        <div className='col-md-1 col-1 chat-send'>
+          <svg viewBox="0 0 24 24" height="24" width="24" preserveAspectRatio="xMidYMid meet" fill="currentColor" style={{ fill: "white" }} version="1.1" x="0px" y="0px" enableBackground="new 0 0 24 24">
             <title>send</title>
             <path d="M1.101,21.757L23.8,12.028L1.101,2.3l0.011,7.912l13.623,1.816L1.112,13.845 L1.101,21.757z"></path>
           </svg>

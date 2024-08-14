@@ -7,7 +7,7 @@ const UserProfile = () => {
   return (
     <div>
       <Headerimage/>
-      <div className="container mt-4">
+      <div className="container mt-4 dashboard-container" >
         <Profile />
         <Ministat/>
       </div>

@@ -157,37 +157,37 @@ const About = ({userData}) => {
                     :
                     <div className='container-fluid'>
                         <div className='row mt-4'>
-                            <div className='col-md-6 mt-3'>
+                            <div className='col-md-6 mt-3 col-6'>
                                 <div className='row'>
                                     <h6>Captain Name</h6>
                                     <b>{profile.name}</b>
                                 </div>
                             </div>
-                            <div className='col-md-6 mt-3'>
+                            <div className='col-md-6 mt-3 col-6'>
                                 <div className='row'>
                                     <h6>Captain Gender</h6>
                                     <b>{profile.gender}</b>
                                 </div>
                             </div>
-                            <div className='col-md-6 mt-3'>
+                            <div className='col-md-6 mt-3 col-6'>
                                 <div className='row'>
                                     <h6>Captain DOB</h6>
                                     <b>{profile.dob}</b>
                                 </div>
                             </div>
-                            <div className='col-md-6 mt-3'>
+                            <div className='col-md-6 mt-3 col-6'>
                                 <div className='row'>
                                     <h6>Captain Email</h6>
                                     <b>{profile.email}</b>
                                 </div>
                             </div>
-                            <div className='col-md-6 mt-3'>
+                            <div className='col-md-6 mt-3 '>
                                 <div className='row'>
                                     <h6>Captain Phone No.</h6>
                                     <b>{profile.number}</b>
                                 </div>
                             </div>
-                            <div className='col-md-6 mt-3'>
+                            <div className='col-md-6 mt-3 '>
                                 <div className='row'>
                                     <h6>Captain Address</h6>
                                     <b>{profile.address + "," + profile.state + "," + profile.city}</b>
@@ -224,7 +224,7 @@ const About = ({userData}) => {
                                         </select>
                                 }
                             </div>
-                            <div className='col-md-6 mt-3'>
+                            <div className='col-md-6 mt-3 col-6'>
                                 <label className="form-label">Batting Style</label>
                                 {
                                     profile.batting_style ? <h6>{profile.batting_style}</h6> :
@@ -235,7 +235,7 @@ const About = ({userData}) => {
                                         </select>
                                 }
                             </div>
-                            <div className='col-md-6 mt-3'>
+                            <div className='col-md-6 mt-3 col-6'>
                                 <label className="form-label">Bowling Style</label>
                                 {
                                     profile.bowling_style ? <h6>{profile.bowling_style}</h6> :

@@ -17,7 +17,7 @@ const SideBar = ({setSelectedFriend}) => {
     }
 
     return (
-        <div style={{ width: "35%", backgroundColor: "#f0f0f0", padding: "20px" }} className='vh-100'>
+        <div className='vh-100 chat-sidebar'>
             <div className='container-fluid'>
                 <div className='row'>
                     <h2>Cricket Chats</h2>

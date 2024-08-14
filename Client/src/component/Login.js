@@ -68,7 +68,7 @@ const Login = () => {
                             </div> 
                         :
                             <div className='col-md-8'>
-                                <form style={{ width: "60%", borderRadius: "15px", boxShadow: "0 0 9px 1px grey" }} className='p-4'>
+                                <form className='p-4 login-form'>
                                     {/* Sign in with Google and Facebook */}
 
                                     <div className="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">

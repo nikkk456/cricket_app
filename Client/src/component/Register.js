@@ -6,7 +6,7 @@ import OTPInput from './OTPInput';
 
 
 const Register = () => {
-  const [showloader, setShowLoader] = useState(true);
+  const [showloader, setShowLoader] = useState(false);
   const [showOTP, setShowOTP] = useState(false)
   const [registerValue, setRegisterValue] = useState({
     name: '',
@@ -112,7 +112,7 @@ const Register = () => {
                   <div className='col-md-8'> <OTPInput ref={otpRef} onButtonClick={handleOTPSubmit} /></div>
                   :
                   <div className='col-md-8'>
-                    <form style={{ width: "80%", borderRadius: "15px", boxShadow: "0 0 9px 1px grey" }} className='p-4' onSubmit={registeruser}>
+                    <form className='p-4 register-form' onSubmit={registeruser}>
                       <div className='row'>
                         <div className='col-md-6'>
                           <div data-mdb-input-init className="form-outline mb-4">

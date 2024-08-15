@@ -8,6 +8,7 @@ const Notification = () => {
   const user_id = { "user_id": Cookies.get('user_id') };
   const [filter, setFilter] = useState('all');
   const [friendList, setFriendsList] = useState();
+  const [NotificationList, setNotificationList] = useState();
   
   useEffect(() => {
     axios.post("http://localhost:8080/api/friends/list", user_id, {
@@ -20,6 +21,22 @@ const Notification = () => {
       console.log(err);
     });
   }, []);
+
+  useEffect(()=>{
+    axios.post("http://localhost:8080/api/notification/list", user_id, {
+      headers: {
+        authorization: Cookies.get("uid")
+      }
+    }).then((response) => {
+      console.log(response);
+        setNotificationList(Object.values(response.data.results));
+    }).catch((err) => {
+      console.log(err);
+    });
+
+  },[]);
+  console.log("u");
+  console.log(NotificationList);
   const formatPlayingRole = (role) => {
     switch (role) {
       case "all_rounder":
@@ -79,18 +96,18 @@ const Notification = () => {
           <div className='row mt-4 justify-content-center'>
             <div className='rounded no-scrollbar' style={{ boxShadow: "0px 0px 4px 3px grey", maxHeight: "80vh", overflowY: "auto", width: "95%" }}>
               {
-                filterNotifications().map((data) => {
+                NotificationList?NotificationList.map((data) => {
                   return (
                     <NotificationMessage
                       key={data.id}
-                      isSeen={data.isSeen}
-                      type={data.type}
+                      isSeen={data.is_seen}
+                      type={data.notification_type}
                       content={data.content}
-                      date={data.date}
+                      date={data.created_at}
                       time={data.time}
                     />
                   );
-                })
+                }):"Loading..."
               }
             </div>
           </div>

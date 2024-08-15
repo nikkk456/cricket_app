@@ -42,6 +42,15 @@ const PlayerProfile = () => {
         fetchData();
     }, [id]);
 
+    useEffect(()=>{
+        console.log("hii");
+        if(socket){
+            socket.on("requeststatus",(data)=>{
+                alert(data.message);
+            });
+        }
+    },[socket])
+
     const sendFriendRequest = () => {
         console.log("friend request is send...");
         socket.emit('sendFriendRequest', {

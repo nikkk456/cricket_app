@@ -44,8 +44,9 @@ function initializeSocket(server) {
 
                 // Insert the friend request
                 const insertQueryFriendRe = "INSERT INTO `friend_request` (`sender_id`, `receiver_id`) VALUES (?, ?)";
-                const insertQueryNoti = "INSERT INTO `notification_list` (`notification_type`, `userd_id`, `cause_noti`) VALUES (?, ?, ?)";
-                const noti_type = "Received friend request from user ";
+                const insertQueryNoti = "INSERT INTO `notification_list` (`notification_type`,`content`, `user_id`, `cause_noti`) VALUES (?, ?,? , ?)";
+                const content = "Received friend request from user ";
+                const noti_type = "friend request ";
 
                 const friendResult = await new Promise((resolve, reject) => {
                     conn.query(insertQueryFriendRe, [sender_id, receiver_id], (err, res) => {
@@ -58,7 +59,7 @@ function initializeSocket(server) {
                 });
 
                 const notiResult = await new Promise((resolve, reject) => {
-                    conn.query(insertQueryNoti, [noti_type, receiver_id, sender_id], (err, res) => {
+                    conn.query(insertQueryNoti, [noti_type, content, receiver_id, sender_id], (err, res) => {
                         if (err) {
                             console.error("Error inserting notification:", err);
                             return reject(err);

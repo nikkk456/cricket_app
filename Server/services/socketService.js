@@ -44,10 +44,21 @@ function initializeSocket(server) {
 
                 // Insert the friend request
                 const insertQueryFriendRe = "INSERT INTO `friend_request` (`sender_id`, `receiver_id`) VALUES (?, ?)";
-                const insertQueryNoti = "INSERT INTO `notification_list` (`notification_type`,`content`, `user_id`, `cause_noti`) VALUES (?, ?,? , ?)";
-                const content = "Received friend request from user ";
-                const noti_type = "friend request ";
+                const getnoti_typeid = "SELECT id from noti_type WHERE noti_type = ?";
+                const noti_type = 'Friend request';
+                const getresult = await new Promise((resolve,reject)=>{
+                    conn.query(getnoti_typeid,[noti_type],(err,result)=>{
+                        if(err){
+                            console.log("hii");
+                            console.error(err);
+                            return reject(err);
+                        }
+                        resolve(result[0].id);
+                    });
+                });
 
+                const insertQueryNoti = "INSERT INTO `notification_list` (`notification_type`,`user_id`, `cause_noti`) VALUES (?, ?, ?)";
+                const content = "Received friend request from user ";
                 const friendResult = await new Promise((resolve, reject) => {
                     conn.query(insertQueryFriendRe, [sender_id, receiver_id], (err, res) => {
                         if (err) {
@@ -59,7 +70,7 @@ function initializeSocket(server) {
                 });
 
                 const notiResult = await new Promise((resolve, reject) => {
-                    conn.query(insertQueryNoti, [noti_type, content, receiver_id, sender_id], (err, res) => {
+                    conn.query(insertQueryNoti, [getresult, receiver_id, sender_id], (err, res) => {
                         if (err) {
                             console.error("Error inserting notification:", err);
                             return reject(err);

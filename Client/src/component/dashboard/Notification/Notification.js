@@ -103,7 +103,7 @@ const Notification = () => {
                     <NotificationMessage
                       key={data.id}
                       isSeen={data.is_seen}
-                      type={data.notification_type}
+                      type={data.noti_type}
                       content={data.content}
                       date={data.created_at}
                       time={data.time}

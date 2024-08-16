@@ -2,7 +2,7 @@ const conn = require("../bdcon/dbcon");
 
 const friendslist = (req, res) => {
     const getlist = `
-        SELECT u.id, name, playing_role, profilePicture
+        SELECT u.id, name, playing_role,profilePicture
         FROM users u
         LEFT JOIN users_profile up ON u.id = up.user_id
         WHERE u.id != ? `;
@@ -11,7 +11,7 @@ const friendslist = (req, res) => {
     console.log(userId);
     conn.query(getlist, [userId], (err, result) => {
         if (err) {
-            return res.status(500).send(err);
+            return res.status(500).json(err);
         }
         res.status(200).json({ result });
     });

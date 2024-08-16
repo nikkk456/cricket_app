@@ -1,18 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-const app = express();
-const http = require('http'); // Import http module
-const socketIo = require('socket.io');
+const http = require('http');
+const initializeSocket = require('./services/socketService'); // Import the socket service
 
-// Set up the server to work with Socket.io
+const app = express();
 const server = http.createServer(app);
-const io = socketIo(server, {
-    cors: {
-        origin: "*", // Adjust this according to your client origin
-        methods: ["GET", "POST"]
-    }
-});
 
 app.use(cors());
 
@@ -32,44 +25,14 @@ app.use((req, res, next) => {
 // Routes
 const users_route = require("./routes/user.routes.js");
 const friend = require("./routes/friends.routes.js");
+const notification = require("./routes/notification.routes.js");
 
 app.use("/api/friends", friend);
 app.use("/api/user", users_route);
+app.use("/api/notification",notification);
 
-// Socket.io connection handling
-io.on('connection', (socket) => {
-    console.log('A user connected');
-
-    // Join a room with the user's ID to handle notifications
-    socket.on('joinRoom', (user_id) => {
-        socket.join(user_id);
-        console.log(`User ${user_id} joined room`);
-    });
-
-    // Handle sending friend requests
-    socket.on('sendFriendRequest', async (data) => {
-        const { sender_id, receiver_id } = data;
-
-        // Insert the friend request into the database (pseudo code)
-        // await db.query('INSERT INTO FriendRequests (sender_id, receiver_id) VALUES (?, ?)', [sender_id, receiver_id]);
-
-        // Insert a notification for the receiver (pseudo code)
-        // await db.query('INSERT INTO Notifications (user_id, message) VALUES (?, ?)', [receiver_id, `You have a new friend request from user ${sender_id}`]);
-        console.log(`You received a new friend request from user ${sender_id}`)
-        console.log(`Friend request is being send to  ${receiver_id}`)
-
-        // Emit a notification event to the receiver
-        io.to(receiver_id).emit('receiveNotification', {
-            sender_id,
-            message: `You have a new friend request from user ${sender_id}`
-        });
-    });
-
-    // Handle disconnection
-    socket.on('disconnect', () => {
-        console.log('A user disconnected');
-    });
-});
+// Initialize Socket.io
+const io = initializeSocket(server);
 
 // Start the server
 server.listen(8080, () => {

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import notification from './Notification.json';
 import NotificationMessage from './NotificationMessage';
 import FriendList from '../FindFriend/FriendList';
 const Notification = () => {
@@ -52,13 +51,13 @@ const Notification = () => {
 
   const filterNotifications = () => {
     if (filter === 'all') {
-      return notification;
+      return NotificationList;
     }
     if (filter === 'myMessages') {
-      return notification.filter(data => data.type === 'message');
+      return NotificationList.filter(data => data.type === 'message');
     }
     if (filter === 'others') {
-      return notification.filter(data => data.type !== 'message');
+      return NotificationList.filter(data => data.type !== 'message');
     }
   };
 
@@ -96,9 +95,9 @@ const Notification = () => {
             </button>
           </div>
           <div className='row mt-4 justify-content-center'>
-            <div className='rounded no-scrollbar' style={{ boxShadow: "0px 0px 4px 3px grey", maxHeight: "80vh", overflowY: "auto", width: "95%" }}>
+            <div className='rounded no-scrollbar' style={{ boxShadow: "0px 0px 4px 3px grey", maxHeight: "80vh", overflowY: "auto", width: "95%", height:"70vh" }}>
               {
-                NotificationList?NotificationList.map((data) => {
+                NotificationList ? NotificationList.length !=0? NotificationList.map((data) => {
                   return (
                     <NotificationMessage
                       key={data.id}
@@ -109,7 +108,11 @@ const Notification = () => {
                       time={data.time}
                     />
                   );
-                }):"Loading..."
+                }): <div className='d-flex align-items-center justify-content-center ' style={{height:"70vh"}} >
+                  <h5>No Notification till Now!</h5>
+                </div>:<div className='d-flex align-items-center justify-content-center '  style={{height:"70vh"}}>
+                <dotlottie-player src="https://lottie.host/fb5d52f2-d675-4352-a182-ee4e1c88bea9/SpTQ74uC8Z.json" background="transparent" speed="1" style={{ width: "300px", height: "100px" }} loop autoplay></dotlottie-player>
+                </div>
               }
             </div>
           </div>

@@ -68,25 +68,25 @@ const About = ({userData}) => {
                 userData ?
                     <div className='container-fluid'>
                         <div className='row mt-4'>
-                            <div className='col-md-6 mt-3'>
+                            <div className='col-md-6 mt-3 col-6'>
                                 <div className='row'>
                                     <h6>Captain Name</h6>
                                     <b>{userData.name || 'NULL'}</b>
                                 </div>
                             </div>
-                            <div className='col-md-6 mt-3'>
+                            <div className='col-md-6 mt-3 col-6'>
                                 <div className='row'>
                                     <h6>Captain Gender</h6>
                                     <b>{userData.gender || 'NULL'}</b>
                                 </div>
                             </div>
-                            <div className='col-md-6 mt-3'>
+                            <div className='col-md-6 mt-3 col-6'>
                                 <div className='row'>
                                     <h6>Captain DOB</h6>
                                     <b>{userData.dob || 'NULL'}</b>
                                 </div>
                             </div>
-                            <div className='col-md-6 mt-3'>
+                            <div className='col-md-6 mt-3 col-6'>
                                 <div className='row'>
                                     <h6>Captain Email</h6>
                                     <b>{userData.email || 'NULL'}</b>
@@ -95,51 +95,51 @@ const About = ({userData}) => {
                             <div className='col-md-6 mt-3'>
                                 <div className='row'>
                                     <h6>Captain Address</h6>
-                                    <b>{userData.state + "," + userData.city}</b>
+                                    <b>{userData.city + ", " + userData.state}</b>
                                 </div>
                             </div>
                         </div>
                         <hr />
                         <div className='row my-3'>
-                            <div className='col-md-6 mt-3'>
+                            <div className='col-md-6 mt-3 col-6'>
                                 <label className="form-label">Playing Role</label>
                                 <h6>{userData.playing_role}</h6>
                             </div>
-                            <div className='col-md-6 mt-3'>
-                                <label className="form-label">Preferred Playing Position</label>
+                            <div className='col-md-6 mt-3 col-6'>
+                                <label className="form-label">Playing Position</label>
                                 <h6>{userData.preferred_playing_position}</h6>
                             </div>
-                            <div className='col-md-6 mt-3'>
+                            <div className='col-md-6 mt-3 col-6'>
                                 <label className="form-label">Batting Style</label>
                                 <h6>{userData.batting_style || 'NULL'}</h6>
                             </div>
-                            <div className='col-md-6 mt-3'>
+                            <div className='col-md-6 mt-3 col-6'>
                                 <label className="form-label">Bowling Style</label>
                                 <h6>{userData.bowling_style || 'NULL'}</h6>
                             </div>
                             <h5 className='mt-3'>Physical Attributes</h5>
-                            <div className='col-md-6 mt-3'>
+                            <div className='col-md-6 mt-3 col-6'>
                                 <label className="form-label">Player's Height</label>
                                 <h6>{userData.height || 'NULL'} cm</h6>
                             </div>
-                            <div className='col-md-6 mt-3'>
+                            <div className='col-md-6 mt-3 col-6'>
                                 <label className="form-label">Player's Weight</label>
                                 <h6>{userData.weight || 'NULL'} Kg</h6>
                             </div>
                             <h5 className='mt-3'>Cricket Experience</h5>
-                            <div className='col-md-6 mt-3'>
+                            <div className='col-md-6 mt-3 col-6'>
                                 <label className="form-label">Year of Experience</label>
                                 <h6>{userData.experience || 'NULL'} Years</h6>
                             </div>
-                            <div className='col-md-6 mt-3'>
+                            <div className='col-md-6 mt-3 col-6'>
                                 <label className="form-label">Highest Level Played</label>
                                 <h6>{userData.highest_level_played || 'NULL'}</h6>
                             </div>
-                            <div className='col-md-6 mt-3'>
+                            <div className='col-md-6 mt-3 col-6'>
                                 <label className="form-label">Previous Team</label>
                                 <h6>{userData.previous_Team || 'NULL'}</h6>
                             </div>
-                            <div className='col-md-6 mt-3'>
+                            <div className='col-md-6 mt-3 col-6'>
                                 <label className="form-label">Any Achievement</label>
                                 <h6>{userData.achievement || 'NULL'}</h6>
                             </div>

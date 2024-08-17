@@ -62,7 +62,7 @@ const Notification = () => {
   };
 
   return (
-    <div className='container-fluid'>
+    <div className='container-fluid' style={{marginBottom:"55px"}}>
       <div className='row'>
         <div className='col-md-7 ml-2'>
           <div className='row'>
@@ -71,24 +71,21 @@ const Notification = () => {
           <div className='row' style={{ display: "flex", justifyContent: "space-around" }}>
             <button
               type='button'
-              className='btn btn-dark mx-2'
-              style={{ width: "20%" }}
+              className='btn btn-dark mx-2' style={{width:"20%"}}
               onClick={() => setFilter('all')}
             >
               All
             </button>
             <button
               type='button'
-              className='btn btn-dark mx-2'
-              style={{ width: "20%" }}
+              className='btn btn-dark mx-2 notification-btn'
               onClick={() => setFilter('myMessages')}
             >
               My Messages
             </button>
             <button
               type='button'
-              className='btn btn-dark mx-2'
-              style={{ width: "20%" }}
+              className='btn btn-dark mx-2 notification-btn'
               onClick={() => setFilter('others')}
             >
               Others
@@ -121,9 +118,9 @@ const Notification = () => {
 
         </div>
         <div className='col-md-4'>
-          <div className='row'>
-            <h3 className='mx-1'>Suggested Captains</h3>
-            <div style={{ maxHeight: "50vh", overflowY: "auto", borderRadius: "10px", boxShadow: "0px 0px 6px 1px grey" }} className='no-scrollbar'>
+          <div className='row d-flex justify-content-center' >
+            <h3 className='mx-1 my-3'>Suggested Captains</h3>
+            <div style={{ maxHeight: "50vh", width:"95%", overflowY: "auto", borderRadius: "10px", boxShadow: "0px 0px 6px 1px grey" }} className='no-scrollbar'>
               {
                 showLoader ?<dotlottie-player src="https://lottie.host/fb5d52f2-d675-4352-a182-ee4e1c88bea9/SpTQ74uC8Z.json" background="transparent" speed="1" style={{ width: "300px", height: "100px" }} loop autoplay></dotlottie-player>: friendList.map((data, index) => (
                   <><FriendList name={data.name} playerId={data.id} playingStyle={formatPlayingRole(data.playing_role)} index={index} imageUrl={data.profilePicture} /></>
@@ -131,8 +128,8 @@ const Notification = () => {
               }
             </div>
           </div>
-          <div className='row mt-4'>
-            <div className='rounded p-2' style={{ boxShadow: "0px 0px 6px 1px grey" }}>
+          <div className='row mt-4 d-flex justify-content-center'>
+            <div className='rounded p-2' style={{ boxShadow: "0px 0px 6px 1px grey", width:"95%" }}>
               <h4>
                 Want to make your Own team ?
               </h4>

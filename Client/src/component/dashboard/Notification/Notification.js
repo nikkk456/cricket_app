@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import notification from './Notification.json';
 import NotificationMessage from './NotificationMessage';
 import FriendList from '../FindFriend/FriendList';
 const Notification = () => {
@@ -51,18 +50,18 @@ const Notification = () => {
 
   const filterNotifications = () => {
     if (filter === 'all') {
-      return notification;
+      return NotificationList;
     }
     if (filter === 'myMessages') {
-      return notification.filter(data => data.type === 'message');
+      return NotificationList.filter(data => data.type === 'message');
     }
     if (filter === 'others') {
-      return notification.filter(data => data.type !== 'message');
+      return NotificationList.filter(data => data.type !== 'message');
     }
   };
 
   return (
-    <div className='container-fluid'>
+    <div className='container-fluid' style={{marginBottom:"55px"}}>
       <div className='row'>
         <div className='col-md-7 ml-2'>
           <div className='row'>
@@ -71,34 +70,30 @@ const Notification = () => {
           <div className='row' style={{ display: "flex", justifyContent: "space-around" }}>
             <button
               type='button'
-              className='btn btn-dark mx-2'
-              style={{ width: "20%" }}
+              className='btn btn-dark mx-2' style={{width:"20%"}}
               onClick={() => setFilter('all')}
             >
               All
             </button>
             <button
               type='button'
-              className='btn btn-dark mx-2'
-              style={{ width: "20%" }}
+              className='btn btn-dark mx-2 notification-btn'
               onClick={() => setFilter('myMessages')}
             >
               My Messages
             </button>
             <button
               type='button'
-              className='btn btn-dark mx-2'
-              style={{ width: "20%" }}
+              className='btn btn-dark mx-2 notification-btn'
               onClick={() => setFilter('others')}
             >
               Others
             </button>
           </div>
           <div className='row mt-4 justify-content-center'>
-            <div className='rounded no-scrollbar' style={{ boxShadow: "0px 0px 4px 3px grey", maxHeight: "80vh", overflowY: "auto", width: "95%" }}>
+            <div className='rounded no-scrollbar' style={{ boxShadow: "0px 0px 4px 3px grey", maxHeight: "80vh", overflowY: "auto", width: "95%", height:"70vh" }}>
               {
-                NotificationList?NotificationList.map((data) => {
-                  console.log(data.notification_type)
+                NotificationList ? NotificationList.length !=0? NotificationList.map((data) => {
                   return (
                     
                     <NotificationMessage
@@ -113,7 +108,11 @@ const Notification = () => {
                       status = {data.status}
                     />
                   );
-                }):"Loading..."
+                }): <div className='d-flex align-items-center justify-content-center ' style={{height:"70vh"}} >
+                  <h5>No Notification till Now!</h5>
+                </div>:<div className='d-flex align-items-center justify-content-center '  style={{height:"70vh"}}>
+                <dotlottie-player src="https://lottie.host/fb5d52f2-d675-4352-a182-ee4e1c88bea9/SpTQ74uC8Z.json" background="transparent" speed="1" style={{ width: "300px", height: "100px" }} loop autoplay></dotlottie-player>
+                </div>
               }
             </div>
           </div>
@@ -122,9 +121,9 @@ const Notification = () => {
 
         </div>
         <div className='col-md-4'>
-          <div className='row'>
-            <h3 className='mx-1'>Suggested Captains</h3>
-            <div style={{ maxHeight: "50vh", overflowY: "auto", borderRadius: "10px", boxShadow: "0px 0px 6px 1px grey" }} className='no-scrollbar'>
+          <div className='row d-flex justify-content-center' >
+            <h3 className='mx-1 my-3'>Suggested Captains</h3>
+            <div style={{ maxHeight: "50vh", width:"95%", overflowY: "auto", borderRadius: "10px", boxShadow: "0px 0px 6px 1px grey" }} className='no-scrollbar'>
               {
                 showLoader ?<dotlottie-player src="https://lottie.host/fb5d52f2-d675-4352-a182-ee4e1c88bea9/SpTQ74uC8Z.json" background="transparent" speed="1" style={{ width: "300px", height: "100px" }} loop autoplay></dotlottie-player>: friendList.map((data, index) => (
                   <><FriendList name={data.name} playerId={data.id} playingStyle={formatPlayingRole(data.playing_role)} index={index} imageUrl={data.profilePicture} /></>
@@ -132,8 +131,8 @@ const Notification = () => {
               }
             </div>
           </div>
-          <div className='row mt-4'>
-            <div className='rounded p-2' style={{ boxShadow: "0px 0px 6px 1px grey" }}>
+          <div className='row mt-4 d-flex justify-content-center'>
+            <div className='rounded p-2' style={{ boxShadow: "0px 0px 6px 1px grey", width:"95%" }}>
               <h4>
                 Want to make your Own team ?
               </h4>

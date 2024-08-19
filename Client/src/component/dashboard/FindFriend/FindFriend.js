@@ -108,9 +108,7 @@ const FindFriend = () => {
                                 ))
                             }
                         </div>:
-                        <div className='col-md-4' style={{position: 'absolute',width: '-webkit-fill-available', display: 'flex',justifyContent: 'center',top: '50%',transform: 'translateY(-50%)'}}>
-                        <CricketLoader/>
-                        </div>
+                        <dotlottie-player src="https://lottie.host/fb5d52f2-d675-4352-a182-ee4e1c88bea9/SpTQ74uC8Z.json" background="transparent" speed="1" style={{ width: "300px", height: "100px" }} loop autoplay></dotlottie-player>
                         }   
                 </div>
             </div>

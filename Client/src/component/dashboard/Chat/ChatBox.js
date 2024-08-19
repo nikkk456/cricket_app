@@ -36,7 +36,7 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat }) => {
   return (
     <div className='vh-100 chat-chatbox'>
       {/* Username and info Header  */}
-      <div className='row text-white' style={{ backgroundColor: "rgb(92 92 93)", height: "10%" }}>
+      <div className='row text-white chat-box-header'>
         {
           mobileChat ?
             <div className='col-1 p-0' style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
@@ -103,7 +103,7 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat }) => {
       </div>
 
       {/* Footer of chatBox  */}
-      <div className='row' style={{ backgroundColor: "rgb(92 92 93)" }}>
+      <div className='row chat-box-footer ' style={{ backgroundColor: "rgb(92 92 93)" }}>
         <div className='col-md-1 col-1 chat-emoji'>
           <svg
             xmlns="http://www.w3.org/2000/svg"

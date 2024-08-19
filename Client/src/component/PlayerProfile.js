@@ -130,7 +130,7 @@ const PlayerProfile = () => {
             {/* This is the Ministat  */}
             <div className='container'>
                 <div className="text-center mt-3 d-flex justify-content-center">
-                    <div className="row text-white bg-dark p-3 rounded-pill" style={{ width: "45%", height: "90px" }}>
+                    <div className="row text-white bg-dark p-3 rounded-pill mini-stat">
                         <div className="col-4">
                             <h5>0</h5>
                             <h6>Matches</h6>

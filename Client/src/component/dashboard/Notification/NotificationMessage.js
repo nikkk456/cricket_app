@@ -1,39 +1,60 @@
-import React from 'react'
+import React from 'react';
+import "./notification.css";
+import Cookies from 'js-cookie';
+import axios from 'axios';
 const truncateContent = (content, wordLimit) => {
     const words = content.split(' ');
     if (words.length > wordLimit) {
-      return words.slice(0, wordLimit).join(' ') + '...';
+        return words.slice(0, wordLimit).join(' ') + '...';
     }
     return content;
-  };
+};
 
-const NotificationMessage = ({ type, content, date, time, isSeen }) => {
+
+const NotificationMessage = ({ type, content, date, time, isSeen, id , sender_id , sender_name , status}) => {
     const truncatedContent = truncateContent(content, 7);
+    const accept_request = ()=>{
+        const values = {user_id : Cookies.get("user_id"),sender_id:sender_id};
+        axios.post("http://localhost:8080/api/notification/accept_request", values, {
+            headers: {
+              authorization: Cookies.get("uid")
+            }
+          }).then((response) => {
+            console.log(response);
+            if(response.data.results[0].status == 1){
+                alert("happy connect !");
+            }
+          }).catch((err) => {
+            console.log(err);
+          });
+    }
+    const decline_request = ()=>{
+
+    }
+
     return (
-        <div className={isSeen?'row p-2 border-bottom ': 'row p-2 text-white border-bottom'} style={{backgroundColor: isSeen?"":"grey", cursor:"pointer"}}>
-            <div className='col-md-10'>
-                <div className='row'>
-                    <div style={{ display: "flex" }}>
-                        <div style={{ width: "10%" }}>
-                            <img src="https://github.com/mdo.png" alt="mdo" style={{ width: "100%" }} className="rounded-circle" />
+        <div className={`notification-item ${isSeen ? 'seen' : 'unseen'}`}>
+            <div className="notification-content">
+                <div className="notification-icon">
+                    <img src="https://github.com/mdo.png" alt="Profile" className="notification-avatar" />
+                </div>
+                <div className="notification-text">
+                    <h6 className="notification-type"><b>{type}!</b></h6>
+                    <p className="notification-message">{truncatedContent} {sender_name}</p>
+                    {status==0 ? (
+                        <div className="notification-actions">
+                            <button className="btn btn-success btn-sm mx-1" onClick={accept_request}>Accept</button>
+                            <button className="btn btn-danger btn-sm" onClick={decline_request}>Decline</button>
                         </div>
-                        <div className='row mx-2'>
-                        <h6><b>{type}!</b></h6>
-                        <p>{truncatedContent}</p>
-                        </div>
-                    </div>
+                    ):''}
                 </div>
             </div>
-            <div className='col-md-2'>
-                <div className='row'>
-                    <small>
-                        {date}
-                    </small>
-                    <small style={{ fontSize: "x-small" }}>{time}</small>
-                </div>
+            <div className="notification-time">
+                <small>{date}</small>
+                <small style={{ fontSize: "x-small" }}>{time}</small>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default NotificationMessage
+export default NotificationMessage;

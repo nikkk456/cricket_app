@@ -37,8 +37,7 @@ const Notification = () => {
     });
 
   },[]);
-  console.log("u");
-  console.log(NotificationList);
+
   const formatPlayingRole = (role) => {
     switch (role) {
       case "all_rounder":
@@ -99,14 +98,19 @@ const Notification = () => {
             <div className='rounded no-scrollbar' style={{ boxShadow: "0px 0px 4px 3px grey", maxHeight: "80vh", overflowY: "auto", width: "95%" }}>
               {
                 NotificationList?NotificationList.map((data) => {
+                  console.log(data.notification_type)
                   return (
+                    
                     <NotificationMessage
-                      key={data.id}
+                      id={data.notification_type}
                       isSeen={data.is_seen}
                       type={data.noti_type}
                       content={data.content}
                       date={data.created_at}
                       time={data.time}
+                      sender_id={data.sender_id}
+                      sender_name = {data.sender_name}
+                      status = {data.status}
                     />
                   );
                 }):"Loading..."

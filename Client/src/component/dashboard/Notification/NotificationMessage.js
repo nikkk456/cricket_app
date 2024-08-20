@@ -11,7 +11,7 @@ const truncateContent = (content, wordLimit) => {
 };
 
 
-const NotificationMessage = ({ type, content, date, time, isSeen, id , sender_id , sender_name , status}) => {
+const NotificationMessage = ({ type, content, date, time, isSeen, id , sender_id , sender_name , status, setNotificationList}) => {
     const truncatedContent = truncateContent(content, 7);
     const accept_request = ()=>{
         const values = {user_id : Cookies.get("user_id"),sender_id:sender_id};
@@ -21,8 +21,9 @@ const NotificationMessage = ({ type, content, date, time, isSeen, id , sender_id
             }
           }).then((response) => {
             console.log(response);
+            setNotificationList(response)
             if(response.data.results[0].status == 1){
-                alert("happy connect !");
+                alert("You are Now Friends !");
             }
           }).catch((err) => {
             console.log(err);

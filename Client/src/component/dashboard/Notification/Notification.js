@@ -59,6 +59,7 @@ const Notification = () => {
       return NotificationList.filter(data => data.type !== 'message');
     }
   };
+  console.log("This is NotificationList in Notification Panel", NotificationList);
 
   return (
     <div className='container-fluid' style={{marginBottom:"55px"}}>
@@ -106,6 +107,7 @@ const Notification = () => {
                       sender_id={data.sender_id}
                       sender_name = {data.sender_name}
                       status = {data.status}
+                      setNotificationList = {setNotificationList}
                     />
                   );
                 }): <div className='d-flex align-items-center justify-content-center ' style={{height:"70vh"}} >

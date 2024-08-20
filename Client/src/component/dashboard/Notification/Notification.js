@@ -59,7 +59,7 @@ const Notification = () => {
       return NotificationList.filter(data => data.type !== 'message');
     }
   };
-  console.log("This is NotificationList in Notification Panel", NotificationList);
+  console.log("This is Notification List", NotificationList)
 
   return (
     <div className='container-fluid' style={{marginBottom:"55px"}}>
@@ -94,16 +94,16 @@ const Notification = () => {
           <div className='row mt-4 justify-content-center'>
             <div className='rounded no-scrollbar' style={{ boxShadow: "0px 0px 4px 3px grey", maxHeight: "80vh", overflowY: "auto", width: "95%", height:"70vh" }}>
               {
-                NotificationList ? NotificationList.length !=0? NotificationList.map((data) => {
+                NotificationList ? NotificationList.length !==0? NotificationList.map((data) => {
                   return (
                     
                     <NotificationMessage
+                      key={data.id}
                       id={data.notification_type}
                       isSeen={data.is_seen}
                       type={data.noti_type}
                       content={data.content}
                       date={data.created_at}
-                      time={data.time}
                       sender_id={data.sender_id}
                       sender_name = {data.sender_name}
                       status = {data.status}
@@ -127,8 +127,10 @@ const Notification = () => {
             <h3 className='mx-1 my-3'>Suggested Captains</h3>
             <div style={{ maxHeight: "50vh", width:"95%", overflowY: "auto", borderRadius: "10px", boxShadow: "0px 0px 6px 1px grey" }} className='no-scrollbar'>
               {
-                showLoader ?<dotlottie-player src="https://lottie.host/fb5d52f2-d675-4352-a182-ee4e1c88bea9/SpTQ74uC8Z.json" background="transparent" speed="1" style={{ width: "300px", height: "100px" }} loop autoplay></dotlottie-player>: friendList.map((data, index) => (
-                  <><FriendList name={data.name} playerId={data.id} playingStyle={formatPlayingRole(data.playing_role)} index={index} imageUrl={data.profilePicture} /></>
+                showLoader ?<dotlottie-player src="https://lottie.host/fb5d52f2-d675-4352-a182-ee4e1c88bea9/SpTQ74uC8Z.json" background="transparent" speed="1" style={{ width: "300px", height: "100px" }} loop autoplay></dotlottie-player>
+                :
+                friendList.map((data, index) => (
+                  <div key={data.id}><FriendList name={data.name} playerId={data.id} playingStyle={formatPlayingRole(data.playing_role)} index={index} imageUrl={data.profilePicture} /></div>
                 )) 
               }
             </div>

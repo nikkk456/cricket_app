@@ -8,6 +8,7 @@ import FriendList from '../../FindFriend/FriendList';
 const ListOfFriend = () => {
     const user_id ={"user_id":Cookies.get('user_id')};
     const [ suggestfriends, setSuggestfriend] = useState();
+    const [myfriends, setMyFriends] = useState();
     const [friendList, setFriendsList] = useState();
     useEffect(()=>{
         axios.post("http://localhost:8080/api/friends/list",user_id,{
@@ -28,11 +29,14 @@ const ListOfFriend = () => {
                 authorization:Cookies.get("uid")
             }
         }).then((response)=>{
-           console.log(response)
+           console.log("This is MyFriends",response);
+            setMyFriends(response.data.results);
         }).catch((err)=>{
             console.log(err);
         });
     },[]);
+
+    console.log("This is myFrined lustr of array", myfriends);
     const formatPlayingRole = (role) => {
         switch(role) {
             case "all_rounder":
@@ -58,13 +62,13 @@ const ListOfFriend = () => {
             </div>
             <hr/>
             <div className='row'>
-                <MiniUserprofile  captain="true"/>
-                <MiniUserprofile  captain="true"/>
-                <MiniUserprofile  captain="false"/>
-                <MiniUserprofile  captain="true"/>
-                <MiniUserprofile  captain="false"/>
-                <MiniUserprofile  captain="true"/>
-                <MiniUserprofile  captain="false"/>
+                {
+                    myfriends? myfriends.map((data, index)=>{
+                       return(
+                        <MiniUserprofile name={data.name} playerId={data.id} index={index} imageUrl={data.profilePicture} key={data.id}/>
+                       )
+                    }):"No Friend Till Now Connect them!"
+                }
             </div>
             <hr/>
             <div className='row'>
@@ -72,7 +76,7 @@ const ListOfFriend = () => {
                 {
                     friendList? friendList.map((data, index)=>{
                         return (
-                            <FriendList name={data.name} playerId={data.id} playingStyle={formatPlayingRole(data.playing_role)} index={index} imageUrl={data.profilePicture}/>
+                            <FriendList name={data.name} playerId={data.id} playingStyle={formatPlayingRole(data.playing_role)} index={index} imageUrl={data.profilePicture} key={data.id}/>
                         )
                     }):""
                 }

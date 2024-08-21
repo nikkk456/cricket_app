@@ -32,15 +32,28 @@ const NotificationMessage = ({ type, content, date, isSeen, id, sender_id, sende
                 }
                 return prevList;
               });
-            if (response.data.results[0].status === 1) {
-                alert("You are Now Friends !");
-            }
         }).catch((err) => {
             console.log(err);
         });
     }
     const decline_request = () => {
-
+        const values = { user_id: Cookies.get("user_id"), sender_id: sender_id };
+        axios.post("http://localhost:8080/api/notification/decline_request", values, {
+            headers: {
+                authorization: Cookies.get("uid")
+            }
+        }).then((response) => {
+            console.log(response);
+            setNotificationList((prevList) => {
+                if (Array.isArray(response.data.results)) {
+                  // Return a new array with the updated list
+                  return [...response.data.results];
+                }
+                return prevList;
+              });
+        }).catch((err) => {
+            console.log(err);
+        });
     }
 
     return (

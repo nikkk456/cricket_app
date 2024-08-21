@@ -1,7 +1,7 @@
 const conn = require("../bdcon/dbcon");
 
 const accept_request = (req, res) => {
-    const update_status = "UPDATE friend_request SET status = 1 WHERE sender_id = ? and receiver_id = ? ";
+    const update_status = "UPDATE friend_request SET status = 2 WHERE sender_id = ? and receiver_id = ? ";
 
     conn.query(update_status,[req.body.sender_id , req.body.user_id],(err,results)=>{
         if(err){

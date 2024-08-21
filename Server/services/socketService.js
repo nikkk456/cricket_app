@@ -24,9 +24,9 @@ function initializeSocket(server) {
 
             try {
                 // Check if a friend request already exists
-                const checkExistingQuery = "SELECT COUNT(*) as allcount FROM friend_request WHERE sender_id = ? AND receiver_id = ?";
+                const checkExistingQuery = "SELECT COUNT(*) as allcount FROM friend_request WHERE (sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?)";
                 const checking = await new Promise((resolve, reject) => {
-                    conn.query(checkExistingQuery, [sender_id, receiver_id], (err, results) => {
+                    conn.query(checkExistingQuery, [sender_id, receiver_id,receiver_id,sender_id], (err, results) => {
                         if (err) {
                             return reject(err);
                         }

@@ -3,6 +3,8 @@ const router = express.Router();
 const friendslist = require("../controller/friend.controller.js");
 const verifytoken = require("../services/token_verify.js");
 const searchfriend = require("../controller/searchfriends.controller.js");
+const myfriends = require("../controller/myfriends.controller.js");
 router.route("/list").post(verifytoken,friendslist);
+router.route("/myfriends").post(verifytoken,myfriends);
 router.route("/searchfriends").post(searchfriend);
 module.exports = router;

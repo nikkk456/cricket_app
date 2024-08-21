@@ -21,6 +21,18 @@ const ListOfFriend = () => {
             console.log(err);
         });
     },[]);
+
+    useEffect(()=>{
+        axios.post("http://localhost:8080/api/friends/myfriends",user_id,{
+            headers:{
+                authorization:Cookies.get("uid")
+            }
+        }).then((response)=>{
+           console.log(response)
+        }).catch((err)=>{
+            console.log(err);
+        });
+    },[]);
     const formatPlayingRole = (role) => {
         switch(role) {
             case "all_rounder":

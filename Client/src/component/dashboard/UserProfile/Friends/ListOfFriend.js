@@ -65,7 +65,7 @@ const ListOfFriend = () => {
                 {
                     myfriends? myfriends.map((data, index)=>{
                        return(
-                        <MiniUserprofile name={data.name} playerId={data.id} index={index} imageUrl={data.profilePicture} key={data.id}/>
+                        <MiniUserprofile name={data.friend_name} playerId={data.friend_id} index={index} imageUrl={data.profilePicture} key={data.friend_id}/>
                        )
                     }):"No Friend Till Now Connect them!"
                 }

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import SideBar from './SideBar';
 import ChatBox from './ChatBox';
@@ -11,51 +11,51 @@ const UserChat = () => {
   const [mobileChat, setMobileChat] = useState(false);
   const [messages, setMessages] = useState([]);
 
- 
   useEffect(() => {
     if (!socket) {
       console.log("Socket is not initialized yet");
       return;
     }
-  
+
     const userID = Cookies.get("user_id");
-  
+
     // Emit event to join the chat room when a user selects a friend
     if (selectedFriend) {
       const chatRoom = [userID, selectedFriend.id].sort().join('_');
       socket.emit("joinRoom", { user_id: userID, chat_id: chatRoom });
     }
-  
+
     // Define event handlers
     const handleReceiveMessage = (data) => {
-      setMessages(prevMessages => [...prevMessages, data]);
+      setMessages((prevMessages) => {
+        // Ensure no duplicate messages by checking if the message already exists in state
+        const messageExists = prevMessages.some(
+          (msg) => msg.timestamp === data.timestamp && msg.sender === data.sender
+        );
+
+        return messageExists ? prevMessages : [...prevMessages, data];
+      });
+
       if (data.sender !== userID) {
         alert(`${data.sender}: ${data.messageText}`);
       }
     };
-  
-    const handleSendStatus = (data) => {
-      alert(data.status); // Alert for sender
-    };
-  
-    const handleReceiveStatus = (data) => {
-      alert(`${data.sender}: ${data.messageText}`); // Alert for receiver
-      setMessages(prevMessages => [...prevMessages, data]);
-    };
-  
+
     // Attach event listeners
     socket.on("receiveMessage", handleReceiveMessage);
-    socket.on("sendStatus", handleSendStatus);
-    socket.on("receiveStatus", handleReceiveStatus);
-  
+
     // Clean up listeners when the component unmounts or dependencies change
     return () => {
       socket.off("receiveMessage", handleReceiveMessage);
-      socket.off("sendStatus", handleSendStatus);
-      socket.off("receiveStatus", handleReceiveStatus);
     };
   }, [socket, selectedFriend]);
-  
+
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      sendmsgbutton();
+    }
+  };
 
   const sendmsgbutton = () => {
     if (inputValue.trim() === '') {
@@ -65,10 +65,10 @@ const UserChat = () => {
       sender: Cookies.get("user_id"),
       receiver: selectedFriend.id,
       messageText: inputValue,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
     socket.emit('sendMessage', message);
-    setMessages(prevMessages => [...prevMessages, message]);
+    setMessages((prevMessages) => [...prevMessages, message]);
     setInputValue('');
   };
 
@@ -107,6 +107,7 @@ const UserChat = () => {
                 onInputChange={handleInputChange}
                 onSendmsg={sendmsgbutton}
                 messages={messages}
+                onKeyDown={handleKeyDown}
               />
             </div>
           </div>
@@ -123,6 +124,7 @@ const UserChat = () => {
               onInputChange={handleInputChange}
               onSendmsg={sendmsgbutton}
               messages={messages}
+              onKeyDown={handleKeyDown}
             />
           </div>
         </div>

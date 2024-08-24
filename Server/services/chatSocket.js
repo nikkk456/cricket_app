@@ -38,8 +38,7 @@ function handleChatSockets(io) {
                 // Emit message to the chat room
                 io.to(chatRoom).emit('receiveMessage', { sender, messageText, timestamp });
                 // Notify sender of successful sending
-                io.to(sender).emit('sendStatus', { status: 'Message sent successfully' });
-
+                // io.to(sender).emit('sendStatus', { status: 'Message sent successfully' });
                 // Notify receiver of new message
                 io.to(receiver).emit('receiveStatus', { status: 'New message received', sender, messageText, timestamp });
                 console.log(`Message sent to room ${chatRoom}`);

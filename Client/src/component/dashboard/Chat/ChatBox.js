@@ -3,8 +3,9 @@ import EmojiPicker from 'emoji-picker-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 
-const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inputValue, onInputChange ,messages}) => {
-  
+const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inputValue, onInputChange ,messages , onKeyDown}) => {
+  console.log(messages);
+  // console.log(selectedFriend.id);
   const chatContainerRef = useRef(null);
   const navigate = useNavigate();
   useEffect(() => {
@@ -73,7 +74,7 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inpu
       <div className='row'>
         <div className="chat-box no-scrollbar" ref={chatContainerRef}>
           {messages.length != 0 ? messages.map((msg, index) => (
-            <div key={index} className={`message ${msg.sender === 'Nikhil' ? 'left' : 'right'}`}>
+            <div key={index} className={`message ${msg.sender == selectedFriend.id ? 'left' : 'right'}`}>
               {
                 msg.sender === 'Nikhil' ? <>
                   <span style={{ display: "flex", alignItems: "flex-start" }}>
@@ -133,6 +134,7 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inpu
             placeholder='Type a message'
             value={inputValue} // Use value from props
             onChange={onInputChange} // Handle input changes
+            onKeyDown={onKeyDown}
           />
         </div>
         <div className='col-md-1 col-1 chat-send'>

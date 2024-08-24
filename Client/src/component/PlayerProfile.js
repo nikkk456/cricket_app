@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import io from 'socket.io-client';
-import axios from 'axios';
+import axiosinstance from '../axios/axiosInstance';
 import Cookies from 'js-cookie'
 import { Link, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import About from './dashboard/UserProfile/About/About';
@@ -23,7 +23,7 @@ const PlayerProfile = () => {
     useEffect(() => {
         const value = { user_id: id };
         const fetchData = async () => {
-            await axios.post("http://localhost:8080/api/user/profile", value, {
+            await axiosinstance.post("/user/profile", value, {
                 headers: {
                     'Authorization': Cookies.get('uid')
                 }

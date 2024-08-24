@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosinstance from '../../../../axios/axiosInstance';
 import React, { useContext } from 'react'
 import { useEffect, useState } from 'react'
 import Cookies from 'js-cookie';
@@ -41,7 +41,7 @@ const About = ({userData}) => {
             formData.append('profilePicture', updated_value.profilePicture);
         }
 
-        axios.post("http://localhost:8080/api/user/profile_update", formData, {
+        axiosinstance.post("/user/profile_update", formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 Authorization: Cookies.get('uid'),

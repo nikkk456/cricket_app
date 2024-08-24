@@ -1,7 +1,7 @@
 import React from 'react';
 import "./notification.css";
 import Cookies from 'js-cookie';
-import axios from 'axios';
+import axiosinstance from '../../../axios/axiosInstance';
 const truncateContent = (content, wordLimit) => {
     const words = content.split(' ');
     if (words.length > wordLimit) {
@@ -19,7 +19,7 @@ const NotificationMessage = ({ type, content, date, isSeen, id, sender_id, sende
 
     const accept_request = () => {
         const values = { user_id: Cookies.get("user_id"), sender_id: sender_id };
-        axios.post("http://localhost:8080/api/notification/accept_request", values, {
+        axiosinstance.post("/notification/accept_request", values, {
             headers: {
                 authorization: Cookies.get("uid")
             }
@@ -38,7 +38,7 @@ const NotificationMessage = ({ type, content, date, isSeen, id, sender_id, sende
     }
     const decline_request = () => {
         const values = { user_id: Cookies.get("user_id"), sender_id: sender_id };
-        axios.post("http://localhost:8080/api/notification/decline_request", values, {
+        axiosinstance.post("/notification/decline_request", values, {
             headers: {
                 authorization: Cookies.get("uid")
             }

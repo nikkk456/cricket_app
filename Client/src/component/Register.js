@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
-import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 import OTPInput from './OTPInput';
+import axiosinstance from '../axios/axiosInstance';
 
 
 
@@ -47,7 +47,7 @@ const Register = () => {
     setShowLoader(true);
     if (!validate()) return;
     console.log(registerValue);
-    axios.post("http://localhost:8080/api/user/otp", registerValue).then((res) => {
+    axiosinstance.post("/user/otp", registerValue).then((res) => {
       console.log(res);
       setShowLoader(false);
       if (res.status = 201) {
@@ -75,7 +75,7 @@ const Register = () => {
       otp: otpValue
     }
     console.log(data_sent);
-    axios.post("http://localhost:8080/api/user/register", data_sent).then((res) => {
+    axiosinstance.post("/user/register", data_sent).then((res) => {
       console.log(res);
       setShowLoader(false);
       if (res.status = 201) {

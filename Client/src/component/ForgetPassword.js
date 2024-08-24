@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
-import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 import OTPInput from './OTPInput';
+import axiosinstance from '../axios/axiosInstance';
 
 
 const ForgetPassword = () => {
@@ -15,7 +15,7 @@ const ForgetPassword = () => {
         setShowLoader(true);
         e.preventDefault();
         const value = { email: email };
-        axios.post("http://localhost:8080/api/user/forgot_pass", value).then((response) => {
+        axiosinstance.post("/user/forgot_pass", value).then((response) => {
             setShowLoader(false);
             console.log(response);
             if (response.status = 200) {
@@ -30,7 +30,7 @@ const ForgetPassword = () => {
         setShowLoader(true);
         const otpValue = otpRef.current.getOTP();
         const value = { email: email, otp: otpValue };
-        axios.post("http://localhost:8080/api/user/verifyotp", value).then((res) => {
+        axiosinstance.post("/user/verifyotp", value).then((res) => {
             setShowLoader(false);
             if (res.status == 200) {
                 navigate('/SetNewPassword', { state: { email: email, forgot: 1 } });

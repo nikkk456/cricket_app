@@ -4,6 +4,7 @@ import axios from 'axios';
 import MiniUserprofile from './MiniUserprofile'
 import { useState } from 'react';
 import FriendList from '../../FindFriend/FriendList';
+import axiosinstance from '../../../../axios/axiosInstance';
 
 const ListOfFriend = () => {
     const user_id ={"user_id":Cookies.get('user_id')};
@@ -11,7 +12,7 @@ const ListOfFriend = () => {
     const [myfriends, setMyFriends] = useState();
     const [friendList, setFriendsList] = useState();
     useEffect(()=>{
-        axios.post("http://localhost:8080/api/friends/list",user_id,{
+        axiosinstance.post("/friends/list",user_id,{
             headers:{
                 authorization:Cookies.get("uid")
             }
@@ -24,7 +25,7 @@ const ListOfFriend = () => {
     },[]);
 
     useEffect(()=>{
-        axios.post("http://localhost:8080/api/friends/myfriends",user_id,{
+        axiosinstance.post("/friends/myfriends",user_id,{
             headers:{
                 authorization:Cookies.get("uid")
             }

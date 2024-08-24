@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosinstance from '../axios/axiosInstance';
 import React, { createContext, useEffect, useState } from 'react';
 import Cookies from 'js-cookie'
 
@@ -10,7 +10,7 @@ export const PlayerProfileProvider = ({ children }) => {
     useEffect(() => {
         const value = { user_id: Cookies.get('user_id') };
         const fetchData = async () => {
-            await axios.post("http://localhost:8080/api/user/profile", value, {
+            await axiosinstance.post("/user/profile", value, {
                 headers: {
                     'Authorization': Cookies.get('uid')
                 }

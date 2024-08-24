@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import FriendList from './FriendList';
 import Cookies from 'js-cookie';
-import axios from 'axios';
+import axiosinstance from '../../../axios/axiosInstance.js';
 import CricketLoader from '../../loader/CricketLoader.js';
 
 const FindFriend = () => {
@@ -14,7 +14,7 @@ const FindFriend = () => {
     const [suggestfriend,setSuggestfriend] = useState(false);
     
     useEffect(()=>{
-        axios.post("http://localhost:8080/api/friends/list",user_id,{
+        axiosinstance.post("/friends/list",user_id,{
             headers:{
                 authorization:Cookies.get("uid")
             }
@@ -40,7 +40,7 @@ const FindFriend = () => {
     const searchfriend = (e)=>{
         setSearchValue({...searchValue,[e.target.name]:e.target.value});
         console.log(searchValue);
-        axios.post("http://localhost:8080/api/friends/searchfriends",searchValue, {
+        axiosinstance.post("/friends/searchfriends",searchValue, {
             headers: {
                 "userId": Cookies.get('user_id')
             }

@@ -1,11 +1,10 @@
-import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import Toast from './Toast'
-
+import axiosinstance from '../axios/axiosInstance';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -32,7 +31,7 @@ const Login = () => {
 
     const handleSubmit = () => {
         setShowLoader(true);
-        axios.post("http://localhost:8080/api/user/login", loginData).then((response) => {
+        axiosinstance.post("/user/login", loginData).then((response) => {
             setShowLoader(false);
             login(response.data);
             navigate("/")

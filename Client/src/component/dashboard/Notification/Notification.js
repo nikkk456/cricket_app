@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
-import axios from 'axios';
+import axiosinstance from '../../../axios/axiosInstance';
 import NotificationMessage from './NotificationMessage';
 import FriendList from '../FindFriend/FriendList';
 const Notification = () => {
@@ -11,7 +11,7 @@ const Notification = () => {
   const [NotificationList, setNotificationList] = useState();
   
   useEffect(() => {
-    axios.post("http://localhost:8080/api/friends/list", user_id, {
+    axiosinstance.post("/friends/list", user_id, {
       headers: {
         authorization: Cookies.get("uid")
       }
@@ -24,7 +24,7 @@ const Notification = () => {
   }, []);
 
   useEffect(()=>{
-    axios.post("http://localhost:8080/api/notification/list", user_id, {
+    axiosinstance.post("/notification/list", user_id, {
       headers: {
         authorization: Cookies.get("uid")
       }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axiosinstance from '../axios/axiosInstance';
 import { useLocation ,useNavigate} from 'react-router-dom';
 
 
@@ -20,7 +20,7 @@ const SetNewPassword = () => {
             return   ;
         }
         const values = {email:email,password:loginData.password};
-        axios.post("http://localhost:8080/api/user/resetpass",values).then((res)=>{
+        axiosinstance.post("/user/resetpass",values).then((res)=>{
             console.log(res);
             if(res.status==200){
                 navigate("/login");

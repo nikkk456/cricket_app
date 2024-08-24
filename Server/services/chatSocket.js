@@ -2,14 +2,15 @@ const conn = require("../bdcon/dbcon");
 
 function handleChatSockets(io) {
     io.on('connection', (socket) => {
-        console.log('A user connected to chat');
-        // join room
-        socket.on('joinRoom', (user_id) => {
-            if (user_id) {
-                socket.join(user_id);
-                console.log(`User ${user_id} joined room`);
+        console.log('A user connected to chat. Socket ID:', socket.id);
+
+        // Join room
+        socket.on('joinRoom', ({ user_id, chat_id }) => {
+            if (user_id && chat_id) {
+                socket.join(chat_id);
+                console.log(`User ${user_id} joined room ${chat_id}`);
             } else {
-                console.warn('No user ID provided for joinRoom');
+                console.warn('No user ID or chat ID provided for joinRoom');
             }
         });
 
@@ -18,6 +19,13 @@ function handleChatSockets(io) {
             const { sender, receiver, messageText, timestamp } = data;
 
             try {
+                if (!sender || !receiver || !messageText || !timestamp) {
+                    throw new Error('Invalid message data');
+                }
+
+                // Generate chat room ID
+                const chatRoom = [sender, receiver].sort().join('_'); // Example: "5_16"
+
                 // Save message to database
                 const insertMessageQuery = "INSERT INTO messages (sender, receiver, messageText, timestamp) VALUES (?, ?, ?, ?)";
                 await new Promise((resolve, reject) => {
@@ -27,11 +35,14 @@ function handleChatSockets(io) {
                     });
                 });
 
-                // Emit message to the receiver
-                console.log(receiver);
-                io.to(receiver).emit('receiveMessage', { sender, messageText, timestamp });
-                io.to(sender).emit('receivestatus', { sender, messageText, timestamp });
-                console.log(`Message sent to room ${receiver}`);
+                // Emit message to the chat room
+                io.to(chatRoom).emit('receiveMessage', { sender, messageText, timestamp });
+                // Notify sender of successful sending
+                io.to(sender).emit('sendStatus', { status: 'Message sent successfully' });
+
+                // Notify receiver of new message
+                io.to(receiver).emit('receiveStatus', { status: 'New message received', sender, messageText, timestamp });
+                console.log(`Message sent to room ${chatRoom}`);
             } catch (err) {
                 console.error("Error handling message:", err);
             }
@@ -43,5 +54,7 @@ function handleChatSockets(io) {
         });
     });
 }
+
+
 
 module.exports = handleChatSockets;

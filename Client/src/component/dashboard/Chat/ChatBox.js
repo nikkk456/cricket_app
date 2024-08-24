@@ -2,7 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat }) => {
+
+const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inputValue, onInputChange ,messages}) => {
+  
   const chatContainerRef = useRef(null);
   const navigate = useNavigate();
   useEffect(() => {
@@ -12,10 +14,10 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat }) => {
     }
   }, [selectedFriend]);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  const [inputValue, setInputValue] = useState('');
+  // 
   const onEmojiClick = (emojiObject) => {
     console.log(emojiObject);
-    setInputValue((prevInput) => prevInput + emojiObject.emoji); // Hide emoji picker after selecting an emoji
+    // setInputValue((prevInput) => prevInput + emojiObject.emoji); // Hide emoji picker after selecting an emoji
   };
 
   // If No body is selected for Chat 
@@ -29,7 +31,7 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat }) => {
     </div>;
   }
 
-  var { name, chats } = selectedFriend;
+  const { name = '', chats = [] } = selectedFriend || {};
   const handleDeleteChat = () => {
     setSelectedFriend({ ...selectedFriend, chats: [] });
   }
@@ -38,12 +40,12 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat }) => {
       {/* Username and info Header  */}
       <div className='row text-white chat-box-header'>
         {
-          mobileChat ?
+          mobileChat &&
             <div className='col-1 p-0' style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-chevron-left" viewBox="0 0 16 16" onClick={()=>{setSelectedFriend(null)}}>
                 <path fillRule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
               </svg>
-            </div> : ""
+            </div> 
         }
         <div className='col-md-4 col-4 rounded-circle chat-profile'>
           <img src="https://github.com/mdo.png" className='rounded-circle me-2' alt='...' style={{ width: "100%" }} />
@@ -70,7 +72,7 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat }) => {
       {/* Chat BOX started Here  */}
       <div className='row'>
         <div className="chat-box no-scrollbar" ref={chatContainerRef}>
-          {chats.length != 0 ? chats.map((msg, index) => (
+          {messages.length != 0 ? messages.map((msg, index) => (
             <div key={index} className={`message ${msg.sender === 'Nikhil' ? 'left' : 'right'}`}>
               {
                 msg.sender === 'Nikhil' ? <>
@@ -79,12 +81,12 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat }) => {
                     </svg>
                   </span>
                   <div className="message-content-left">
-                    <p style={{ margin: "0px" }}>{msg.message}</p>
+                    <p style={{ margin: "0px" }}>{msg.messageText}</p>
                     <small style={{ fontSize: "x-small" }}>{new Date(msg.timestamp).toLocaleTimeString()}</small>
                   </div>
                 </> : <>
                   <div className="message-content-right">
-                    <p style={{ margin: "0px" }}>{msg.message}</p>
+                    <p style={{ margin: "0px" }}>{msg.messageText}</p>
                     <small style={{ fontSize: "x-small" }}>{new Date(msg.timestamp).toLocaleTimeString()}</small>
                   </div>
                   <span style={{ display: "flex", alignItems: "flex-start" }}>
@@ -93,12 +95,9 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat }) => {
                 </>
               }
             </div>
-          )) : <div className='row justify-content-center align-items-center'>
-            <div>
-              <h2>Type a message to start a conversation</h2>
-            </div>
-          </div>
-          }
+             )) : <div className='h-100 d-flex justify-content-center align-items-center' style={{ marginTop: "-90px" }}>
+            <p>Start the conversation...</p>
+              </div>}
         </div>
       </div>
 
@@ -132,12 +131,12 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat }) => {
             style={{ borderRadius: "10px" }}
             aria-describedby="emailHelp"
             placeholder='Type a message'
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
+            value={inputValue} // Use value from props
+            onChange={onInputChange} // Handle input changes
           />
         </div>
         <div className='col-md-1 col-1 chat-send'>
-          <svg viewBox="0 0 24 24" height="24" width="24" preserveAspectRatio="xMidYMid meet" fill="currentColor" style={{ fill: "white" }} version="1.1" x="0px" y="0px" enableBackground="new 0 0 24 24">
+          <svg onClick={onSendmsg} viewBox="0 0 24 24" height="24" width="24" preserveAspectRatio="xMidYMid meet" fill="currentColor" style={{ fill: "white" }} version="1.1" x="0px" y="0px" enableBackground="new 0 0 24 24">
             <title>send</title>
             <path d="M1.101,21.757L23.8,12.028L1.101,2.3l0.011,7.912l13.623,1.816L1.112,13.845 L1.101,21.757z"></path>
           </svg>

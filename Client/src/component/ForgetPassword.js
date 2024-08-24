@@ -50,7 +50,7 @@ const ForgetPassword = () => {
                     <>
                         {
                             showOTP ?
-                                <div className='col-md-4'> <OTPInput ref={otpRef} onButtonClick={handleOTPSubmit} /></div>
+                                <div className='col-md-4'> <OTPInput ref={otpRef} onButtonClick={handleOTPSubmit} onOTPButtonClick={handleSubmit}  /></div>
                                 :
                                 <div className="col-md-4 col-md-offset-4 p-5" style={{ border: "1px solid black", borderRadius: "10px" }}>
                                     <div className="text-center">

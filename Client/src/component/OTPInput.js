@@ -71,7 +71,7 @@ const OTPInput = forwardRef((props, ref) => {
                     </div>
                     <div className="content d-flex justify-content-center align-items-center">
                         <span style={{color:"black"}}>Didn't get the code</span>
-                        <a href="#" className="text-decoration-none ms-3" >Resend OTP</a>
+                        <a href="#" onClick={props.onOTPButtonClick} className="text-decoration-none ms-3" >Resend OTP</a>
                     </div>
                     <div className="mt-4">
                     <button className="btn btn-dark px-4 validate" onClick={props.onButtonClick}>Validate</button>

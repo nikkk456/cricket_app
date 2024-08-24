@@ -1,24 +1,29 @@
-import React from 'react'
+import React from 'react';
+import './UserChatProfile.css'; // Importing custom CSS for styling
 
-const UserChatProfile = ({ captain, name, lastMessage = "Hello", lastActive }) => {
+const UserChatProfile = ({ captain, name, lastMessage = "Hello", lastActive, profilepicture }) => {
     return (
-        <div className='row my-2' style={{cursor:"pointer"}}>
-            <div className='col-md-4 col-7 rounded-circle' style={{ width: "20%", display: "flex", alignItems: "center" }}>
-                <img src="https://github.com/mdo.png" className='rounded-circle me-2' alt='...' style={{ width: "100%", border: "3px solid black" }} />
+        <div className='user-chat-profile d-flex align-items-center my-2 p-2'>
+            <div className='profile-picture-container me-3'>
+                <img
+                    src={profilepicture ? profilepicture : "https://github.com/mdo.png"}
+                    className='profile-picture'
+                    alt='Profile'
+                />
             </div>
-            <div className='col-md-7 col-7 d-flex mx-2' style={{ flexDirection: "column", padding:"0px" }}>
-                <h6 style={{ margin: "0px" }}>
-                    <b>{name}</b> {captain ? <span className="badge text-bg-success rounded-circle" style={{fontSize:"x-small"}}>C</span> : ""}
+            <div className='profile-details flex-grow-1'>
+                <h6 className='mb-1'>
+                    <b>{name}</b> {captain && <span className="badge bg-success captain-badge">C</span>}
                 </h6>
-                <small>
+                <small className='text-muted last-message'>
                     {lastMessage}
                 </small>
             </div>
-            <div className='col-md-1 col-1'>
-                <small style={{fontSize:"x-small"}}>{lastActive}</small>
+            <div className='last-active-time text-muted'>
+                <small>{lastActive}</small>
             </div>
         </div>
-    )
+    );
 }
 
-export default UserChatProfile
+export default UserChatProfile;

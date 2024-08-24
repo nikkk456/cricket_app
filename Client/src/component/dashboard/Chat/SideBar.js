@@ -2,11 +2,31 @@ import React, { useState } from 'react';
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import UserChatProfile from './UserChatProfile';
 import friendsData from './FriendsData.json';
-import teamsData from './TeamData.json'
+import teamsData from './TeamData.json';
+import axiosinstance from '../../../axios/axiosInstance'
+import { useEffect } from 'react';
+import Cookies from 'js-cookie';
 
 const SideBar = ({setSelectedFriend}) => {
     const location = useLocation();
     const [searchTerm, setSearchTerm] = useState('');
+    const [friendslist, setfriendslist] = useState([]);
+
+    
+        useEffect(()=>{
+           const user_id ={"user_id":Cookies.get('user_id')};
+            axiosinstance.post("/friends/list",user_id,{
+                headers:{
+                    authorization:Cookies.get("uid")
+                }
+            }).then((response)=>{
+                console.log("This is suggested friend list Data ", response)
+                setfriendslist(Object.values(response.data.result));
+            }).catch((err)=>{
+                console.log(err);
+            });
+        },[]);
+
 
     const filteredFriends = friendsData.filter(friend =>
         friend.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -53,17 +73,27 @@ const SideBar = ({setSelectedFriend}) => {
                     </div>
                 </div>
                 <Routes>
-                    <Route path='friendschat' element={
+                <Route path='friendschat' element={
                         <div className='row chat-list mt-3 no-scrollbar' style={{ height: "60vh", overflowY: "scroll" }}>
                         {
-                            filteredFriends.map((data, index) => (
-                                <div className='' key={index} onClick={() => handleFriendClick(data)}>
-                                    <UserChatProfile captain={data.captain} name={data.name} key={index} lastMessage={data.chats && data.chats.length > 0 ? data.chats[data.chats.length - 1].message : "Hello"}  lastActive="12:14" />
-                                </div>
-                            ))
+                            friendslist.length > 0 ? (
+                                friendslist.map((data, index) => (
+                                    <div key={index} onClick={() => handleFriendClick(data)}>
+                                        <UserChatProfile
+                                            captain={data.captain}
+                                            name={data.name}
+                                            profilepicture={data.profilePicture}
+                                            lastMessage={data.chats && data.chats.length > 0 ? data.chats[data.chats.length - 1].message : "Hello"}
+                                            lastActive="12:14"
+                                        />
+                                    </div>
+                                ))
+                            ) : (
+                                <p>No friends available</p>
+                            )
                         }
                     </div>
-                } />
+                    } />
                 <Route path='teamschat' element={
                     <div className='row chat-list mt-3 no-scrollbar' style={{ maxHeight: "60vh", overflowY: "scroll" }}>
                         {

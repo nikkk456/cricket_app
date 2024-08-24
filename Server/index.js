@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const http = require('http');
-const initializeSocket = require('./services/socketService'); // Import the socket service
+// const initializeSocket = require('./services/friendRequestSocket.js'); // Import the socket service
 
 const app = express();
 const server = http.createServer(app);
@@ -32,7 +32,13 @@ app.use("/api/user", users_route);
 app.use("/api/notification",notification);
 
 // Initialize Socket.io
+const initializeSocket = require('./services/initializeSocket');
+const handleChatSockets = require('./services/chatSocket');
+const handleFriendRequestSockets = require('./services/friendRequestSocket');
 const io = initializeSocket(server);
+handleChatSockets(io);
+handleFriendRequestSockets(io);
+
 
 // Start the server
 server.listen(8080, () => {

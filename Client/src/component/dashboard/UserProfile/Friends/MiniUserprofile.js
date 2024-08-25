@@ -5,6 +5,7 @@ import styles from '../../FindFriend/FriendList.module.css';
 const MiniUserprofile = ({ name, playingStyle, imageUrl, index, playerId }) => {
     const navigate = useNavigate();
     const handleClick = () => {
+        console.log(playerId);
         navigate(`/playerprofile/${playerId}/about`, { state: { playerId: playerId } });
     }
     return (

@@ -96,7 +96,7 @@ const UserChat = () => {
         <div className="container-fluid">
           <div className="row">
             <div className={`col-12 p-0 ${selectedFriend ? 'd-none d-md-block' : ''}`}>
-              <SideBar setSelectedFriend={setSelectedFriend} />
+              <SideBar setSelectedFriend={setSelectedFriend}  setMessages={setMessages} />
             </div>
             <div className={`col-12 ${selectedFriend ? '' : 'd-none d-md-block'}`}>
               <ChatBox
@@ -115,7 +115,7 @@ const UserChat = () => {
       ) : (
         <div className="container-fluid">
           <div className="row">
-            <SideBar setSelectedFriend={setSelectedFriend} />
+            <SideBar setSelectedFriend={setSelectedFriend}  setMessages={setMessages}/>
             <ChatBox
               selectedFriend={selectedFriend}
               setSelectedFriend={setSelectedFriend}

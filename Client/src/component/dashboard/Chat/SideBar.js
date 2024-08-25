@@ -7,12 +7,11 @@ import axiosinstance from '../../../axios/axiosInstance'
 import { useEffect } from 'react';
 import Cookies from 'js-cookie';
 
-const SideBar = ({setSelectedFriend}) => {
+const SideBar = ({setSelectedFriend,setMessages}) => {
+    console.log("setMessages prop:", setMessages); // Should
     const location = useLocation();
     const [searchTerm, setSearchTerm] = useState('');
     const [friendslist, setfriendslist] = useState([]);
-
-    
         useEffect(()=>{
            const user_id ={"user_id":Cookies.get('user_id')};
             axiosinstance.post("/friends/list",user_id,{
@@ -32,8 +31,24 @@ const SideBar = ({setSelectedFriend}) => {
         friend.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     const handleFriendClick = (friend)=>{
+        setMessages([]);
         console.log("The friend is clicked ");
         setSelectedFriend(friend)
+        axiosinstance.post("/chats/getchats", {friend_id:friend.id},{
+            headers:{
+                authorization:Cookies.get("uid"),
+                user_id:Cookies.get("user_id")
+            }
+        }).then((response)=>{
+            console.log(response);
+            const updatedFriend = { ...friend, chat: response.data };
+            setSelectedFriend(updatedFriend);
+            console.log(typeof setMessages); // Sh
+            setMessages((prevMessages) => [...prevMessages, ...response.data]); // setMessages is used here
+            console.log(updatedFriend);
+        }).catch((err)=>{
+            console.log(err);
+        });
     }
 
     return (

@@ -26,10 +26,11 @@ app.use((req, res, next) => {
 const users_route = require("./routes/user.routes.js");
 const friend = require("./routes/friends.routes.js");
 const notification = require("./routes/notification.routes.js");
-
+const chats = require("./routes/chats.routes.js");
 app.use("/api/friends", friend);
 app.use("/api/user", users_route);
 app.use("/api/notification",notification);
+app.use("/api/chats",chats);
 
 // Initialize Socket.io
 const initializeSocket = require('./services/initializeSocket');

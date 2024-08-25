@@ -8,11 +8,19 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inpu
   // console.log(selectedFriend.id);
   const chatContainerRef = useRef(null);
   const navigate = useNavigate();
-  useEffect(() => {
-    //To get recent messages on screen and then scroll up for older chats
+  const scrollUp = ()=>{
+    console.log("Scroll Up is called");
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
+  }
+  const handleKeyDown = (e) => {
+    onKeyDown(e); // Call the existing onKeyDown function
+      scrollUp(); // Scroll up after handling the key down event
+  };
+  useEffect(() => {
+    //To get recent messages on screen and then scroll up for older chats
+    scrollUp();
   }, [selectedFriend]);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   // 
@@ -76,7 +84,7 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inpu
           {messages.length != 0 ? messages.map((msg, index) => (
             <div key={index} className={`message ${msg.sender == selectedFriend.id ? 'left' : 'right'}`}>
               {
-                msg.sender === 'Nikhil' ? <>
+                msg.sender == selectedFriend.id ? <>
                   <span style={{ display: "flex", alignItems: "flex-start" }}>
                     <svg viewBox="0 0 8 13" height="13" width="8" preserveAspectRatio="xMidYMid meet" className="" version="1.1" x="0px" y="0px" enableBackground="new 0 0 8 13"><title>tail-in</title><path opacity="0.13" fill="#0000000" d="M1.533,3.568L8,12.193V1H2.812 C1.042,1,0.474,2.156,1.533,3.568z"></path><path fill="currentColor" d="M1.533,2.568L8,11.193V0L2.812,0C1.042,0,0.474,1.156,1.533,2.568z"></path>
                     </svg>
@@ -134,7 +142,7 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inpu
             placeholder='Type a message'
             value={inputValue} // Use value from props
             onChange={onInputChange} // Handle input changes
-            onKeyDown={onKeyDown}
+            onKeyDown={handleKeyDown}
           />
         </div>
         <div className='col-md-1 col-1 chat-send'>

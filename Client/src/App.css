@@ -199,6 +199,14 @@ height: 100%;
 .chat-chatbox{
   width: 65%;
 }
+.chat-box-background{
+  background-image: url('../public/Image/Cricket_Wallpaper5.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+}
 .chat-triple-dot{
   width: 40%;
   display: flex;

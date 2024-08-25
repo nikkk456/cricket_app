@@ -80,7 +80,7 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inpu
       </div>
       {/* Chat BOX started Here  */}
       <div className='row'>
-        <div className="chat-box no-scrollbar" ref={chatContainerRef}>
+        <div className="chat-box no-scrollbar chat-box-background" ref={chatContainerRef}>
           {messages.length != 0 ? messages.map((msg, index) => (
             <div key={index} className={`message ${msg.sender == selectedFriend.id ? 'left' : 'right'}`}>
               {

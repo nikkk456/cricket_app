@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const http = require('http');
+const { v4: uuidv4 } = require('uuid');
 // const initializeSocket = require('./services/friendRequestSocket.js'); // Import the socket service
 
 const app = express();
@@ -31,6 +32,12 @@ app.use("/api/friends", friend);
 app.use("/api/user", users_route);
 app.use("/api/notification",notification);
 app.use("/api/chats",chats);
+
+app.post('/api/generate-referral', (req, res) => {
+    const userId = req.body.userId; // Assume you have user ID in session or token
+    const referralCode = uuidv4();
+        res.json({ referralCode });
+});
 
 // Initialize Socket.io
 const initializeSocket = require('./services/initializeSocket');

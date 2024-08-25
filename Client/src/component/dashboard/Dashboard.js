@@ -8,6 +8,7 @@ import FindFriend from './FindFriend/FindFriend';
 import AccountSetting from './AccountSetting/AccountSetting';
 import Navbar from '../Navbar';
 import BottomNavbar from '../BottomNavbar';
+import Referral from './Referral/Referral';
 
 const Dashboard = () => {
     const [upperNavbar, setUppernavbar] = useState(false);
@@ -44,6 +45,7 @@ const Dashboard = () => {
                         <Route path="notification/*" element={<Notification />} />
                         <Route path="findfriend/*" element={<FindFriend />} />
                         <Route path="accountsetting/*" element={<AccountSetting />} />
+                        <Route path="refer_friends" element={<Referral />} />
                     </Routes>
                 </div>
                 {upperNavbar && (

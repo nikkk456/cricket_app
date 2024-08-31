@@ -15,7 +15,6 @@ import { SocketContext } from './context/SocketContext';
 
 function App() {
   const socket = useContext(SocketContext);
-  console.log("This is socket", socket);
   useEffect(() => {
     if (!socket) {
       console.log("Socket is not initialised yet");

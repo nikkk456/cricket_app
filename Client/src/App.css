@@ -251,6 +251,13 @@ height: 100%;
   background-color: rgb(92 92 93);
   height: 10%;
 }
+.dropdown-menu-up {
+  top: -135px !important; 
+  left: -30px !important;
+}
+.dropdown-menu{
+  min-width: 5rem !important;
+}
 /* For Mobile Screen */
 @media only screen and (max-width: 767px) {
   .features-card {

@@ -4,7 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import { PlayerProfileContext } from '../context/PlayerProfileContext';
 const Navbar = () => {
     const location = useLocation();
-    const showNavbar = !location.pathname.includes('/dashboard');
+    const showNavbar =  !(location.pathname.includes('/dashboard'));
     const { isAuthenticated } = useContext(AuthContext);
     const {playerProfileData} = useContext(PlayerProfileContext)
 
@@ -25,7 +25,7 @@ const Navbar = () => {
                             <a className="nav-link" href="#">Blogs</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">ScoreCard</a>
+                            <a className="nav-link" href="/scorecard">ScoreCard</a>
                         </li>
                     </ul>
                     <form className="d-flex" role="search">

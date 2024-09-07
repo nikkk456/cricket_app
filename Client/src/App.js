@@ -12,6 +12,7 @@ import PlayerProfile from './component/PlayerProfile';
 import NotFound from './component/NotFound';
 import { useContext, useEffect, useState } from 'react';
 import { SocketContext } from './context/SocketContext';
+import HomePage from './component/scorecard/HomePage';
 
 function App() {
   const socket = useContext(SocketContext);
@@ -34,6 +35,7 @@ function App() {
         <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/setnewpassword" element={<SetNewPassword />} />
         <Route path="/dashboard/*" element={<Dashboard />} />
+        <Route path="/scorecard/*" element={<HomePage />} />
         <Route path="/playerprofile/:id/*" element={<PlayerProfile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

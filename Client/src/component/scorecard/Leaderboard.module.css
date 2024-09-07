@@ -1,0 +1,9 @@
+.friendListItem {
+    border-radius: 10px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+.friendListItem:hover {
+    background-color: #d0d0d0d0 !important; /* Light grey background on hover */
+}

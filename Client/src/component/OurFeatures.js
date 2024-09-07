@@ -44,7 +44,7 @@ const OurFeatures = () => {
                 </div>
                 <div className='col-md-4 col-6' style={{display:"flex", justifyContent:"center"}}>
                     <div className="card features-card " >
-                        <img src="./Image/cricket_team.jpg" className="card-img-top" alt="cricket team" style={{ borderRadius: "15px" }} />
+                        <img src="./Image/leaderboard.jpg" className="card-img-top" alt="cricket team" style={{ borderRadius: "15px" }} />
                         <div className="card-body">
                             <h5 className="card-title text-center">LeaderBoard</h5>
                             <p className="card-text text-center">View the leaderboard to see the top teams and players.</p>

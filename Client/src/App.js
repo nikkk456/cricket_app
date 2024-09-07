@@ -13,6 +13,8 @@ import NotFound from './component/NotFound';
 import { useContext, useEffect, useState } from 'react';
 import { SocketContext } from './context/SocketContext';
 import HomePage from './component/scorecard/HomePage';
+import ScoreUpdate from './component/scorecard/ScoreUpdate';
+import CoinToss from './component/scorecard/CoinToss';
 
 function App() {
   const socket = useContext(SocketContext);
@@ -35,7 +37,9 @@ function App() {
         <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/setnewpassword" element={<SetNewPassword />} />
         <Route path="/dashboard/*" element={<Dashboard />} />
-        <Route path="/scorecard/*" element={<HomePage />} />
+        <Route path="/scorecard/:teamA/vs/:teamB/scoreUpdate" element={<ScoreUpdate />} />
+        <Route path="/scorecard/:teamA/vs/:teamB/tossCoin" element={<CoinToss />} />
+        <Route path="/scorecard" element={<HomePage />} />
         <Route path="/playerprofile/:id/*" element={<PlayerProfile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

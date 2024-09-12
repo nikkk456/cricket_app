@@ -37,8 +37,8 @@ function App() {
         <Route path="/forgetpassword" element={<ForgetPassword />} />
         <Route path="/setnewpassword" element={<SetNewPassword />} />
         <Route path="/dashboard/*" element={<Dashboard />} />
-        <Route path="/scorecard/:teamA/vs/:teamB/scoreUpdate" element={<ScoreUpdate />} />
-        <Route path="/scorecard/:teamA/vs/:teamB/tossCoin" element={<CoinToss />} />
+        <Route path="/scorecard/:teamA/vs/:teamB/:tossWinner/:overs/scoreUpdate/*" element={<ScoreUpdate />} />
+        <Route path="/scorecard/:teamA/vs/:teamB/:overs/tossCoin" element={<CoinToss />} />
         <Route path="/scorecard" element={<HomePage />} />
         <Route path="/playerprofile/:id/*" element={<PlayerProfile />} />
         <Route path="*" element={<NotFound />} />

@@ -3,7 +3,7 @@ import coinSound from './coin-flip-sound.mp3'; // Add your sound file here
 import { useParams } from 'react-router-dom';
 
 const CoinToss = () => {
-    const { teamA, teamB } = useParams();
+    const { teamA, teamB,overs } = useParams();
     const [teamAselection, setTeamASelection] = useState();
     const [teamBselection, setTeamBSelection] = useState();
     const [winner, setWinner] = useState();
@@ -42,17 +42,17 @@ const CoinToss = () => {
             {
                 winner ?
                     <center>
-                        <div className="card" style={{width: "19rem", height:"460px"}}>
+                        <div className="card" style={{width: "19rem", height:"460px", padding:"10px"}}>
                             <img src="/Image/celebration.png" className="card-img-top" alt="..." />
                             <div className="card-body">
                                 <h4 className="card-title">Congratulations !!!</h4>
                                 <p className="card-text">{teamA} won the Toss</p>
-                                <select className="form-select form-select-sm " aria-label="Default select example" name='teamA_selection' onChange={(e) => { setTeamASelection(e.target.value) }}>
+                                <select className="form-select form-select-sm " aria-label="Default select example" name='teamA_selection' onChange={(e) => { setWinnerSelection(e.target.value) }}>
                                     <option value="">Choose Next Step</option>
                                     <option value="Batting" >Batting</option>
                                     <option value="Bowling">Bowling</option>
                                 </select>
-                                <a href="#" className="btn btn-dark btn-sm mt-2">Start Match</a>
+                                <a href={`/scorecard/${teamA}/vs/${teamB}/${winner}/${overs}/scoreUpdate`} className="btn btn-dark btn-sm mt-2">Start Match</a>
                             </div>
                         </div>
                     </center>

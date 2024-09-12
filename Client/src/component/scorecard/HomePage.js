@@ -35,7 +35,7 @@ const HomePage = () => {
             alert("You Can not select same team against each other")
         }
         else{
-            navigate(`/scorecard/${teamA}/vs/${teamB}/tossCoin`);
+            navigate(`/scorecard/${teamA}/vs/${teamB}/${over}/tossCoin`);
         }
     }
 

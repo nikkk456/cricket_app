@@ -10,6 +10,7 @@ const upload = require('../services/upload.js');
 const  ForgetPassword  = require("../controller/forgot_pass.controller.js");
 const otpVerify = require("../controller/otp_verify.controller.js")
 const resetpass = require("../controller/reset_password.controller.js");
+const referral = require("../controller/referral.controller.js");
 
 router.route("/register").post(registeruser);
 router.route("/login").post(loginuser);
@@ -19,4 +20,5 @@ router.route("/profile_update").post(verifytoken,upload.single('profilePicture')
 router.route("/forgot_pass").post(ForgetPassword);
 router.route("/verifyotp").post(otpVerify);
 router.route("/resetpass").post(resetpass);
+router.route("/generate-referral").post(referral);
 module.exports = router;

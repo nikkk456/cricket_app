@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
-import axios from 'axios';
+// import axios from 'axios';
 import Cookies from 'js-cookie'
+import axiosinstance from '../../../axios/axiosInstance';
 
 const Referral = () => {
     const [referralLink, setReferralLink] = useState('');
     const userId = Cookies.get("user_id");
     const generateReferralLink = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/api/generate-referral', { userId });
+            const response = await axiosinstance.post('user/generate-referral', { userId });
             console.log("Response after generating referral code ", response);
-            const link = `${window.location.origin}/register?ref=${response.data.referralCode}`;
+            const link = `${window.location.origin}/register?ref=${response.data.referral_link}`;
             setReferralLink(link);
             navigator.clipboard.writeText(link);
             alert('Referral link copied to clipboard!');

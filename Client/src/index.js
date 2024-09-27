@@ -8,6 +8,7 @@ import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './context/AuthContext';
 import { PlayerProfileProvider } from './context/PlayerProfileContext';
 import { SocketProvider } from './context/SocketContext';
+import { ScoreCardProvider } from './context/ScoreCardContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const user_id = Cookies.get('user_id');
@@ -15,10 +16,12 @@ root.render(
   // <React.StrictMode>
   <AuthProvider>
     <PlayerProfileProvider>
-      <SocketProvider userId= {user_id}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <SocketProvider userId={user_id}>
+        <ScoreCardProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </ScoreCardProvider>
       </SocketProvider>
     </PlayerProfileProvider>
   </AuthProvider>

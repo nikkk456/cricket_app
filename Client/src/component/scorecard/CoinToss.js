@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import coinSound from './coin-flip-sound.mp3'; // Add your sound file here
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ScoreCardContext } from '../../context/ScoreCardContext';
 
 const CoinToss = () => {
     const { teamA, teamB,overs } = useParams();
@@ -10,15 +11,20 @@ const CoinToss = () => {
     const [winnerSelection, setWinnerSelection] = useState();
     const [tossResult, setTossResult] = useState('Heads');
     const [isFlipping, setIsFlipping] = useState(false);
+    const {challenge, setChallenge}=  useContext(ScoreCardContext);
+    const navigate = useNavigate();
+
+    console.log(challenge);
 
     // Function to handle coin toss
     const handleToss = () => {
-        if (!teamAselection || !teamBselection) {
+        if (!challenge.teamAToss || !challenge.teamBToss) {
             alert("Please make a call for Toss!");
         }
-        else if (teamAselection === teamBselection) {
+        else if (challenge.teamAToss === challenge.teamBToss) {
             alert("Both team call same for toss!")
         } else {
+            console.log("This is challenge", challenge);
             const coinAudio = new Audio(coinSound);
             coinAudio.play();
             setIsFlipping(true);
@@ -27,32 +33,41 @@ const CoinToss = () => {
                 const result = Math.random() > 0.5 ? 'Heads' : 'Tails';
                 setTossResult(result);
                 setIsFlipping(false);
-                if (result == teamAselection) {
-                    setWinner(teamA);
+                if (result == challenge.teamAToss) {
+                    setChallenge({...challenge, tossWinner:challenge.teamA});
                 }
                 else {
-                    setWinner(teamB);
+                    setChallenge({...challenge, tossWinner:challenge.teamB});
                 }
             }, 2000); // 2 seconds for animation
         }
     };
 
+    const startMatch = ()=>{
+        if(challenge.tossWinnerSelection === ""){
+            alert("Please select one option");
+            return;
+        }else{
+            navigate(`/scorecard/${challenge.teamA}/vs/${challenge.teamB}/${challenge.tossWinner}/${challenge.overs}/scoreUpdate`);
+        }
+    }
+
     return (
         <div className='container mt-5 vh-100'>
             {
-                winner ?
+                challenge.tossWinner ?
                     <center>
                         <div className="card" style={{width: "19rem", height:"460px", padding:"10px"}}>
                             <img src="/Image/celebration.png" className="card-img-top" alt="..." />
                             <div className="card-body">
                                 <h4 className="card-title">Congratulations !!!</h4>
-                                <p className="card-text">{teamA} won the Toss</p>
-                                <select className="form-select form-select-sm " aria-label="Default select example" name='teamA_selection' onChange={(e) => { setWinnerSelection(e.target.value) }}>
+                                <p className="card-text">{challenge.tossWinner} won the Toss</p>
+                                <select className="form-select form-select-sm " aria-label="Default select example" name='teamA_selection' onChange={(e) => { setChallenge({...challenge, tossWinnerSelection:e.target.value}) }}>
                                     <option value="">Choose Next Step</option>
                                     <option value="Batting" >Batting</option>
                                     <option value="Bowling">Bowling</option>
                                 </select>
-                                <a href={`/scorecard/${teamA}/vs/${teamB}/${winner}/${overs}/scoreUpdate`} className="btn btn-dark btn-sm mt-2">Start Match</a>
+                                <a className="btn btn-dark btn-sm mt-2" onClick={startMatch}>Start Match</a>
                             </div>
                         </div>
                     </center>
@@ -64,9 +79,9 @@ const CoinToss = () => {
                         </div>
                         <div className='row text-center'>
                             <div className='col-md-5 col-5'>
-                                <h5>{teamA} Selection</h5>
+                                <h5>{challenge.teamA} Selection</h5>
                                 <center>
-                                    <select className="form-select form-select-sm coin_selection" aria-label="Default select example" name='teamA_selection' onChange={(e) => { setTeamASelection(e.target.value) }}>
+                                    <select className="form-select form-select-sm coin_selection" aria-label="Default select example" name='teamA_selection' onChange={(e) => { setChallenge({...challenge, teamAToss: e.target.value}) }}>
                                         <option value="">Call Your Toss</option>
                                         <option value="Heads" >Heads</option>
                                         <option value="Tails">Tails</option>
@@ -77,9 +92,9 @@ const CoinToss = () => {
                                 <h2>V/S</h2>
                             </div>
                             <div className='col-md-5 col-5'>
-                                <h5>{teamB} Selection</h5>
+                                <h5>{challenge.teamB} Selection</h5>
                                 <center>
-                                    <select className="form-select form-select-sm coin_selection" aria-label="Default select example" name='teamB_selection' onChange={(e) => { setTeamBSelection(e.target.value) }}>
+                                    <select className="form-select form-select-sm coin_selection" aria-label="Default select example" name='teamB_selection' onChange={(e) => { setChallenge({...challenge, teamBToss: e.target.value}) }}>
                                         <option value="">Call Your Toss</option>
                                         <option value="Heads" >Heads</option>
                                         <option value="Tails">Tails</option>

@@ -1,15 +1,25 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { SocketContext } from '../../context/SocketContext';
-import { Link, Route, Routes, useLocation, useParams } from 'react-router-dom';
+import { Link, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom';
 import Overview from './Overview';
 import Score_Card from './score_card/Score_Card';
 import Update_score from './update_score/Update_score';
+import { ScoreCardContext } from '../../context/ScoreCardContext';
 
 
 function ScoreUpdate() {
     const location = useLocation();
+    const navigate = useNavigate();
+    const [teamAScore, setTeamAScore] = useState(0);
+    const [teamBScore, setTeamBScore] = useState(0);
+    const [teamAWickets, setTeamAWickets] = useState(0);
+    const [teamBWickets, setTeamBWickets] = useState(0);
+    const [teamAOvers, setTeamAOvers] = useState(0);
+    const [teamBOvers, setTeamBOvers] = useState(0);
+    const { challenge, setChallenge } = useContext(ScoreCardContext);
     const { teamA, teamB, overs, tossWinner } = useParams();
     const socket = useContext(SocketContext);
+    console.log(challenge);
     useEffect(() => {
         if (!socket) {
             console.log("Socket is not initialised yet in scoreUpdate Page");
@@ -25,6 +35,11 @@ function ScoreUpdate() {
     const sendScoreUpdate = () => {
         socket.emit('updateScore', score);
     };
+    const handleNavigate = () => {
+        const newPath = 'update_score';  // Relative to current nested route
+        console.log('Navigating to:', newPath);
+        navigate(newPath);
+    };
 
     return (
         <div className='container'>
@@ -36,13 +51,13 @@ function ScoreUpdate() {
                     <div className='row'>
                         <div className='col-md-6 col-6' style={{ display: "flex", flexDirection: "column", alignItems: "end" }}>
                             <img src={"https://i.ibb.co/tMDN1vK/cricket-team.jpg"} alt="TeamA" width="50" height="50" className="rounded-circle mx-2 border" style={{ boxShadow: "0px 0px 4px 2px grey" }} />
-                            <h6 className='mt-2'>{teamA}</h6>
+                            <h6 className='mt-2'>{challenge.teamA}</h6>
                         </div>
                         <div className='col-md-4 col-4 p-2' style={{ display: "flex", flexDirection: "column", alignItems: "start", justifyContent: "center" }}>
                             <h5 className='m-0'>
-                                0/0
+                                {teamAScore}/{teamAWickets}
                             </h5>
-                            <small>{`(${overs})`}</small>
+                            <small>{`(${teamAOvers/6}/${challenge.overs})`}</small>
                         </div>
 
                     </div>
@@ -51,19 +66,19 @@ function ScoreUpdate() {
                     <div className='row' style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
                         <div className='col-md-4 col-4 p-2' style={{ display: "flex", flexDirection: "column", alignItems: "end", justifyContent: "center" }}>
                             <h5 className='m-0'>
-                                0/0
+                                {teamBScore}/{teamBWickets}
                             </h5>
-                            <small>{`(${overs})`}</small>
+                            <small>{`(${Math.floor(teamBOvers/6)}.${(teamBOvers-(Math.floor(teamBOvers/6)*6))}/${challenge.overs})`}</small>
                         </div>
                         <div className='col-md-6 col-6' style={{ display: "flex", flexDirection: "column", alignItems: "start" }}>
                             <img src={"https://github.com/mdo.png"} alt="TeamA" width="50" height="50" className="rounded-circle mx-2 border" style={{ boxShadow: "0px 0px 4px 2px grey" }} />
-                            <h6 className='mt-2'>{teamB}</h6>
+                            <h6 className='mt-2'>{challenge.teamB}</h6>
                         </div>
                     </div>
                 </div>
             </div>
             <div className='row justify-content-center align-items-center'>
-                <center><small>Toss Winner: {tossWinner}</small></center>
+                <center><small>Toss Winner: {challenge.tossWinner}</small></center>
                 <center><small>Group Stage Match</small></center>
             </div>
             <div className='row'>
@@ -71,22 +86,25 @@ function ScoreUpdate() {
                     <div className='col-auto'>
                         <ul className="nav nav-underline">
                             <li className="nav-item mx-2">
-                                <Link className={location.pathname.includes('/overview')?"nav-link active":'nav-link'} to="overview">Overview</Link>
+                                <Link className={location.pathname.includes('/overview') ? "nav-link active" : 'nav-link'} to="overview">Overview</Link>
                             </li>
                             <li className="nav-item mx-2">
-                                <Link className={location.pathname.includes('/score_card')?"nav-link active":'nav-link'} to="score_card">Score-Card</Link>
+                                <Link className={location.pathname.includes('/score_card') ? "nav-link active" : 'nav-link'} to="score_card">Score-Card</Link>
                             </li>
                             <li className="nav-item mx-2">
-                                <Link className='nav-link' to="update_score">Update Score</Link>
+                                <Link
+                                    className={location.pathname.includes('/update_score') ? "nav-link active" : 'nav-link'} to="update_score" >
+                                    Update Score
+                                </Link>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
             <Routes>
-                <Route path='overview' element={<Overview teamA={teamA} teamB={teamB} overs={overs}/>}/>
-                <Route path='score_card/*' element={<Score_Card />}/>
-                <Route path='update_score/*' element={<Update_score />}/>
+                <Route path='overview' element={<Overview teamA={teamA} teamB={teamB} overs={overs} />} />
+                <Route path='score_card/*' element={<Score_Card />} />
+                <Route path='update_score' element={<Update_score teamAScore={teamAScore} teamBScore={teamBScore} teamAWickets={teamAWickets} teamBWickets={teamBWickets} setTeamAScore={setTeamAScore} setTeamBScore={setTeamBScore} setTeamAWickets={setTeamAWickets} setTeamBWickets={setTeamBWickets} setTeamAOvers={setTeamAOvers} setTeamBOvers={setTeamBOvers}/>} />
             </Routes>
             {/* <input
                 type="number"

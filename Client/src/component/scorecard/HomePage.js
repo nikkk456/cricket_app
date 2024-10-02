@@ -33,6 +33,9 @@ const HomePage = () => {
         if(!challenge.teamA || !challenge.teamB || !challenge.overs || !challenge.startTime){
             alert("Please fill all details")
         }
+        else if(challenge.teamAPlayers.length != challenge.teamBPlayers.length){
+            alert("Both team should have equal number of players");
+        }
         else if(challenge.teamA === challenge.teamB){
             alert("You Can not select same team against each other")
         }

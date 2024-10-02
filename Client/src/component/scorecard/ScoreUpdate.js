@@ -41,6 +41,33 @@ function ScoreUpdate() {
         navigate(newPath);
     };
 
+    // Initial object structure
+    const playerTemplate = {
+        playerName: "",
+        playersScore: 0,
+        playersSix: 0,
+        playersFours: 0,
+        playersBall: 0,
+        playersOutBy: "",
+        playerOver:0,
+        playersMaidenOver:0,
+        playersRunConceeded:0,
+        playersWickettaken:0,
+        playersEconomy:0,
+
+    };
+
+    // Create a new array with player names filled in
+    const teamAPlayers = challenge.teamAPlayers.map(player => ({
+        ...playerTemplate, // copy the template
+        playerName: player.value // set the playerName
+    }));
+    const teamBPlayers = challenge.teamBPlayers.map(player => ({
+        ...playerTemplate, // copy the template
+        playerName: player.value // set the playerName
+    }));
+
+
     return (
         <div className='container'>
             <div className='row text-center'>
@@ -57,7 +84,7 @@ function ScoreUpdate() {
                             <h5 className='m-0'>
                                 {teamAScore}/{teamAWickets}
                             </h5>
-                            <small>{`(${teamAOvers/6}/${challenge.overs})`}</small>
+                            <small>{`(${Math.floor(teamAOvers / 6)}.${(teamAOvers - (Math.floor(teamAOvers / 6) * 6))}/${challenge.overs})`}</small>
                         </div>
 
                     </div>
@@ -68,7 +95,7 @@ function ScoreUpdate() {
                             <h5 className='m-0'>
                                 {teamBScore}/{teamBWickets}
                             </h5>
-                            <small>{`(${Math.floor(teamBOvers/6)}.${(teamBOvers-(Math.floor(teamBOvers/6)*6))}/${challenge.overs})`}</small>
+                            <small>{`(${Math.floor(teamBOvers / 6)}.${(teamBOvers - (Math.floor(teamBOvers / 6) * 6))}/${challenge.overs})`}</small>
                         </div>
                         <div className='col-md-6 col-6' style={{ display: "flex", flexDirection: "column", alignItems: "start" }}>
                             <img src={"https://github.com/mdo.png"} alt="TeamA" width="50" height="50" className="rounded-circle mx-2 border" style={{ boxShadow: "0px 0px 4px 2px grey" }} />
@@ -104,7 +131,7 @@ function ScoreUpdate() {
             <Routes>
                 <Route path='overview' element={<Overview teamA={teamA} teamB={teamB} overs={overs} />} />
                 <Route path='score_card/*' element={<Score_Card />} />
-                <Route path='update_score' element={<Update_score teamAScore={teamAScore} teamBScore={teamBScore} teamAWickets={teamAWickets} teamBWickets={teamBWickets} setTeamAScore={setTeamAScore} setTeamBScore={setTeamBScore} setTeamAWickets={setTeamAWickets} setTeamBWickets={setTeamBWickets} setTeamAOvers={setTeamAOvers} setTeamBOvers={setTeamBOvers}/>} />
+                <Route path='update_score' element={<Update_score teamAScore={teamAScore} teamBScore={teamBScore} teamAWickets={teamAWickets} teamBWickets={teamBWickets} setTeamAScore={setTeamAScore} setTeamBScore={setTeamBScore} setTeamAWickets={setTeamAWickets} setTeamBWickets={setTeamBWickets} setTeamAOvers={setTeamAOvers} setTeamBOvers={setTeamBOvers} teamAPlayers={teamAPlayers} teamBPlayers={teamBPlayers} />} />
             </Routes>
             {/* <input
                 type="number"

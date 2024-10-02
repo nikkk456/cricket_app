@@ -295,6 +295,10 @@ height: 100%;
 .flipping {
   animation: flipAndGrowUpwards 2s ease forwards;
 }
+.hover-effect:hover {
+  background-color: #747576; /* Light background on hover */
+  cursor: pointer;           /* Hand cursor on hover */
+}
 
 /* Keyframes for flipping, growing, and moving upwards */
 @keyframes flipAndGrowUpwards {

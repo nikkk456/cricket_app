@@ -3,7 +3,9 @@ import { ScoreCardContext } from '../../../context/ScoreCardContext';
 import TeamA from './TeamA';
 import TeamB from './TeamB';
 
-const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setTeamAScore, setTeamBScore, setTeamBWickets, setTeamAWickets, setTeamBOvers, setTeamAOvers }) => {
+const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setTeamAScore, setTeamBScore, setTeamBWickets, setTeamAWickets, setTeamBOvers, setTeamAOvers, teamAPlayers, teamBPlayers }) => {
+  const [teamAPlayersData, setTeamAPlayersData] = useState(teamAPlayers);
+  const [teamBPlayersData, setTeamBPlayersData] = useState(teamBPlayers);
   const { challenge, setChallenge } = useContext(ScoreCardContext);
   const [strikerbatsman, setStrikerBatsman] = useState();
   const [nonstrikerbatsman, setNonStrikerBatsman] = useState();
@@ -11,14 +13,14 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
   const [balls, setBalls] = useState(0);
   const [totalRun, setTotalRun] = useState(0);
   const [matchWinner, setMatchWinner] = useState();
-  // const [nextBatsman, setNextBatsman] = useState('');
-  // const [catchTaker, setCatchTaker] = useState('');
   const [wickets, setWickets] = useState(0);
   const [firstInnings, setFirstInnings] = useState();
   const [secondInnings, setSecondInnings] = useState();
   const [overCompleted, setOverCompleted] = useState(false);
   const [innings, setInnings] = useState(1);
   const [inningsOver, setInningsOver] = useState(false);
+  const [winningruns, setWinningRuns] = useState(0);
+  const [winningwickets, setWinningWickets] = useState(0);
 
   useEffect(() => {
     if (challenge.tossWinner == challenge.teamA) {
@@ -39,72 +41,131 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
       }
     }
   }, [])
+  console.log("This is teamAPlayers Data", teamAPlayersData);
+  console.log("This is teamBPlayers Data", teamBPlayersData);
 
-
-  useEffect(() => {
-    if (challenge.tossWinner == challenge.teamA) {
-      if (challenge.tossWinnerSelection == "Batting" && !inningsOver) {
-        setTeamAScore(totalRun);
-        setTeamAWickets(wickets);
-        setTeamAOvers(balls);
-
-      } else {
-        setTeamBScore(totalRun);
-        setTeamBWickets(wickets);
-        setTeamBOvers(balls);
-      }
-    } else {
-      if (challenge.tossWinnerSelection == "Batting" && !inningsOver) {
-        setTeamBScore(totalRun);
-        setTeamBWickets(wickets);
-        setTeamBOvers(balls);
-      } else {
-        setTeamAScore(totalRun);
-        setTeamAWickets(wickets);
-        setTeamAOvers(balls);
-      }
+  const checkOddRuns = (run) => {
+    if (run % 2 !== 0) {
+      // Change striker if odd runs
+      swapPlayers();
     }
-  }, [challenge, wickets, totalRun, balls, inningsOver])
+  }
 
+  const swapPlayers = () => {
+    let temp = strikerbatsman;
+    setStrikerBatsman(nonstrikerbatsman);
+    setNonStrikerBatsman(temp);
+  }
 
   const handleBallInput = (run) => {
     const newRuns = totalRun + run;
     const newBalls = balls + 1;
-
-
-    if (run % 2 !== 0) {
-      // Change striker if odd runs
-      let temp = strikerbatsman;
-      setStrikerBatsman(nonstrikerbatsman);
-      setNonStrikerBatsman(temp);
-    }
+    let overPlayedByTeam = Math.floor(newBalls / 6);
 
     setTotalRun(newRuns);
     setBalls(balls + 1);
 
     if (newBalls % 6 === 0) {
       setOverCompleted(true);
+      swapPlayers();
     }
 
     if (innings == 1 && firstInnings == challenge.teamA) {
-      setTeamAScore(totalRun);
+      setTeamAPlayersData(prevTeamAPlayers => {
+        return prevTeamAPlayers.map(player => {
+          if (player.playerName === strikerbatsman) {
+            // Return a new player object with updated score
+            return {
+              ...player,
+              playersScore: player.playersScore + run,
+              playersBall: player.playersBall + 1,
+              playersSix: run === 6 ? player.playersSix + 1 : player.playersSix,
+              playersFours: run === 4 ? player.playersFours + 1 : player.playersFours
+
+            };
+          }
+          return player; // Return the other players unchanged
+        });
+      });
+      setTeamAScore(newRuns);
+      setTeamAOvers(newBalls);
+      checkOddRuns(run);
     } else if (innings == 1 && firstInnings == challenge.teamB) {
-      setTeamBScore(totalRun);
+
+      // Update the player Score
+      setTeamBPlayersData(prevTeamBPlayers => {
+        return prevTeamBPlayers.map(player => {
+          if (player.playerName === strikerbatsman) {
+            return {
+              ...player,
+              playersScore: player.playersScore + run,
+              playersBall: player.playersBall + 1,
+              playersSix: run === 6 ? player.playersSix + 1 : player.playersSix,
+              playersFours: run === 4 ? player.playersFours + 1 : player.playersFours
+            };
+          }
+          return player;
+        });
+      });
+      setTeamBScore(newRuns);
+      setTeamBOvers(newBalls);
+      checkOddRuns(run);
     }
 
     if (innings == 2 && secondInnings == challenge.teamA) {
-      console.log("Ye is function me aare hai ");
-      setTeamAScore(totalRun);
-      if(teamAScore>teamBScore){
+      setTeamAPlayersData(prevTeamAPlayers => {
+        return prevTeamAPlayers.map(player => {
+          if (player.playerName === strikerbatsman) {
+            return {
+              ...player,
+              playersScore: player.playersScore + run,
+              playersBall: player.playersBall + 1,
+              playersSix: run === 6 ? player.playersSix + 1 : player.playersSix,
+              playersFours: run === 4 ? player.playersFours + 1 : player.playersFours
+            };
+          }
+          return player;
+        });
+      });
+      setTeamAScore(newRuns);
+      setTeamAOvers(newBalls);
+      checkOddRuns(run);
+      if (newRuns > teamBScore) {
+        setWinningWickets(challenge.teamAPlayers.length - teamAWickets - 1);
+        console.log("This is winning wickets of teamA", winningwickets);
         setMatchWinner(challenge.teamA);
         setInnings(0);
       }
+      else if (overPlayedByTeam >= challenge.overs) {
+        setWinningRuns(teamBScore - newRuns)
+        setMatchWinner(challenge.teamB)
+      }
     } else if (innings == 2 && secondInnings == challenge.teamB) {
-      console.log("Ye is function me aare hai TeamB wale me ");
-      setTeamBScore(totalRun);
-      if(teamBScore>teamAScore){
+      // Update the player Score
+      setTeamBPlayersData(prevTeamBPlayers => {
+        return prevTeamBPlayers.map(player => {
+          if (player.playerName === strikerbatsman) {
+            return {
+              ...player,
+              playersScore: player.playersScore + run,
+              playersBall: player.playersBall + 1,
+              playersSix: run === 6 ? player.playersSix + 1 : player.playersSix,
+              playersFours: run === 4 ? player.playersFours + 1 : player.playersFours
+            };
+          }
+          return player;
+        });
+      });
+      setTeamBScore(newRuns);
+      setTeamBOvers(newBalls);
+      checkOddRuns(run);
+      if (newRuns > teamAScore) {
+        setWinningWickets(challenge.teamBPlayers.length - teamBWickets - 1);
         setMatchWinner(challenge.teamB);
         setInnings(0);
+      } else if (overPlayedByTeam >= challenge.overs) {
+        setWinningRuns(teamAScore - newRuns)
+        setMatchWinner(challenge.teamA)
       }
     }
 
@@ -113,18 +174,37 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
   };
   console.log("This is Total Run " + totalRun + " This is total Wicket  " + wickets + " this is stricker and non striker", strikerbatsman, nonstrikerbatsman + "The Match Winner is ", matchWinner);
   const handleWicket = () => {
+    let newWickets = wickets + 1;
+    let newBalls = balls + 1;
+    let teamAPlayers = challenge.teamAPlayers;
+    let teamBPlayers = challenge.teamBPlayers;
+
+    console.log("Thus is teamAplayers and teamBplayers", teamAPlayers, teamBPlayers);
+
     setWickets(wickets + 1);
     setBalls(balls + 1);
     if (innings == 1 && firstInnings == challenge.teamA) {
-      setTeamAWickets(totalRun);
+      setTeamAWickets(newWickets);
+      setTeamAOvers(newBalls);
     } else if (innings == 1 && firstInnings == challenge.teamB) {
-      setTeamBWickets(totalRun);
+      setTeamBWickets(newWickets);
+      setTeamBOvers(newBalls);
     }
 
     if (innings == 2 && secondInnings == challenge.teamA) {
-      setTeamAWickets(totalRun);
+      if (newWickets >= teamAPlayers.length - 1) {
+        setWinningRuns(teamBScore - teamAScore);
+        setMatchWinner(challenge.teamB);
+      }
+      setTeamAWickets(newWickets);
+      setTeamAOvers(newBalls);
     } else if (innings == 2 && secondInnings == challenge.teamB) {
-      setTeamBWickets(totalRun);
+      if (newWickets >= teamBPlayers.length - 1) {
+        setWinningRuns(teamAScore - teamBScore);
+        setMatchWinner(challenge.teamA);
+      }
+      setTeamBWickets(newWickets);
+      setTeamBOvers(newBalls);
     }
     // axios.post('/api/update-score', { runs, balls, wickets: wickets + 1, striker: nextBatsman, nonStriker, bowler, isWicket: true, catchTaker })
     //   .then(response => {
@@ -135,23 +215,47 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
   };
   const handleWideOrNoBall = (run) => {
     setTotalRun(totalRun + run);
+    if (innings == 1 && firstInnings == challenge.teamA) {
+      setTeamAScore(teamAScore + run);
+    } else if (innings == 1 && firstInnings == challenge.teamB) {
+      setTeamBScore(teamBScore + run);
+    }
+
+    if (innings == 2 && secondInnings == challenge.teamA) {
+      setTeamAScore(teamAScore + run);
+    } else if (innings == 2 && secondInnings == challenge.teamB) {
+      setTeamBScore(teamBScore + run);
+    }
+
+
     // axios.post('/api/update-score', { runs: runs + run, balls, bowler })
     //   .then(response => setMatchData(response.data));
   };
   const oversPlayed = Math.floor(balls / 6);
-  if (oversPlayed >= challenge.overs) {
-    if(oversPlayed >= challenge.over * 2){
-      return (<><h1>Match Hi khtm Bhiya jI</h1></>)
+
+
+  useEffect(() => {
+    if (oversPlayed >= challenge.overs) {
+      setInnings(innings + 1);
+      setInningsOver(true);
+      setWickets(0);
+      setTotalRun(0);
+      setBalls(0);
+      setStrikerBatsman();
+      setNonStrikerBatsman();
+      setBowler();
+      setOverCompleted(false);
     }
-    console.log("Match Over");
-    setInnings(innings+1);
-    setInningsOver(true);
-    setWickets(0);
-    setTotalRun(0);
-    setBalls(0);
-    setStrikerBatsman();
-    setNonStrikerBatsman();
-    setBowler();
+  }, [wickets, balls])
+
+
+  if (matchWinner) {
+    console.log("This is winninhWickets in If condiotion ", winningwickets);
+    return (
+      <div className='container'>
+        <h1>{matchWinner} Wins The Match by {winningruns > 0 ? winningruns + " Runs" : winningwickets + " Wickets"}</h1>
+      </div>
+    )
   }
 
   return (
@@ -160,13 +264,13 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
         innings == 1 && (
           <>
             <div className='container'>
-              <h5>{challenge.tossWinner} won the Toss and choose to {challenge.tossWinnerSelection}</h5>
-              <h5>Welcome to First innings of the match Please select the Respective Batsman </h5>
+              <h5 className='text-center my-2'>{challenge.tossWinner} won the Toss and choose to {challenge.tossWinnerSelection}</h5>
+              <h6 className='text-center'>Welcome to First innings of the match Please select the Respective Batsman </h6>
               {
                 firstInnings == challenge.teamA ?
-                  <TeamA setBowler={setBowler} setStrikerBatsman={setStrikerBatsman} setNonStrikerBatsman={setNonStrikerBatsman} />
+                  <TeamA setBowler={setBowler} setStrikerBatsman={setStrikerBatsman} setNonStrikerBatsman={setNonStrikerBatsman} bowler={bowler} nonStrickerBatsman={nonstrikerbatsman} strikerbatsman={strikerbatsman} teamAPlayers={teamAPlayersData} teamBPlayers={teamBPlayersData}/>
                   :
-                  <TeamB setBowler={setBowler} setStrikerBatsman={setStrikerBatsman} setNonStrikerBatsman={setNonStrikerBatsman} />
+                  <TeamB setBowler={setBowler} setStrikerBatsman={setStrikerBatsman} setNonStrikerBatsman={setNonStrikerBatsman} bowler={bowler} nonStrickerBatsman={nonstrikerbatsman} strikerbatsman={strikerbatsman} teamAPlayers={teamAPlayersData} teamBPlayers={teamBPlayersData} />
               }
 
             </div>
@@ -177,10 +281,21 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
                 overCompleted ?
                   <div>
                     <h3>Select Next Bowler</h3>
-                    <select onChange={(e) => { setBowler(e.target.value); setOverCompleted(false) }} value={bowler}>
-                      {challenge.teamAPlayers.map(b => (
-                        <option value={b.name}>{b.name}</option>
-                      ))}
+                    <select className="form-select form-select-sm " aria-label="Default select example" name='teamA_selection' onChange={(e) => {
+                      setBowler(e.target.value);
+                      setOverCompleted(false)
+                    }}>
+                      <option value="" disabled selected>Select a Bowler</option>
+                      {
+                        firstInnings == challenge.teamA?
+                        challenge.teamBPlayers.map((element, index) => (
+                          <option value={element.value} key={index}>{element.value}</option>
+                        ))
+                        :
+                        challenge.teamAPlayers.map((element, index) => (
+                          <option value={element.value} key={index}>{element.value}</option>
+                        ))
+                      }
                     </select>
                   </div> :
                   <>
@@ -209,9 +324,9 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
               <h5>Welcome to Second innings of the match Please select the Respective Batsman </h5>
               {
                 secondInnings == challenge.teamA ?
-                  <TeamA setBowler={setBowler} setStrikerBatsman={setStrikerBatsman} setNonStrikerBatsman={setNonStrikerBatsman} />
+                  <TeamA setBowler={setBowler} setStrikerBatsman={setStrikerBatsman} setNonStrikerBatsman={setNonStrikerBatsman} bowler={bowler} nonStrickerBatsman={nonstrikerbatsman} strikerbatsman={strikerbatsman} teamAPlayers={teamAPlayersData} teamBPlayers={teamBPlayersData}/>
                   :
-                  <TeamB setBowler={setBowler} setStrikerBatsman={setStrikerBatsman} setNonStrikerBatsman={setNonStrikerBatsman} />
+                  <TeamB setBowler={setBowler} setStrikerBatsman={setStrikerBatsman} setNonStrikerBatsman={setNonStrikerBatsman} bowler={bowler} nonStrickerBatsman={nonstrikerbatsman} strikerbatsman={strikerbatsman} teamAPlayers={teamAPlayersData} teamBPlayers={teamBPlayersData} />
               }
 
             </div>
@@ -222,10 +337,20 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
                 overCompleted ?
                   <div>
                     <h3>Select Next Bowler</h3>
-                    <select onChange={(e) => { setBowler(e.target.value); setOverCompleted(false) }} value={bowler}>
-                      {challenge.teamAPlayers.map(b => (
-                        <option value={b.name}>{b.name}</option>
-                      ))}
+                    <select className="form-select form-select-sm " aria-label="Default select example" name='teamA_selection' onChange={(e) => {
+                      setBowler(e.target.value);
+                      setOverCompleted(false)
+                    }}>
+                      <option value="" disabled selected>Select a Bowler</option>
+                      {
+                        secondInnings == challenge.teamA?
+                        challenge.teamBPlayers.map((element, index) => (
+                          <option value={element.value} key={index}>{element.value}</option>
+                        )):
+                        challenge.teamAPlayers.map((element, index) => (
+                          <option value={element.value} key={index}>{element.value}</option>
+                        ))
+                      }
                     </select>
                   </div> :
                   <>
@@ -245,13 +370,6 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
             </div>
           </>
         )
-      }
-      {
-        matchWinner && (
-          <div className='container'>
-            <h1>{matchWinner} Wins The Match</h1>
-          </div>
-        ) 
       }
 
 

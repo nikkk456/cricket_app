@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { ScoreCardContext } from '../../../context/ScoreCardContext';
+import CurrentOver from './CurrentOver';
 
-const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, strikerbatsman, nonStrickerBatsman, teamAPlayers, teamBPlayers }) => {
+const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, strikerbatsman, nonStrickerBatsman, teamAPlayers, teamBPlayers, currentOverRuns }) => {
     const { challenge } = useContext(ScoreCardContext);
     const [stricker, setStricker] = useState({
         playerName: "",
@@ -31,6 +32,19 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
         playersEconomy: 0,
 
     });
+    const [currentBowler, setCurrentBowler] = useState({
+        playerName: "",
+        playersScore: 0,
+        playersSix: 0,
+        playersFours: 0,
+        playersBall: 0,
+        playersOutBy: "",
+        playerOver: 0,
+        playersMaidenOver: 0,
+        playersRunConceeded: 0,
+        playersWickettaken: 0,
+        playersEconomy: 0,
+    })
     const [showBowler, setShowBowler] = useState(false);
     const [showStrickerBatsman, setShowStrickerBatsman] = useState(false);
     const [showNonStrickerBatsman, setShowNonStrickerBatsman] = useState(false);
@@ -52,8 +66,14 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
             setShowNonStrickerBatsman(true);
         }
     }, [nonStrickerBatsman, teamAPlayers])
-
-    console.log("this is TeamAPlayers", teamAPlayers, teamBPlayers);
+    useEffect(() => {
+        if (bowler && teamBPlayers.length > 0) {
+            const currentbowler = teamBPlayers.find(item => item.playerName == bowler);
+            console.log("This is Current Bowler=========>", bowler);
+            setCurrentBowler(currentbowler);
+            setShowBowler(true);
+        }
+    }, [bowler, teamBPlayers])
 
     return (
         <div className='container'>
@@ -101,7 +121,9 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
                                 </div>
                                 <div className='flex-grow-1'>
                                     <h6 className='mb-0' style={{ fontWeight: "600", color: "#050505" }}>
-                                        {stricker.playerName}
+                                        {stricker.playerName} <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill-rule="evenodd" clip-rule="evenodd" className="mx-2" image-rendering="optimizeQuality" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" viewBox="0 0 1707 1707" id="bat">
+                                            <path d="M355 1653l-302 -301 -11 11c-56,56 -56,149 0,205l96 96c57,57 149,57 206,0l11 -11zm86 -86l-302 -301 -71 72 301 301 72 -72zm83 -83l-302 -301 -69 69 302 301 69 -69zm86 -85l-302 -302 -71 72 301 301 72 -71zm669 -748l0 0 -45 -84 -382 302c-9,7 -21,-5 -14,-14l301 -382 -84 -45c-24,-13 -54,-24 -76,-2l-657 657 302 301 657 -657c21,-21 11,-52 -2,-76zm-373 150l317 -249 114 -115 -68 -68 -114 115 -249 317zm446 -378l71 -71 -68 -69 -72 72 69 68zm85 -85l67 -67 -68 -68 -67 66 68 69zm81 -81l72 -72 -68 -68 -72 72 68 68zm86 -86l97 -97c8,-8 8,-21 0,-29l-39 -39c-8,-8 -21,-8 -30,0l-96 97 68 68z"></path>
+                                        </svg>
                                     </h6>
                                 </div>
                                 <div style={{ display: "flex" }}>
@@ -118,8 +140,13 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
                                         <small>{stricker.playersSix}</small>
                                     </div>
                                     <div className='mx-1'>
-                                        <small>0</small>
+                                        <small>
+                                            {isNaN(stricker.playersScore / stricker.playersBall)
+                                                ? '0'
+                                                : ((stricker.playersScore / stricker.playersBall) * 100).toFixed(1)}
+                                        </small>
                                     </div>
+
                                     <div className='mx-2'>
                                         <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { setShowStrickerBatsman(false) }} width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
                                             <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
@@ -193,8 +220,13 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
                                             <small>{nonStricker.playersSix}</small>
                                         </div>
                                         <div className='mx-1'>
-                                            <small>0</small>
+                                            <small>
+                                                {isNaN(nonStricker.playersScore / nonStricker.playersBall)
+                                                    ? '0'
+                                                    : ((nonStricker.playersScore / nonStricker.playersBall) * 100).toFixed(1)}
+                                            </small>
                                         </div>
+
                                         <div className='mx-2'>
                                             <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { setShowNonStrickerBatsman(false) }} width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
                                                 <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
@@ -238,37 +270,39 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
                     }
                 </div>
                 <div className='col-md-4 col-4 p-4'>
+                    <div className='row'>
+                        <div className='d-flex align-items-center py-2 px-3 my-2 friendListItem rounded' style={{ background: "black", color: "white" }}>
+                            <div className='flex-grow-1'>
+                                <h6 className='m-0'>{challenge.teamB}</h6>
+                            </div>
+                            <div style={{ display: "flex", alignItems: "center" }}>
+                                <div className='mx-1'>
+                                    <small>O</small>
+                                </div>
+                                <div className='mx-1'>
+                                    <small>M</small>
+                                </div>
+                                <div className='mx-1'>
+                                    <small>R</small>
+                                </div>
+                                <div className='mx-1'>
+                                    <small>W</small>
+                                </div>
+                                <div className='mx-1'>
+                                    <small>E</small>
+                                </div>
+                                <div className=''>
+                                    <svg xmlns="http://www.w3.org/2000/svg" style={{ visibility: 'hidden' }} width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     {
                         showBowler ?
                             <>
-                                <div className='d-flex align-items-center py-2 px-3 my-2 friendListItem rounded' style={{ background: "black", color: "white" }}>
-                                    <div className='flex-grow-1'>
-                                        <h6 className='m-0'>{challenge.teamB}</h6>
-                                    </div>
-                                    <div style={{ display: "flex", alignItems: "center" }}>
-                                        <div className='mx-1'>
-                                            <small>O</small>
-                                        </div>
-                                        <div className='mx-1'>
-                                            <small>M</small>
-                                        </div>
-                                        <div className='mx-1'>
-                                            <small>R</small>
-                                        </div>
-                                        <div className='mx-1'>
-                                            <small>W</small>
-                                        </div>
-                                        <div className='mx-1'>
-                                            <small>E</small>
-                                        </div>
-                                        <div className=''>
-                                            <svg xmlns="http://www.w3.org/2000/svg" style={{ visibility: 'hidden' }} width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
-                                            </svg>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className={`d-flex align-items-center py-2 px-3 my-0 friendListItem`} >
+                                <div className={`d-flex align-items-center py-2 my-0 friendListItem`} >
                                     <div className='me-3'>
                                         <img
                                             src={"https://github.com/mdo.png"}
@@ -279,30 +313,47 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
                                     </div>
                                     <div className='flex-grow-1'>
                                         <h6 className='mb-0' style={{ fontWeight: "600", color: "#050505" }}>
-                                            {bowler}
+                                            {currentBowler.playerName}
                                         </h6>
                                     </div>
                                     <div style={{ display: "flex" }}>
                                         <div className='mx-1'>
-                                            <small>0</small>
+                                            <small>{currentBowler.playerOver}</small>
                                         </div>
                                         <div className='mx-1'>
-                                            <small>0</small>
+                                            <small>{currentBowler.playersMaidenOver}</small>
                                         </div>
                                         <div className='mx-1'>
-                                            <small>0</small>
+                                            <small>{currentBowler.playersRunConceeded}</small>
                                         </div>
                                         <div className='mx-1'>
-                                            <small>0</small>
+                                            <small>{currentBowler.playersWickettaken}</small>
                                         </div>
                                         <div className='mx-1'>
-                                            <small>0</small>
+                                            <small>
+                                                {isNaN(currentBowler.playersRunConceeded / (Math.floor(currentBowler.playerOver) + (currentBowler.playerOver % 1) * 10 / 6))
+                                                    ? '0'
+                                                    : (currentBowler.playersRunConceeded / (Math.floor(currentBowler.playerOver) + (currentBowler.playerOver % 1) * 10 / 6)).toFixed(2)
+                                                }
+                                            </small>
                                         </div>
+
                                         <div className='mx-2'>
                                             <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { setShowBowler(false) }} width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
                                                 <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
                                             </svg>
                                         </div>
+                                    </div>
+                                </div>
+
+                                <div className=' d-flex my-3 flex-column'>
+                                    <p><strong>This Over</strong></p>
+                                    <div className='d-flex'>
+                                        {
+                                            currentOverRuns.map((ball, index) => (
+                                                <CurrentOver ball={ball} key={index}/>
+                                            ))
+                                        }
                                     </div>
                                 </div>
                             </> :
@@ -320,7 +371,7 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
                                     </button>
                                     <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         {challenge.teamBPlayers.map((element, index) => (
-                                            <li key={index} onClick={() => { setBowler(element.value); setShowBowler(true); }}>
+                                            <li key={index} onClick={() => { setBowler(element.value); }}>
                                                 <div className="dropdown-item d-flex align-items-center py-2 px-3 my-0 friendListItem hover-effect">
                                                     <img
                                                         src={"https://github.com/mdo.png"}

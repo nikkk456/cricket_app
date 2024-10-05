@@ -2,8 +2,10 @@ import React, { useContext, useEffect, useState } from 'react'
 import { ScoreCardContext } from '../../../context/ScoreCardContext';
 import TeamA from './TeamA';
 import TeamB from './TeamB';
+import { SocketContext } from '../../../context/SocketContext';
 
 const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setTeamAScore, setTeamBScore, setTeamBWickets, setTeamAWickets, setTeamBOvers, setTeamAOvers, teamAPlayers, teamBPlayers }) => {
+  const socket = useContext(SocketContext);
   const [teamAPlayersData, setTeamAPlayersData] = useState(teamAPlayers);
   const [teamBPlayersData, setTeamBPlayersData] = useState(teamBPlayers);
   const { challenge, setChallenge } = useContext(ScoreCardContext);
@@ -11,9 +13,13 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
   const [nonstrikerbatsman, setNonStrikerBatsman] = useState();
   const [bowler, setBowler] = useState();
   const [balls, setBalls] = useState(0);
+  const [currentOverBalls, setCurrentOverBalls] = useState(0);
+  const [currentOverRuns, setCurrentOverRuns] = useState([]);
+  const [currentOverWicket, setCurrentOverWicket] = useState(0);
   const [totalRun, setTotalRun] = useState(0);
   const [matchWinner, setMatchWinner] = useState();
   const [wickets, setWickets] = useState(0);
+  const [wicketTaken, setWicketTaken] = useState(false);
   const [firstInnings, setFirstInnings] = useState();
   const [secondInnings, setSecondInnings] = useState();
   const [overCompleted, setOverCompleted] = useState(false);
@@ -22,6 +28,12 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
   const [winningruns, setWinningRuns] = useState(0);
   const [winningwickets, setWinningWickets] = useState(0);
 
+  useEffect(() => {
+    if (!socket) {
+        console.log("Socket is not initialised yet in scoreUpdate Page");
+    } else {
+    }
+}, [socket]);
   useEffect(() => {
     if (challenge.tossWinner == challenge.teamA) {
       if (challenge.tossWinnerSelection == "Batting") {
@@ -41,8 +53,21 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
       }
     }
   }, [])
-  console.log("This is teamAPlayers Data", teamAPlayersData);
-  console.log("This is teamBPlayers Data", teamBPlayersData);
+
+
+  
+  useEffect(() => {
+    let Data = {
+      teamARun: teamAScore,
+      teamBRun: teamBScore,
+      teamAWickets: teamAWickets,
+      teamBWickets: teamBWickets,
+      teamAPlayersData: teamAPlayersData,
+      teamBPlayersData: teamBPlayersData,
+      totalBalls: balls,
+    }
+    socket.emit('updateScore', Data);
+  }, [balls, totalRun])
 
   const checkOddRuns = (run) => {
     if (run % 2 !== 0) {
@@ -58,6 +83,9 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
   }
 
   const handleBallInput = (run) => {
+    const currentBall = currentOverBalls + 1;
+    setCurrentOverBalls(currentBall);
+    setCurrentOverRuns((prevOverRuns) => [...prevOverRuns, run]);
     const newRuns = totalRun + run;
     const newBalls = balls + 1;
     let overPlayedByTeam = Math.floor(newBalls / 6);
@@ -66,7 +94,10 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
     setBalls(balls + 1);
 
     if (newBalls % 6 === 0) {
+      setCurrentOverBalls(0);
       setOverCompleted(true);
+      setCurrentOverRuns([]);
+      setCurrentOverWicket([]);
       swapPlayers();
     }
 
@@ -80,13 +111,33 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
               playersScore: player.playersScore + run,
               playersBall: player.playersBall + 1,
               playersSix: run === 6 ? player.playersSix + 1 : player.playersSix,
-              playersFours: run === 4 ? player.playersFours + 1 : player.playersFours
-
+              playersFours: run === 4 ? player.playersFours + 1 : player.playersFours,
             };
           }
           return player; // Return the other players unchanged
         });
       });
+
+      setTeamBPlayersData(prevTeamBPlayers => {
+        return prevTeamBPlayers.map(player => {
+          if (player.playerName === bowler) {
+            console.log("This is currentBall", currentBall);
+
+            // Assuming currentBall is defined elsewhere
+            const fullOvers = Math.floor(player.playerOver);
+            const updatedOver =
+              currentBall >= 6 ? fullOvers + 1 : fullOvers + currentBall / 10;
+
+            return {
+              ...player,
+              playerOver: updatedOver,
+              playersRunConceeded: player.playersRunConceeded + run,
+            };
+          }
+          return player; // Always return player, even if it's not the bowler
+        });
+      });
+
       setTeamAScore(newRuns);
       setTeamAOvers(newBalls);
       checkOddRuns(run);
@@ -107,6 +158,25 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
           return player;
         });
       });
+
+      setTeamAPlayersData(prevTeamAPlayers => {
+        return prevTeamAPlayers.map(player => {
+          if (player.playerName === bowler) {
+
+            const fullOvers = Math.floor(player.playerOver);
+            const updatedOver =
+              currentBall >= 6 ? fullOvers + 1 : fullOvers + currentBall / 10;
+
+            return {
+              ...player,
+              playerOver: updatedOver,
+              playersRunConceeded: player.playersRunConceeded + run,
+            };
+          }
+          return player; // Always return player, even if it's not the bowler
+        });
+      });
+
       setTeamBScore(newRuns);
       setTeamBOvers(newBalls);
       checkOddRuns(run);
@@ -127,6 +197,26 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
           return player;
         });
       });
+      setTeamBPlayersData(prevTeamBPlayers => {
+        return prevTeamBPlayers.map(player => {
+          if (player.playerName === bowler) {
+            console.log("This is currentBall", currentBall);
+
+            // Assuming currentBall is defined elsewhere
+            const fullOvers = Math.floor(player.playerOver);
+            const updatedOver =
+              currentBall >= 6 ? fullOvers + 1 : fullOvers + currentBall / 10;
+
+            return {
+              ...player,
+              playerOver: updatedOver,
+              playersRunConceeded: player.playersRunConceeded + run,
+            };
+          }
+          return player; // Always return player, even if it's not the bowler
+        });
+      });
+
       setTeamAScore(newRuns);
       setTeamAOvers(newBalls);
       checkOddRuns(run);
@@ -156,6 +246,26 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
           return player;
         });
       });
+
+      setTeamAPlayersData(prevTeamAPlayers => {
+        return prevTeamAPlayers.map(player => {
+          if (player.playerName === bowler) {
+
+            const fullOvers = Math.floor(player.playerOver);
+            const updatedOver =
+              currentBall >= 6 ? fullOvers + 1 : fullOvers + currentBall / 10;
+
+            return {
+              ...player,
+              playerOver: updatedOver,
+              playersRunConceeded: player.playersRunConceeded + run,
+            };
+          }
+          return player; // Always return player, even if it's not the bowler
+        });
+      });
+
+
       setTeamBScore(newRuns);
       setTeamBOvers(newBalls);
       checkOddRuns(run);
@@ -175,19 +285,90 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
   console.log("This is Total Run " + totalRun + " This is total Wicket  " + wickets + " this is stricker and non striker", strikerbatsman, nonstrikerbatsman + "The Match Winner is ", matchWinner);
   const handleWicket = () => {
     let newWickets = wickets + 1;
+    let currentBall = currentOverBalls + 1;
+    let currentWicket = currentOverWicket + 1;
     let newBalls = balls + 1;
     let teamAPlayers = challenge.teamAPlayers;
     let teamBPlayers = challenge.teamBPlayers;
-
-    console.log("Thus is teamAplayers and teamBplayers", teamAPlayers, teamBPlayers);
-
+    setCurrentOverWicket(currentWicket);
+    setCurrentOverBalls(currentBall);
+    setWicketTaken(true);
+    setCurrentOverRuns((prevOverRuns) => [...prevOverRuns, "Wicket"]);
     setWickets(wickets + 1);
     setBalls(balls + 1);
     if (innings == 1 && firstInnings == challenge.teamA) {
       setTeamAWickets(newWickets);
       setTeamAOvers(newBalls);
+
+      //To set the Players Wicket taken by 
+      setTeamAPlayersData(prevTeamAPlayers => {
+        return prevTeamAPlayers.map(player => {
+          if (player.playerName === strikerbatsman) {
+            // Return a new player object with updated score
+            return {
+              ...player,
+              playersOutBy: bowler,
+              playersBall: player.playersBall + 1,
+            };
+          }
+          return player; // Return the other players unchanged
+        });
+      });
+
+      //to set wicket of the bowler
+      setTeamBPlayersData(prevTeamBPlayers => {
+        return prevTeamBPlayers.map(player => {
+          if (player.playerName === bowler) {
+
+            // Assuming currentBall is defined elsewhere
+            const fullOvers = Math.floor(player.playerOver);
+            const updatedOver =
+              currentBall >= 6 ? fullOvers + 1 : fullOvers + currentBall / 10;
+
+            return {
+              ...player,
+              playerOver: updatedOver,
+              playersWickettaken: player.playersWickettaken + currentWicket,
+            };
+          }
+          return player; // Always return player, even if it's not the bowler
+        });
+      });
     } else if (innings == 1 && firstInnings == challenge.teamB) {
       setTeamBWickets(newWickets);
+      setTeamBPlayersData(prevTeamBPlayers => {
+        return prevTeamBPlayers.map(player => {
+          if (player.playerName === strikerbatsman) {
+            // Return a new player object with updated score
+            return {
+              ...player,
+              playersOutBy: bowler,
+              playersBall: player.playersBall + 1,
+            };
+          }
+          return player; // Return the other players unchanged
+        });
+      });
+
+      //to set the wicket of the bowler
+      setTeamAPlayersData(prevTeamAPlayers => {
+        return prevTeamAPlayers.map(player => {
+          if (player.playerName === bowler) {
+
+            // Assuming currentBall is defined elsewhere
+            const fullOvers = Math.floor(player.playerOver);
+            const updatedOver =
+              currentBall >= 6 ? fullOvers + 1 : fullOvers + currentBall / 10;
+
+            return {
+              ...player,
+              playerOver: updatedOver,
+              playersWickettaken: player.playersWickettaken + currentWicket,
+            };
+          }
+          return player; // Always return player, even if it's not the bowler
+        });
+      });
       setTeamBOvers(newBalls);
     }
 
@@ -197,6 +378,39 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
         setMatchWinner(challenge.teamB);
       }
       setTeamAWickets(newWickets);
+      setTeamAPlayersData(prevTeamAPlayers => {
+        return prevTeamAPlayers.map(player => {
+          if (player.playerName === strikerbatsman) {
+            // Return a new player object with updated score
+            return {
+              ...player,
+              playersOutBy: bowler,
+              playersBall: player.playersBall + 1,
+            };
+          }
+          return player; // Return the other players unchanged
+        });
+      });
+
+      //To set the wicket of teh boeler
+      setTeamBPlayersData(prevTeamBPlayers => {
+        return prevTeamBPlayers.map(player => {
+          if (player.playerName === bowler) {
+
+            // Assuming currentBall is defined elsewhere
+            const fullOvers = Math.floor(player.playerOver);
+            const updatedOver =
+              currentBall >= 6 ? fullOvers + 1 : fullOvers + currentBall / 10;
+
+            return {
+              ...player,
+              playerOver: updatedOver,
+              playersWickettaken: player.playersWickettaken + currentWicket,
+            };
+          }
+          return player; // Always return player, even if it's not the bowler
+        });
+      });
       setTeamAOvers(newBalls);
     } else if (innings == 2 && secondInnings == challenge.teamB) {
       if (newWickets >= teamBPlayers.length - 1) {
@@ -204,6 +418,37 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
         setMatchWinner(challenge.teamA);
       }
       setTeamBWickets(newWickets);
+      setTeamBPlayersData(prevTeamBPlayers => {
+        return prevTeamBPlayers.map(player => {
+          if (player.playerName === strikerbatsman) {
+            // Return a new player object with updated score
+            return {
+              ...player,
+              playersOutBy: bowler,
+              playersBall: player.playersBall + 1,
+            };
+          }
+          return player; // Return the other players unchanged
+        });
+      });
+
+      setTeamAPlayersData(prevTeamAPlayers => {
+        return prevTeamAPlayers.map(player => {
+          if (player.playerName === bowler) {
+
+            const fullOvers = Math.floor(player.playerOver);
+            const updatedOver =
+              currentBall >= 6 ? fullOvers + 1 : fullOvers + currentBall / 10;
+
+            return {
+              ...player,
+              playerOver: updatedOver,
+              playersWickettaken: player.playersWickettaken + currentWicket,
+            };
+          }
+          return player; // Always return player, even if it's not the bowler
+        });
+      });
       setTeamBOvers(newBalls);
     }
     // axios.post('/api/update-score', { runs, balls, wickets: wickets + 1, striker: nextBatsman, nonStriker, bowler, isWicket: true, catchTaker })
@@ -215,16 +460,61 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
   };
   const handleWideOrNoBall = (run) => {
     setTotalRun(totalRun + run);
+    setCurrentOverRuns((prevOverRuns) => [...prevOverRuns, "wide"]);
     if (innings == 1 && firstInnings == challenge.teamA) {
       setTeamAScore(teamAScore + run);
+      setTeamBPlayersData(prevTeamBPlayers => {
+        return prevTeamBPlayers.map(player => {
+          if (player.playerName === bowler) {
+            return {
+              ...player,
+              playersRunConceeded: player.playersRunConceeded + run,
+            };
+          }
+          return player; // Always return player, even if it's not the bowler
+        });
+      });
     } else if (innings == 1 && firstInnings == challenge.teamB) {
       setTeamBScore(teamBScore + run);
+      setTeamAPlayersData(prevTeamAPlayers => {
+        return prevTeamAPlayers.map(player => {
+          if (player.playerName === bowler) {
+            return {
+              ...player,
+              playersRunConceeded: player.playersRunConceeded + run,
+            };
+          }
+          return player; // Always return player, even if it's not the bowler
+        });
+      });
     }
 
     if (innings == 2 && secondInnings == challenge.teamA) {
       setTeamAScore(teamAScore + run);
+      setTeamBPlayersData(prevTeamBPlayers => {
+        return prevTeamBPlayers.map(player => {
+          if (player.playerName === bowler) {
+            return {
+              ...player,
+              playersRunConceeded: player.playersRunConceeded + run,
+            };
+          }
+          return player; // Always return player, even if it's not the bowler
+        });
+      });
     } else if (innings == 2 && secondInnings == challenge.teamB) {
       setTeamBScore(teamBScore + run);
+      setTeamAPlayersData(prevTeamAPlayers => {
+        return prevTeamAPlayers.map(player => {
+          if (player.playerName === bowler) {
+            return {
+              ...player,
+              playersRunConceeded: player.playersRunConceeded + run,
+            };
+          }
+          return player; // Always return player, even if it's not the bowler
+        });
+      });
     }
 
 
@@ -235,7 +525,10 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
 
 
   useEffect(() => {
-    if (oversPlayed >= challenge.overs) {
+    if (oversPlayed >= challenge.overs || wickets >= challenge.teamAPlayers.length - 1) {
+      setCurrentOverRuns([]);
+      setCurrentOverWicket(0);
+      setCurrentOverBalls(0);
       setInnings(innings + 1);
       setInningsOver(true);
       setWickets(0);
@@ -248,9 +541,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
     }
   }, [wickets, balls])
 
-
   if (matchWinner) {
-    console.log("This is winninhWickets in If condiotion ", winningwickets);
     return (
       <div className='container'>
         <h1>{matchWinner} Wins The Match by {winningruns > 0 ? winningruns + " Runs" : winningwickets + " Wickets"}</h1>
@@ -268,15 +559,36 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
               <h6 className='text-center'>Welcome to First innings of the match Please select the Respective Batsman </h6>
               {
                 firstInnings == challenge.teamA ?
-                  <TeamA setBowler={setBowler} setStrikerBatsman={setStrikerBatsman} setNonStrikerBatsman={setNonStrikerBatsman} bowler={bowler} nonStrickerBatsman={nonstrikerbatsman} strikerbatsman={strikerbatsman} teamAPlayers={teamAPlayersData} teamBPlayers={teamBPlayersData}/>
+                  <TeamA setBowler={setBowler} setStrikerBatsman={setStrikerBatsman} setNonStrikerBatsman={setNonStrikerBatsman} bowler={bowler} nonStrickerBatsman={nonstrikerbatsman} strikerbatsman={strikerbatsman} teamAPlayers={teamAPlayersData} teamBPlayers={teamBPlayersData} currentOverRuns={currentOverRuns} />
                   :
-                  <TeamB setBowler={setBowler} setStrikerBatsman={setStrikerBatsman} setNonStrikerBatsman={setNonStrikerBatsman} bowler={bowler} nonStrickerBatsman={nonstrikerbatsman} strikerbatsman={strikerbatsman} teamAPlayers={teamAPlayersData} teamBPlayers={teamBPlayersData} />
+                  <TeamB setBowler={setBowler} setStrikerBatsman={setStrikerBatsman} setNonStrikerBatsman={setNonStrikerBatsman} bowler={bowler} nonStrickerBatsman={nonstrikerbatsman} strikerbatsman={strikerbatsman} teamAPlayers={teamAPlayersData} teamBPlayers={teamBPlayersData} currentOverRuns={currentOverRuns} />
               }
 
             </div>
             <div className='container'>
               <h2>Select Run per Over's Ball </h2>
               <h5>Select run on {(balls - (Math.floor(balls / 6) * 6)) + 1} ball  of {Math.floor(balls / 6) + 1} Over</h5>
+              {
+                wicketTaken ?
+                  <div className='mx-3'>
+                    <h3>Select Next Batsman</h3>
+                    <select className="form-select form-select-sm " aria-label="Default select example" name='teamA_selection' onChange={(e) => {
+                      setStrikerBatsman(e.target.value); setWicketTaken(false);
+                    }}>
+                      <option value="" disabled selected>Select a Batsman</option>
+                      {
+                        firstInnings == challenge.teamA ?
+                          challenge.teamAPlayers.map((element, index) => (
+                            <option value={element.value} key={index}>{element.value}</option>
+                          ))
+                          :
+                          challenge.teamBPlayers.map((element, index) => (
+                            <option value={element.value} key={index}>{element.value}</option>
+                          ))
+                      }
+                    </select>
+                  </div> : ""
+              }
               {
                 overCompleted ?
                   <div>
@@ -287,19 +599,20 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
                     }}>
                       <option value="" disabled selected>Select a Bowler</option>
                       {
-                        firstInnings == challenge.teamA?
-                        challenge.teamBPlayers.map((element, index) => (
-                          <option value={element.value} key={index}>{element.value}</option>
-                        ))
-                        :
-                        challenge.teamAPlayers.map((element, index) => (
-                          <option value={element.value} key={index}>{element.value}</option>
-                        ))
+                        firstInnings == challenge.teamA ?
+                          challenge.teamBPlayers.map((element, index) => (
+                            <option value={element.value} key={index}>{element.value}</option>
+                          ))
+                          :
+                          challenge.teamAPlayers.map((element, index) => (
+                            <option value={element.value} key={index}>{element.value}</option>
+                          ))
                       }
                     </select>
                   </div> :
                   <>
                     <div>
+                      <button className='btn btn-sm btn-primary' onClick={() => handleBallInput(0)}>0 Run</button>
                       <button className='btn btn-sm btn-primary' onClick={() => handleBallInput(1)}>1 Run</button>
                       <button className='btn btn-sm btn-primary' onClick={() => handleBallInput(2)}>2 Runs</button>
                       <button className='btn btn-sm btn-primary' onClick={() => handleBallInput(3)}>3 Runs</button>
@@ -324,15 +637,36 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
               <h5>Welcome to Second innings of the match Please select the Respective Batsman </h5>
               {
                 secondInnings == challenge.teamA ?
-                  <TeamA setBowler={setBowler} setStrikerBatsman={setStrikerBatsman} setNonStrikerBatsman={setNonStrikerBatsman} bowler={bowler} nonStrickerBatsman={nonstrikerbatsman} strikerbatsman={strikerbatsman} teamAPlayers={teamAPlayersData} teamBPlayers={teamBPlayersData}/>
+                  <TeamA setBowler={setBowler} setStrikerBatsman={setStrikerBatsman} setNonStrikerBatsman={setNonStrikerBatsman} bowler={bowler} nonStrickerBatsman={nonstrikerbatsman} strikerbatsman={strikerbatsman} teamAPlayers={teamAPlayersData} teamBPlayers={teamBPlayersData} currentOverRuns={currentOverRuns} />
                   :
-                  <TeamB setBowler={setBowler} setStrikerBatsman={setStrikerBatsman} setNonStrikerBatsman={setNonStrikerBatsman} bowler={bowler} nonStrickerBatsman={nonstrikerbatsman} strikerbatsman={strikerbatsman} teamAPlayers={teamAPlayersData} teamBPlayers={teamBPlayersData} />
+                  <TeamB setBowler={setBowler} setStrikerBatsman={setStrikerBatsman} setNonStrikerBatsman={setNonStrikerBatsman} bowler={bowler} nonStrickerBatsman={nonstrikerbatsman} strikerbatsman={strikerbatsman} teamAPlayers={teamAPlayersData} teamBPlayers={teamBPlayersData} currentOverRuns={currentOverRuns} />
               }
 
             </div>
             <div className='container'>
               <h2>Select Run per Over's Ball </h2>
               <h5>Select run on {(balls - (Math.floor(balls / 6) * 6)) + 1} ball  of {Math.floor(balls / 6) + 1} Over</h5>
+              {
+                wicketTaken ?
+                  <div className='my-3'>
+                    <h3>Select Next Batsman</h3>
+                    <select className="form-select form-select-sm " aria-label="Default select example" name='teamA_selection' onChange={(e) => {
+                      setStrikerBatsman(e.target.value); setWicketTaken(false);
+                    }}>
+                      <option value="" disabled selected>Select a Batsman</option>
+                      {
+                        secondInnings == challenge.teamA ?
+                          challenge.teamAPlayers.map((element, index) => (
+                            <option value={element.value} key={index}>{element.value}</option>
+                          ))
+                          :
+                          challenge.teamBPlayers.map((element, index) => (
+                            <option value={element.value} key={index}>{element.value}</option>
+                          ))
+                      }
+                    </select>
+                  </div> : ""
+              }
               {
                 overCompleted ?
                   <div>
@@ -343,18 +677,19 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
                     }}>
                       <option value="" disabled selected>Select a Bowler</option>
                       {
-                        secondInnings == challenge.teamA?
-                        challenge.teamBPlayers.map((element, index) => (
-                          <option value={element.value} key={index}>{element.value}</option>
-                        )):
-                        challenge.teamAPlayers.map((element, index) => (
-                          <option value={element.value} key={index}>{element.value}</option>
-                        ))
+                        secondInnings == challenge.teamA ?
+                          challenge.teamBPlayers.map((element, index) => (
+                            <option value={element.value} key={index}>{element.value}</option>
+                          )) :
+                          challenge.teamAPlayers.map((element, index) => (
+                            <option value={element.value} key={index}>{element.value}</option>
+                          ))
                       }
                     </select>
                   </div> :
                   <>
                     <div>
+                      <button className='btn btn-sm btn-primary' onClick={() => handleBallInput(0)}>0 Run</button>
                       <button className='btn btn-sm btn-primary' onClick={() => handleBallInput(1)}>1 Run</button>
                       <button className='btn btn-sm btn-primary' onClick={() => handleBallInput(2)}>2 Runs</button>
                       <button className='btn btn-sm btn-primary' onClick={() => handleBallInput(3)}>3 Runs</button>

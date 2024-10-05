@@ -4,13 +4,19 @@ import { SocketContext } from '../../context/SocketContext';
 
 function LiveScore() {
     const socket = useContext(SocketContext);
-    const [score, setScore] = useState({ runs: 0, wickets: 0, overs: 0 });
+    const [data, setData] = useState({
+        teamARun: 0,
+      teamBRun: 0,
+      teamAPlayersData: [],
+      teamBPlayersData: [],
+      totalBalls: 0,
+    });
     useEffect(() => {
         if (!socket) {
             console.log("Socket is not initialised yet in scoreUpdate Page");
         } else {
-            socket.on('scoreUpdate', (newScore) => {
-                setScore(newScore);
+            socket.on('scoreUpdate', (data) => {
+                setData(data);
             });
         }
     }, [socket]);
@@ -25,9 +31,8 @@ function LiveScore() {
     return (
         <div>
             <h2>Live Score</h2>
-            <p>Runs: {score.runs}</p>
-            <p>Wickets: {score.wickets}</p>
-            <p>Overs: {score.overs}</p>
+            <p>TeamA : {data.teamARun}</p>
+            <p>TeamB : {data.teamBRun}</p>
         </div>
     );
 }

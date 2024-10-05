@@ -107,6 +107,8 @@ const HomePage = () => {
                 }
             </div>
 
+            <LiveScore/>
+
 
 
             {/* MOdal starts here  */}

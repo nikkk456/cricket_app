@@ -28,10 +28,6 @@ function ScoreUpdate() {
     }, [socket]);
     const [score, setScore] = useState({ runs: 0, wickets: 0, overs: 0 });
 
-    const handleScoreChange = (e) => {
-        setScore({ ...score, [e.target.name]: e.target.value });
-    };
-
     const sendScoreUpdate = () => {
         socket.emit('updateScore', score);
     };

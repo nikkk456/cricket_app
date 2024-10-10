@@ -74,6 +74,8 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
             setShowBowler(true);
         }
     }, [bowler, teamBPlayers])
+    console.log("This is teamAplayers", teamAPlayers);
+    console.log("this is teamBplayers", teamBPlayers);
 
     return (
         <div className='container'>
@@ -101,7 +103,7 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
                                     <small>SR</small>
                                 </div>
                                 <div className=''>
-                                    <svg xmlns="http://www.w3.org/2000/svg" style={{ visibility: 'hidden' }} width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                    <svg xmlns="http://www.w3.org/2000/svg" style={{ visibility: 'hidden' }} width="16" height="16" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
                                         <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
                                     </svg>
                                 </div>
@@ -121,7 +123,7 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
                                 </div>
                                 <div className='flex-grow-1'>
                                     <h6 className='mb-0' style={{ fontWeight: "600", color: "#050505" }}>
-                                        {stricker.playerName} <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill-rule="evenodd" clip-rule="evenodd" className="mx-2" image-rendering="optimizeQuality" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" viewBox="0 0 1707 1707" id="bat">
+                                        {stricker.playerName} <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill-rule="evenodd" clipRule="evenodd" className="mx-2" image-rendering="optimizeQuality" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" viewBox="0 0 1707 1707" id="bat">
                                             <path d="M355 1653l-302 -301 -11 11c-56,56 -56,149 0,205l96 96c57,57 149,57 206,0l11 -11zm86 -86l-302 -301 -71 72 301 301 72 -72zm83 -83l-302 -301 -69 69 302 301 69 -69zm86 -85l-302 -302 -71 72 301 301 72 -71zm669 -748l0 0 -45 -84 -382 302c-9,7 -21,-5 -14,-14l301 -382 -84 -45c-24,-13 -54,-24 -76,-2l-657 657 302 301 657 -657c21,-21 11,-52 -2,-76zm-373 150l317 -249 114 -115 -68 -68 -114 115 -249 317zm446 -378l71 -71 -68 -69 -72 72 69 68zm85 -85l67 -67 -68 -68 -67 66 68 69zm81 -81l72 -72 -68 -68 -72 72 68 68zm86 -86l97 -97c8,-8 8,-21 0,-29l-39 -39c-8,-8 -21,-8 -30,0l-96 97 68 68z"></path>
                                         </svg>
                                     </h6>
@@ -148,7 +150,7 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
                                     </div>
 
                                     <div className='mx-2'>
-                                        <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { setShowStrickerBatsman(false) }} width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                        <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { setShowStrickerBatsman(false) }} width="16" height="16" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
                                             <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
                                         </svg>
                                     </div>
@@ -228,7 +230,7 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
                                         </div>
 
                                         <div className='mx-2'>
-                                            <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { setShowNonStrickerBatsman(false) }} width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                            <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { setShowNonStrickerBatsman(false) }} width="16" height="16" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
                                                 <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
                                             </svg>
                                         </div>
@@ -292,7 +294,7 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
                                     <small>E</small>
                                 </div>
                                 <div className=''>
-                                    <svg xmlns="http://www.w3.org/2000/svg" style={{ visibility: 'hidden' }} width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                    <svg xmlns="http://www.w3.org/2000/svg" style={{ visibility: 'hidden' }} width="16" height="16" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
                                         <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
                                     </svg>
                                 </div>
@@ -339,7 +341,7 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
                                         </div>
 
                                         <div className='mx-2'>
-                                            <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { setShowBowler(false) }} width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                            <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { setShowBowler(false) }} width="16" height="16" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
                                                 <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
                                             </svg>
                                         </div>
@@ -351,7 +353,7 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
                                     <div className='d-flex'>
                                         {
                                             currentOverRuns.map((ball, index) => (
-                                                <CurrentOver ball={ball} key={index}/>
+                                                <CurrentOver ball={ball} key={index} />
                                             ))
                                         }
                                     </div>
@@ -370,7 +372,7 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
                                         Select a Bowler
                                     </button>
                                     <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        {challenge.teamBPlayers.map((element, index) => (
+                                        {challenge.teamBPlayers.filter(player=> !bowler || player.playerName !== bowler).map((element, index) => (
                                             <li key={index} onClick={() => { setBowler(element.value); }}>
                                                 <div className="dropdown-item d-flex align-items-center py-2 px-3 my-0 friendListItem hover-effect">
                                                     <img

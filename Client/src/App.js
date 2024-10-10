@@ -15,6 +15,7 @@ import { SocketContext } from './context/SocketContext';
 import HomePage from './component/scorecard/HomePage';
 import ScoreUpdate from './component/scorecard/ScoreUpdate';
 import CoinToss from './component/scorecard/CoinToss';
+import LiveScore from './component/scorecard/liveScore/LiveScore';
 
 function App() {
   const socket = useContext(SocketContext);
@@ -40,6 +41,7 @@ function App() {
         <Route path="/scorecard/:teamA/vs/:teamB/:tossWinner/:overs/scoreUpdate/*" element={<ScoreUpdate />} />
         <Route path="/scorecard/:teamA/vs/:teamB/:overs/tossCoin" element={<CoinToss />} />
         <Route path="/scorecard" element={<HomePage />} />
+        <Route path='/livescore/*' element={<LiveScore/>}/>
         <Route path="/playerprofile/:id/*" element={<PlayerProfile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

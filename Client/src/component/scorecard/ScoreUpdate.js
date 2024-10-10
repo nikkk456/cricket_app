@@ -127,30 +127,8 @@ function ScoreUpdate() {
             <Routes>
                 <Route path='overview' element={<Overview teamA={teamA} teamB={teamB} overs={overs} />} />
                 <Route path='score_card/*' element={<Score_Card />} />
-                <Route path='update_score' element={<Update_score teamAScore={teamAScore} teamBScore={teamBScore} teamAWickets={teamAWickets} teamBWickets={teamBWickets} setTeamAScore={setTeamAScore} setTeamBScore={setTeamBScore} setTeamAWickets={setTeamAWickets} setTeamBWickets={setTeamBWickets} setTeamAOvers={setTeamAOvers} setTeamBOvers={setTeamBOvers} teamAPlayers={teamAPlayers} teamBPlayers={teamBPlayers} />} />
+                <Route path='update_score' element={<Update_score teamAScore={teamAScore} teamBScore={teamBScore} teamAWickets={teamAWickets} teamBWickets={teamBWickets} setTeamAScore={setTeamAScore} setTeamBScore={setTeamBScore} setTeamAWickets={setTeamAWickets} setTeamBWickets={setTeamBWickets} setTeamAOvers={setTeamAOvers} setTeamBOvers={setTeamBOvers} teamAPlayers={teamAPlayers} teamBPlayers={teamBPlayers} teamAOvers={teamAOvers} teamBOvers={teamBOvers} />} />
             </Routes>
-            {/* <input
-                type="number"
-                name="runs"
-                value={score.runs}
-                onChange={handleScoreChange}
-                placeholder="Runs"
-            />
-            <input
-                type="number"
-                name="wickets"
-                value={score.wickets}
-                onChange={handleScoreChange}
-                placeholder="Wickets"
-            />
-            <input
-                type="number"
-                name="overs"
-                value={score.overs}
-                onChange={handleScoreChange}
-                placeholder="Overs"
-            />
-            <button onClick={sendScoreUpdate}>Update Score</button> */}
         </div>
     );
 }

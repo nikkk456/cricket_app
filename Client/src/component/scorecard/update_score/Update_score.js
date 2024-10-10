@@ -4,7 +4,7 @@ import TeamA from './TeamA';
 import TeamB from './TeamB';
 import { SocketContext } from '../../../context/SocketContext';
 
-const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setTeamAScore, setTeamBScore, setTeamBWickets, setTeamAWickets, setTeamBOvers, setTeamAOvers, teamAPlayers, teamBPlayers }) => {
+const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setTeamAScore, setTeamBScore, setTeamBWickets, setTeamAWickets, setTeamBOvers, setTeamAOvers, teamAPlayers, teamBPlayers, teamAOvers, teamBOvers }) => {
   const socket = useContext(SocketContext);
   const [teamAPlayersData, setTeamAPlayersData] = useState(teamAPlayers);
   const [teamBPlayersData, setTeamBPlayersData] = useState(teamBPlayers);
@@ -30,10 +30,10 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
 
   useEffect(() => {
     if (!socket) {
-        console.log("Socket is not initialised yet in scoreUpdate Page");
+      console.log("Socket is not initialised yet in scoreUpdate Page");
     } else {
     }
-}, [socket]);
+  }, [socket]);
   useEffect(() => {
     if (challenge.tossWinner == challenge.teamA) {
       if (challenge.tossWinnerSelection == "Batting") {
@@ -55,16 +55,20 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
   }, [])
 
 
-  
+
   useEffect(() => {
     let Data = {
       teamARun: teamAScore,
       teamBRun: teamBScore,
       teamAWickets: teamAWickets,
       teamBWickets: teamBWickets,
+      teamAOvers: teamAOvers,
+      teamBOvers: teamBOvers,
       teamAPlayersData: teamAPlayersData,
       teamBPlayersData: teamBPlayersData,
       totalBalls: balls,
+      challenge: challenge,
+      currentOverRuns: currentOverRuns,
     }
     socket.emit('updateScore', Data);
   }, [balls, totalRun])
@@ -577,14 +581,17 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
                     }}>
                       <option value="" disabled selected>Select a Batsman</option>
                       {
-                        firstInnings == challenge.teamA ?
-                          challenge.teamAPlayers.map((element, index) => (
-                            <option value={element.value} key={index}>{element.value}</option>
-                          ))
+                        firstInnings === challenge.teamA ?
+                          teamAPlayersData.filter(player => player.playersOutBy === "" && player.playerName !== strikerbatsman && player.playerName !== nonstrikerbatsman)
+                            .map((element, index) => (
+                              <option value={element.playerName} key={index}>{element.playerName}</option>
+                            ))
                           :
-                          challenge.teamBPlayers.map((element, index) => (
-                            <option value={element.value} key={index}>{element.value}</option>
-                          ))
+                          teamBPlayersData
+                          .filter(player => player.playersOutBy === "" && player.playerName !== strikerbatsman && player.playerName !== nonstrikerbatsman)
+                            .map((element, index) => (
+                              <option value={element.playerName} key={index}>{element.playerName}</option>
+                            ))
                       }
                     </select>
                   </div> : ""
@@ -600,12 +607,12 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
                       <option value="" disabled selected>Select a Bowler</option>
                       {
                         firstInnings == challenge.teamA ?
-                          challenge.teamBPlayers.map((element, index) => (
-                            <option value={element.value} key={index}>{element.value}</option>
+                          teamBPlayersData.filter(player => player.playerName !== bowler).map((element, index) => (
+                            <option value={element.playerName} key={index}>{element.playerName}</option>
                           ))
                           :
-                          challenge.teamAPlayers.map((element, index) => (
-                            <option value={element.value} key={index}>{element.value}</option>
+                          teamAPlayersData.filter(player => player.playerName !== bowler).map((element, index) => (
+                            <option value={element.playerName} key={index}>{element.playerName}</option>
                           ))
                       }
                     </select>
@@ -656,11 +663,11 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
                       <option value="" disabled selected>Select a Batsman</option>
                       {
                         secondInnings == challenge.teamA ?
-                          challenge.teamAPlayers.map((element, index) => (
+                          teamAPlayersData.filter(player => player.playersOutBy === "" && player.playerName !== strikerbatsman && player.playerName !== nonstrikerbatsman).map((element, index) => (
                             <option value={element.value} key={index}>{element.value}</option>
                           ))
                           :
-                          challenge.teamBPlayers.map((element, index) => (
+                          teamBPlayersData.filter(player => player.playersOutBy === "" && player.playerName !== strikerbatsman && player.playerName !== nonstrikerbatsman).map((element, index) => (
                             <option value={element.value} key={index}>{element.value}</option>
                           ))
                       }
@@ -678,11 +685,11 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
                       <option value="" disabled selected>Select a Bowler</option>
                       {
                         secondInnings == challenge.teamA ?
-                          challenge.teamBPlayers.map((element, index) => (
-                            <option value={element.value} key={index}>{element.value}</option>
+                          teamBPlayersData.filter(player => player.playerName !== bowler).map((element, index) => (
+                            <option value={element.playerName} key={index}>{element.playerName}</option>
                           )) :
-                          challenge.teamAPlayers.map((element, index) => (
-                            <option value={element.value} key={index}>{element.value}</option>
+                          challenge.teamAPlayers.filter(player => player.playerName !== bowler).map((element, index) => (
+                            <option value={element.playerName} key={index}>{element.playerName}</option>
                           ))
                       }
                     </select>

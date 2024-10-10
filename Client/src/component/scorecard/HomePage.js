@@ -4,14 +4,11 @@ import LeaderBoard from './LeaderBoard'
 import Select from 'react-select';
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import ScoreUpdate from './ScoreUpdate';
-import LiveScore from './LiveScore';
+import LiveScore from './liveScore/LiveScore';
 import { ScoreCardContext } from '../../context/ScoreCardContext';
 
 const HomePage = () => {
     const arr = ['1', '2', '3', '4', '5'];
-    const [teamA, setTeamA] = useState();
-    const [teamB, setTeamB] = useState();
-    const [over, setOver]  = useState();
     const navigate = useNavigate();
     const [selectedPlayers, setSelectedPlayers] = useState([]);
     const [time, setTime] = useState("");
@@ -107,7 +104,8 @@ const HomePage = () => {
                 }
             </div>
 
-            <LiveScore/>
+
+
 
 
 

@@ -3,6 +3,7 @@ import { ScoreCardContext } from '../../../context/ScoreCardContext';
 import TeamA from './TeamA';
 import TeamB from './TeamB';
 import { SocketContext } from '../../../context/SocketContext';
+import HandleBall from './HandleBall';
 
 const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setTeamAScore, setTeamBScore, setTeamBWickets, setTeamAWickets, setTeamBOvers, setTeamAOvers, teamAPlayers, teamBPlayers, teamAOvers, teamBOvers }) => {
   const socket = useContext(SocketContext);
@@ -27,6 +28,8 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
   const [inningsOver, setInningsOver] = useState(false);
   const [winningruns, setWinningRuns] = useState(0);
   const [winningwickets, setWinningWickets] = useState(0);
+  const [nextBatsman, setNextBatsman] = useState();
+  const [nextBowler, setNextBowler] = useState();
 
   useEffect(() => {
     if (!socket) {
@@ -72,6 +75,45 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
     }
     socket.emit('updateScore', Data);
   }, [balls, totalRun])
+
+  // To set the next Batsman
+  useEffect(() => {
+    if (innings == 1 && firstInnings == challenge.teamA) {
+      const firstPlayerNotOut = teamAPlayersData.find(player => player.playersOutBy === "" && player.playerName !== nonstrikerbatsman);
+      setNextBatsman(firstPlayerNotOut);
+    } else if (innings == 1 && firstInnings == challenge.teamB) {
+      const firstPlayerNotOut = teamBPlayersData.find(player => player.playersOutBy === "" && player.playerName !== nonstrikerbatsman);
+      setNextBatsman(firstPlayerNotOut);
+    }
+    else if (innings == 2 && secondInnings == challenge.teamA) {
+      const firstPlayerNotOut = teamAPlayersData.find(player => player.playersOutBy === "" && player.playerName !== nonstrikerbatsman);
+      setNextBatsman(firstPlayerNotOut);
+    }
+    else {
+      const firstPlayerNotOut = teamBPlayersData.find(player => player.playersOutBy === "" && player.playerName !== nonstrikerbatsman);
+      setNextBatsman(firstPlayerNotOut);
+    }
+  }, [wicketTaken])
+
+  //To set the next Bowler
+  useEffect(() => {
+    if (innings == 1 && firstInnings == challenge.teamA) {
+      const bowler = teamBPlayersData.find(player => player.playerOver === 0) || teamBPlayersData[0];
+      setNextBowler(bowler);
+    } else if (innings == 1 && firstInnings == challenge.teamB) {
+      const bowler = teamAPlayersData.find(player => player.playerOver === 0) || teamAPlayersData[0];
+      setNextBowler(bowler);
+    }
+    else if (innings == 2 && secondInnings == challenge.teamA) {
+      const bowler = teamBPlayersData.find(player => player.playerOver === 0) || teamBPlayersData[0];
+      setNextBowler(bowler);
+    }
+    else {
+      const bowler = teamAPlayersData.find(player => player.playerOver === 0) || teamAPlayersData[0];
+      setNextBowler(bowler);
+    }
+  }, [overCompleted])
+
 
   const checkOddRuns = (run) => {
     if (run % 2 !== 0) {
@@ -545,6 +587,14 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
     }
   }, [wickets, balls])
 
+  //To set Everything zero
+  useEffect(()=>{
+    setNextBatsman();
+    setNextBowler();
+    setWicketTaken(false);
+    setOverCompleted(false);
+  }, [inningsOver])
+
   if (matchWinner) {
     return (
       <div className='container'>
@@ -574,61 +624,138 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
               <h5>Select run on {(balls - (Math.floor(balls / 6) * 6)) + 1} ball  of {Math.floor(balls / 6) + 1} Over</h5>
               {
                 wicketTaken ?
-                  <div className='mx-3'>
-                    <h3>Select Next Batsman</h3>
-                    <select className="form-select form-select-sm " aria-label="Default select example" name='teamA_selection' onChange={(e) => {
-                      setStrikerBatsman(e.target.value); setWicketTaken(false);
-                    }}>
-                      <option value="" disabled selected>Select a Batsman</option>
-                      {
-                        firstInnings === challenge.teamA ?
-                          teamAPlayersData.filter(player => player.playersOutBy === "" && player.playerName !== strikerbatsman && player.playerName !== nonstrikerbatsman)
-                            .map((element, index) => (
-                              <option value={element.playerName} key={index}>{element.playerName}</option>
-                            ))
-                          :
-                          teamBPlayersData
-                          .filter(player => player.playersOutBy === "" && player.playerName !== strikerbatsman && player.playerName !== nonstrikerbatsman)
-                            .map((element, index) => (
-                              <option value={element.playerName} key={index}>{element.playerName}</option>
-                            ))
-                      }
-                    </select>
+                  <div className={`overlay ${wicketTaken ? '' : 'hidden'}`}>
+                    <div class="card" style={{ width: "18rem", height: "15.65rem" }}>
+                      <div class="card-body d-flex " style={{ flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                        <center><img src={"https://github.com/mdo.png"} alt="Team" width="50" height="50" style={{ boxShadow: "0px 0px 4px 2px grey" }} className="rounded-circle mx-2" /></center>
+                        <h4 class="card-title text-center my-2">{nextBatsman? nextBatsman.playerName:"No batsman Selected"}</h4>
+                        <div className='d-flex my-3'>
+                          <div className="dropdown">
+                            <button
+                              className="btn btn-dark btn-sm dropdown-toggle"
+                              type="button"
+                              id="dropdownMenuButton"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                            >
+                              Choose Other
+                            </button>
+                            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              {
+                                firstInnings === challenge.teamA ?
+                                  teamAPlayersData.filter(player => player.playersOutBy === "" && player.playerName !== strikerbatsman && player.playerName !== nonstrikerbatsman)
+                                    .map((element, index) => (
+                                      <li key={index} onClick={() => { setStrikerBatsman(element.playerName); setWicketTaken(false) }}>
+                                        <div className="dropdown-item d-flex align-items-center py-2 px-3 my-0 friendListItem hover-effect">
+                                          <img
+                                            src={"https://github.com/mdo.png"}
+                                            className="rounded-circle me-3"
+                                            alt={"..."}
+                                            style={{ width: "35px", height: "35px", objectFit: "cover" }}
+                                          />
+                                          <h6 className="mb-0" style={{ fontWeight: "600", color: "#050505" }}>
+                                            {element.playerName}
+                                          </h6>
+                                        </div>
+                                      </li>
+                                    ))
+                                  :
+                                  teamBPlayersData
+                                    .filter(player => player.playersOutBy === "" && player.playerName !== strikerbatsman && player.playerName !== nonstrikerbatsman)
+                                    .map((element, index) => (
+                                      <li key={index} onClick={() => { setStrikerBatsman(element.playerName); setWicketTaken(false) }}>
+                                        <div className="dropdown-item d-flex align-items-center py-2 px-3 my-0 friendListItem hover-effect">
+                                          <img
+                                            src={"https://github.com/mdo.png"}
+                                            className="rounded-circle me-3"
+                                            alt={"..."}
+                                            style={{ width: "35px", height: "35px", objectFit: "cover" }}
+                                          />
+                                          <h6 className="mb-0" style={{ fontWeight: "600", color: "#050505" }}>
+                                            {element.playerName}
+                                          </h6>
+                                        </div>
+                                      </li>
+                                    ))
+                              }
+                            </ul>
+                          </div>
+                          <div>
+                            <button className='btn btn-dark btn-sm mx-2' onClick={() => { setWicketTaken(false); setStrikerBatsman(nextBatsman.playerName) }}>Continue</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div> : ""
               }
               {
                 overCompleted ?
-                  <div>
-                    <h3>Select Next Bowler</h3>
-                    <select className="form-select form-select-sm " aria-label="Default select example" name='teamA_selection' onChange={(e) => {
-                      setBowler(e.target.value);
-                      setOverCompleted(false)
-                    }}>
-                      <option value="" disabled selected>Select a Bowler</option>
-                      {
-                        firstInnings == challenge.teamA ?
-                          teamBPlayersData.filter(player => player.playerName !== bowler).map((element, index) => (
-                            <option value={element.playerName} key={index}>{element.playerName}</option>
-                          ))
-                          :
-                          teamAPlayersData.filter(player => player.playerName !== bowler).map((element, index) => (
-                            <option value={element.playerName} key={index}>{element.playerName}</option>
-                          ))
-                      }
-                    </select>
-                  </div> :
-                  <>
-                    <div>
-                      <button className='btn btn-sm btn-primary' onClick={() => handleBallInput(0)}>0 Run</button>
-                      <button className='btn btn-sm btn-primary' onClick={() => handleBallInput(1)}>1 Run</button>
-                      <button className='btn btn-sm btn-primary' onClick={() => handleBallInput(2)}>2 Runs</button>
-                      <button className='btn btn-sm btn-primary' onClick={() => handleBallInput(3)}>3 Runs</button>
-                      <button className='btn btn-sm btn-primary' onClick={() => handleBallInput(4)}>4 Runs</button>
-                      <button className='btn btn-sm btn-primary' onClick={() => handleBallInput(6)}>6 Runs</button>
-                      <button className='btn btn-sm btn-primary' onClick={() => handleWideOrNoBall(1)}>Wide Ball (1 Run)</button>
-                      <button className='btn btn-sm btn-primary' onClick={() => handleWideOrNoBall(1)}>No Ball (1 Run)</button>
-                      <button className='btn btn-sm btn-primary' onClick={handleWicket}>Wicket</button>
+                  <div className={`overlay ${overCompleted ? '' : 'hidden'}`}>
+                    <div class="card" style={{ width: "18rem", height: "15.65rem" }}>
+                      <div class="card-body d-flex " style={{ flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                        <center><img src={"https://github.com/mdo.png"} alt="Team" width="50" height="50" style={{ boxShadow: "0px 0px 4px 2px grey" }} className="rounded-circle mx-2" /></center>
+                        <h4 class="card-title text-center my-2">{nextBowler? nextBowler.playerName:"No Bowler Selected"}</h4>
+                        <div className='d-flex my-3'>
+                          <div className="dropdown">
+                            <button
+                              className="btn btn-dark btn-sm dropdown-toggle"
+                              type="button"
+                              id="dropdownMenuButton"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                            >
+                              Choose Other
+                            </button>
+                            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              {
+                                firstInnings === challenge.teamA ?
+                                  teamBPlayersData.filter(player => player.playerName !== bowler)
+                                    .map((element, index) => (
+                                      <li key={index} onClick={() => { setBowler(element.playerName); setOverCompleted(false) }}>
+                                        <div className="dropdown-item d-flex align-items-center py-2 px-3 my-0 friendListItem hover-effect">
+                                          <img
+                                            src={"https://github.com/mdo.png"}
+                                            className="rounded-circle me-3"
+                                            alt={"..."}
+                                            style={{ width: "35px", height: "35px", objectFit: "cover" }}
+                                          />
+                                          <h6 className="mb-0" style={{ fontWeight: "600", color: "#050505" }}>
+                                            {element.playerName}
+                                          </h6>
+                                        </div>
+                                      </li>
+                                    ))
+                                  :
+                                  teamAPlayersData
+                                    .filter(player => player.playerName != bowler)
+                                    .map((element, index) => (
+                                      <li key={index} onClick={() => { setBowler(element.playerName); setOverCompleted(false) }}>
+                                        <div className="dropdown-item d-flex align-items-center py-2 px-3 my-0 friendListItem hover-effect">
+                                          <img
+                                            src={"https://github.com/mdo.png"}
+                                            className="rounded-circle me-3"
+                                            alt={"..."}
+                                            style={{ width: "35px", height: "35px", objectFit: "cover" }}
+                                          />
+                                          <h6 className="mb-0" style={{ fontWeight: "600", color: "#050505" }}>
+                                            {element.playerName}
+                                          </h6>
+                                        </div>
+                                      </li>
+                                    ))
+                              }
+                            </ul>
+                          </div>
+                          <div>
+                            <button className='btn btn-dark btn-sm mx-2' onClick={() => { setOverCompleted(false); setBowler(nextBowler.playerName) }}>Continue</button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+                  </div>
+                  :
+                  <>
+                    <HandleBall handleBallInput={handleBallInput} handleWicket={handleWicket} handleWideOrNoBall={handleWideOrNoBall} />
                   </>
               }
 
@@ -640,8 +767,8 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
         innings == 2 && (
           <>
             <div className='container'>
-              <h5>{challenge.tossWinner} won the Toss and choose to {challenge.tossWinnerSelection}</h5>
-              <h5>Welcome to Second innings of the match Please select the Respective Batsman </h5>
+              <h5 className='text-center'>{challenge.tossWinner} won the Toss and choose to {challenge.tossWinnerSelection}</h5>
+              <h5 className='text-center'>Welcome to Second innings of the match Please select the Respective Batsman </h5>
               {
                 secondInnings == challenge.teamA ?
                   <TeamA setBowler={setBowler} setStrikerBatsman={setStrikerBatsman} setNonStrikerBatsman={setNonStrikerBatsman} bowler={bowler} nonStrickerBatsman={nonstrikerbatsman} strikerbatsman={strikerbatsman} teamAPlayers={teamAPlayersData} teamBPlayers={teamBPlayersData} currentOverRuns={currentOverRuns} />
@@ -655,57 +782,138 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
               <h5>Select run on {(balls - (Math.floor(balls / 6) * 6)) + 1} ball  of {Math.floor(balls / 6) + 1} Over</h5>
               {
                 wicketTaken ?
-                  <div className='my-3'>
-                    <h3>Select Next Batsman</h3>
-                    <select className="form-select form-select-sm " aria-label="Default select example" name='teamA_selection' onChange={(e) => {
-                      setStrikerBatsman(e.target.value); setWicketTaken(false);
-                    }}>
-                      <option value="" disabled selected>Select a Batsman</option>
-                      {
-                        secondInnings == challenge.teamA ?
-                          teamAPlayersData.filter(player => player.playersOutBy === "" && player.playerName !== strikerbatsman && player.playerName !== nonstrikerbatsman).map((element, index) => (
-                            <option value={element.value} key={index}>{element.value}</option>
-                          ))
-                          :
-                          teamBPlayersData.filter(player => player.playersOutBy === "" && player.playerName !== strikerbatsman && player.playerName !== nonstrikerbatsman).map((element, index) => (
-                            <option value={element.value} key={index}>{element.value}</option>
-                          ))
-                      }
-                    </select>
+                  <div className={`overlay ${wicketTaken ? '' : 'hidden'}`}>
+                    <div class="card" style={{ width: "18rem", height: "15.65rem" }}>
+                      <div class="card-body d-flex " style={{ flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                        <center><img src={"https://github.com/mdo.png"} alt="Team" width="50" height="50" style={{ boxShadow: "0px 0px 4px 2px grey" }} className="rounded-circle mx-2" /></center>
+                        <h4 class="card-title text-center my-2">{nextBatsman? nextBatsman.playerName:"No batsman Selected"}</h4>
+                        <div className='d-flex my-3'>
+                          <div className="dropdown">
+                            <button
+                              className="btn btn-dark btn-sm dropdown-toggle"
+                              type="button"
+                              id="dropdownMenuButton"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                            >
+                              Choose Other
+                            </button>
+                            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              {
+                                secondInnings === challenge.teamA ?
+                                  teamAPlayersData.filter(player => player.playersOutBy === "" && player.playerName !== strikerbatsman && player.playerName !== nonstrikerbatsman)
+                                    .map((element, index) => (
+                                      <li key={index} onClick={() => { setStrikerBatsman(element.playerName); setWicketTaken(false) }}>
+                                        <div className="dropdown-item d-flex align-items-center py-2 px-3 my-0 friendListItem hover-effect">
+                                          <img
+                                            src={"https://github.com/mdo.png"}
+                                            className="rounded-circle me-3"
+                                            alt={"..."}
+                                            style={{ width: "35px", height: "35px", objectFit: "cover" }}
+                                          />
+                                          <h6 className="mb-0" style={{ fontWeight: "600", color: "#050505" }}>
+                                            {element.playerName}
+                                          </h6>
+                                        </div>
+                                      </li>
+                                    ))
+                                  :
+                                  teamBPlayersData
+                                    .filter(player => player.playersOutBy === "" && player.playerName !== strikerbatsman && player.playerName !== nonstrikerbatsman)
+                                    .map((element, index) => (
+                                      <li key={index} onClick={() => { setStrikerBatsman(element.playerName); setWicketTaken(false) }}>
+                                        <div className="dropdown-item d-flex align-items-center py-2 px-3 my-0 friendListItem hover-effect">
+                                          <img
+                                            src={"https://github.com/mdo.png"}
+                                            className="rounded-circle me-3"
+                                            alt={"..."}
+                                            style={{ width: "35px", height: "35px", objectFit: "cover" }}
+                                          />
+                                          <h6 className="mb-0" style={{ fontWeight: "600", color: "#050505" }}>
+                                            {element.playerName}
+                                          </h6>
+                                        </div>
+                                      </li>
+                                    ))
+                              }
+                            </ul>
+                          </div>
+                          <div>
+                            <button className='btn btn-dark btn-sm mx-2' onClick={() => { setWicketTaken(false); setStrikerBatsman(nextBatsman.playerName) }}>Continue</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div> : ""
               }
               {
                 overCompleted ?
-                  <div>
-                    <h3>Select Next Bowler</h3>
-                    <select className="form-select form-select-sm " aria-label="Default select example" name='teamA_selection' onChange={(e) => {
-                      setBowler(e.target.value);
-                      setOverCompleted(false)
-                    }}>
-                      <option value="" disabled selected>Select a Bowler</option>
-                      {
-                        secondInnings == challenge.teamA ?
-                          teamBPlayersData.filter(player => player.playerName !== bowler).map((element, index) => (
-                            <option value={element.playerName} key={index}>{element.playerName}</option>
-                          )) :
-                          challenge.teamAPlayers.filter(player => player.playerName !== bowler).map((element, index) => (
-                            <option value={element.playerName} key={index}>{element.playerName}</option>
-                          ))
-                      }
-                    </select>
-                  </div> :
-                  <>
-                    <div>
-                      <button className='btn btn-sm btn-primary' onClick={() => handleBallInput(0)}>0 Run</button>
-                      <button className='btn btn-sm btn-primary' onClick={() => handleBallInput(1)}>1 Run</button>
-                      <button className='btn btn-sm btn-primary' onClick={() => handleBallInput(2)}>2 Runs</button>
-                      <button className='btn btn-sm btn-primary' onClick={() => handleBallInput(3)}>3 Runs</button>
-                      <button className='btn btn-sm btn-primary' onClick={() => handleBallInput(4)}>4 Runs</button>
-                      <button className='btn btn-sm btn-primary' onClick={() => handleBallInput(6)}>6 Runs</button>
-                      <button className='btn btn-sm btn-primary' onClick={() => handleWideOrNoBall(1)}>Wide Ball (1 Run)</button>
-                      <button className='btn btn-sm btn-primary' onClick={() => handleWideOrNoBall(1)}>No Ball (1 Run)</button>
-                      <button className='btn btn-sm btn-primary' onClick={handleWicket}>Wicket</button>
+                <div className={`overlay ${overCompleted ? '' : 'hidden'}`}>
+                    <div class="card" style={{ width: "18rem", height: "15.65rem" }}>
+                      <div class="card-body d-flex " style={{ flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                        <center><img src={"https://github.com/mdo.png"} alt="Team" width="50" height="50" style={{ boxShadow: "0px 0px 4px 2px grey" }} className="rounded-circle mx-2" /></center>
+                        <h4 class="card-title text-center my-2">{nextBowler?nextBowler.playerName:"No Bowler Selected"}</h4>
+                        <div className='d-flex my-3'>
+                          <div className="dropdown">
+                            <button
+                              className="btn btn-dark btn-sm dropdown-toggle"
+                              type="button"
+                              id="dropdownMenuButton"
+                              data-bs-toggle="dropdown"
+                              aria-expanded="false"
+                            >
+                              Choose Other
+                            </button>
+                            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              {
+                                secondInnings === challenge.teamA ?
+                                  teamBPlayersData.filter(player => player.playerName !== bowler)
+                                    .map((element, index) => (
+                                      <li key={index} onClick={() => { setBowler(element.playerName); setOverCompleted(false) }}>
+                                        <div className="dropdown-item d-flex align-items-center py-2 px-3 my-0 friendListItem hover-effect">
+                                          <img
+                                            src={"https://github.com/mdo.png"}
+                                            className="rounded-circle me-3"
+                                            alt={"..."}
+                                            style={{ width: "35px", height: "35px", objectFit: "cover" }}
+                                          />
+                                          <h6 className="mb-0" style={{ fontWeight: "600", color: "#050505" }}>
+                                            {element.playerName}
+                                          </h6>
+                                        </div>
+                                      </li>
+                                    ))
+                                  :
+                                  teamAPlayersData
+                                    .filter(player => player.playerName != bowler)
+                                    .map((element, index) => (
+                                      <li key={index} onClick={() => { setBowler(element.playerName); setOverCompleted(false) }}>
+                                        <div className="dropdown-item d-flex align-items-center py-2 px-3 my-0 friendListItem hover-effect">
+                                          <img
+                                            src={"https://github.com/mdo.png"}
+                                            className="rounded-circle me-3"
+                                            alt={"..."}
+                                            style={{ width: "35px", height: "35px", objectFit: "cover" }}
+                                          />
+                                          <h6 className="mb-0" style={{ fontWeight: "600", color: "#050505" }}>
+                                            {element.playerName}
+                                          </h6>
+                                        </div>
+                                      </li>
+                                    ))
+                              }
+                            </ul>
+                          </div>
+                          <div>
+                            <button className='btn btn-dark btn-sm mx-2' onClick={() => { setOverCompleted(false); setBowler(nextBowler.playerName) }}>Continue</button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
+                  </div>
+                   :
+                  <>
+                    <HandleBall handleBallInput={handleBallInput} handleWicket={handleWicket} handleWideOrNoBall={handleWideOrNoBall} />
                   </>
               }
 

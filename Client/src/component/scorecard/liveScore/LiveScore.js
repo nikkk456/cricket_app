@@ -3,6 +3,7 @@ import { SocketContext } from '../../../context/SocketContext';
 import LiveOverview from './LiveOverview';
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import CurrentOver from '../update_score/CurrentOver';
+import LiveCommentary from './LiveCommentary';
 
 
 function LiveScore() {
@@ -101,9 +102,9 @@ function LiveScore() {
                             <li className="nav-item mx-2">
                                 <Link className={location.pathname.includes('/liveoverview') ? "nav-link active" : 'nav-link'} to="liveoverview">Overview</Link>
                             </li>
-                            {/* <li className="nav-item mx-2">
-                                <Link className={location.pathname.includes('/score_card') ? "nav-link active" : 'nav-link'} to="score_card">Score-Card</Link>
-                            </li> */}
+                            <li className="nav-item mx-2">
+                                <Link className={location.pathname.includes('/commentary') ? "nav-link active" : 'nav-link'} to="commentary">Commentary</Link>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -136,7 +137,7 @@ function LiveScore() {
 
             <Routes>
                 <Route path='liveoverview' element={<LiveOverview teamAPlayersData={data.teamAPlayersData} teamBPlayersData={data.teamBPlayersData} challenge={data.challenge} />} />
-                {/* <Route path='score_card/*' element={<Score_Card />} /> */}
+                <Route path='commentary' element={<LiveCommentary currentOverRun={data.currentOverRuns}/>}/>
             </Routes>
         </div>
     );

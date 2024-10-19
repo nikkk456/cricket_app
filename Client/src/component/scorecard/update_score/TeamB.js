@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { ScoreCardContext } from '../../../context/ScoreCardContext';
 import CurrentOver from './CurrentOver';
 
@@ -57,6 +57,15 @@ const TeamB = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
             }, 2000); 
         }
     }
+
+    const containerRef = useRef(null);
+
+    useEffect(() => {
+        // Auto-scroll to the right whenever currentOverRuns changes (new ball added)
+        if (containerRef.current) {
+            containerRef.current.scrollLeft = containerRef.current.scrollWidth;
+        }
+    }, [currentOverRuns]);
 
     useEffect(() => {
         if (strikerbatsman && teamBPlayers.length > 0) {  // Ensure these values are set
@@ -167,7 +176,7 @@ const TeamB = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
                                 </div>
                                 <div className=' d-flex my-3 flex-column'>
                                     <p><strong>This Over</strong></p>
-                                    <div className='d-flex no-scrollbar overflow-auto' style={{ maxHeight: '100px', width: '100%', overflow: 'auto' }}>
+                                    <div className='d-flex no-scrollbar' style={{overflowX: 'auto' }} ref={containerRef}>
                                         {
                                             currentOverRuns.map((ball, index) => (
                                                 <CurrentOver ball={ball} key={index}/>

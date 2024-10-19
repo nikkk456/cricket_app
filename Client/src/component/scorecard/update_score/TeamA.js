@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { ScoreCardContext } from '../../../context/ScoreCardContext';
 import CurrentOver from './CurrentOver';
 
@@ -48,6 +48,7 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
     const [showBowler, setShowBowler] = useState(false);
     const [showStrickerBatsman, setShowStrickerBatsman] = useState(false);
     const [showNonStrickerBatsman, setShowNonStrickerBatsman] = useState(false);
+    const containerRef = useRef(null);
 
     useEffect(() => {
         if (strikerbatsman && teamAPlayers.length > 0) {  // Ensure these values are set
@@ -74,8 +75,15 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
             setShowBowler(true);
         }
     }, [bowler, teamBPlayers])
-    console.log("This is teamAplayers", teamAPlayers);
-    console.log("this is teamBplayers", teamBPlayers);
+
+    
+
+    useEffect(() => {
+        // Auto-scroll to the right whenever currentOverRuns changes (new ball added)
+        if (containerRef.current) {
+            containerRef.current.scrollLeft = containerRef.current.scrollWidth;
+        }
+    }, [currentOverRuns]);
 
     return (
         <div className='container'>
@@ -352,7 +360,7 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
 
                                 <div className=' d-flex my-3 flex-column'>
                                     <p><strong>This Over</strong></p>
-                                    <div className='d-flex'>
+                                    <div className='d-flex no-scrollbar' style={{overflowX:"auto"}}  ref={containerRef}>
                                         {
                                             currentOverRuns.map((ball, index) => (
                                                 <CurrentOver ball={ball} key={index} />

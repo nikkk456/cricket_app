@@ -334,7 +334,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
     // axios.post('/api/update-score', { runs: newRuns, balls: newBalls, striker: newStriker, nonStriker: newNonStriker, bowler })
     //   .then(response => setMatchData(response.data));
   };
-  console.log("This is Total Run " + totalRun + " This is total Wicket  " + wickets + " this is stricker and non striker", strikerbatsman, nonstrikerbatsman + "The Match Winner is ", matchWinner);
+  // console.log("This is Total Run " + totalRun + " This is total Wicket  " + wickets + " this is stricker and non striker", strikerbatsman, nonstrikerbatsman + "The Match Winner is ", matchWinner);
   const handleWicket = () => {
     let newWickets = wickets + 1;
     let currentBall = currentOverBalls + 1;
@@ -512,7 +512,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
   };
   const handleWideOrNoBall = (run) => {
     setTotalRun(totalRun + run);
-    setCurrentOverRuns((prevOverRuns) => [...prevOverRuns, "wide"]);
+    setCurrentOverRuns((prevOverRuns) => [...prevOverRuns, `${run}wide`]);
     if (innings == 1 && firstInnings == challenge.teamA) {
       setTeamAScore(teamAScore + run);
       setTeamBPlayersData(prevTeamBPlayers => {
@@ -572,7 +572,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
   const handleNoBall = (run) => {
     const newRuns = totalRun + run;
     setTotalRun(totalRun + run);
-    setCurrentOverRuns((prevOverRuns) => [...prevOverRuns, "noball"]);
+    setCurrentOverRuns((prevOverRuns) => [...prevOverRuns, `${run}noball`]);
     if (innings == 1 && firstInnings == challenge.teamA) {
       setTeamAScore(teamAScore + run);
       setTeamAPlayersData(prevTeamAPlayers => {

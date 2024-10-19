@@ -1,7 +1,6 @@
 const socketIo = require('socket.io');
 
 function initializeSocket(server) {
-    let liveScore = { runs: 0, wickets: 0, overs: 0 };
     // Create a new Socket.IO instance with CORS settings
     const io = socketIo(server, {
         cors: {
@@ -14,14 +13,15 @@ function initializeSocket(server) {
     io.on('connection', (socket) => {
         console.log('A user connected');
 
-        socket.emit('scoreUpdate', liveScore);
-
         // Listen for score updates from the admin/scorer
         socket.on('updateScore', (newScore) => {
             liveScore = newScore;
             // Emit the new score to all connected clients
             io.emit('scoreUpdate', liveScore);
         });
+        socket.on('overcompleted', (data)=>{
+            io.emit('showOverCompleteAnimation', data);
+        })
 
         // Example of global event listener
         socket.on('disconnect', () => {

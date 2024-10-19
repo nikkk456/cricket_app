@@ -3,7 +3,8 @@ const handleCreateTeam = (io)=>{
     io.on('connection', (socket) => {
         console.log('A user connected for friend requests');
     socket.on('createRoom', (data, callback) => {
-        const roomId = `room_${Date.now()}`; // Generate a unique room ID
+        console.log("this is data ---------------->", data);
+        const roomId = data.teamName; // Generate a unique room ID
         socket.join(roomId);
         
         // Notify the client with the room ID

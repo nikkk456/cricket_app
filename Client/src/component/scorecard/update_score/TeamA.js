@@ -82,7 +82,7 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
             <div className='row'>
                 <div className='col-md-8 col-8 p-4'>
                     <div className='row'>
-                        <div className='d-flex align-items-center py-2 px-3 my-2 friendListItem rounded' style={{ background: "black", color: "white" }}>
+                        <div className='d-flex align-items-center py-2 px-3 my-2 friendListItem rounded' style={{ background: "black", color: "white", borderRadius:'10px' }}>
                             <div className='flex-grow-1'>
                                 <h6 className='m-0'>{challenge.teamA}</h6>
                             </div>
@@ -99,7 +99,7 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
                                 <div className='mx-1'>
                                     <small>6</small>
                                 </div>
-                                <div className='mx-1'>
+                                <div className='mx-4'>
                                     <small>SR</small>
                                 </div>
                                 <div className=''>
@@ -150,7 +150,7 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
                                     </div>
 
                                     <div className='mx-2'>
-                                        <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { setShowStrickerBatsman(false) }} width="16" height="16" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
+                                        <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { setShowStrickerBatsman(false);setStrikerBatsman() }} width="16" height="16" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
                                             <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
                                         </svg>
                                     </div>
@@ -230,7 +230,7 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
                                         </div>
 
                                         <div className='mx-2'>
-                                            <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { setShowNonStrickerBatsman(false) }} width="16" height="16" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
+                                            <svg xmlns="http://www.w3.org/2000/svg" onClick={() => { setShowNonStrickerBatsman(false);setNonStrikerBatsman() }} width="16" height="16" fill="currentColor" className="bi bi-x-lg" viewBox="0 0 16 16">
                                                 <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
                                             </svg>
                                         </div>
@@ -251,7 +251,7 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
                                         Non Stricker Batsman
                                     </button>
                                     <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        {challenge.teamAPlayers.map((element, index) => (
+                                        {challenge.teamAPlayers.filter(player=> player.value != strikerbatsman ).map((element, index) => (
                                             <li key={index} onClick={() => { setNonStrikerBatsman(element.value) }}>
                                                 <div className="dropdown-item d-flex align-items-center py-2 px-3 my-0 friendListItem hover-effect">
                                                     <img
@@ -273,7 +273,7 @@ const TeamA = ({ setBowler, setStrikerBatsman, setNonStrikerBatsman, bowler, str
                 </div>
                 <div className='col-md-4 col-4 p-4'>
                     <div className='row'>
-                        <div className='d-flex align-items-center py-2 px-3 my-2 friendListItem rounded' style={{ background: "black", color: "white" }}>
+                        <div className='d-flex align-items-center py-2 px-3 my-2 friendListItem rounded' style={{ background: "black", color: "white", borderRadius:'10px' }}>
                             <div className='flex-grow-1'>
                                 <h6 className='m-0'>{challenge.teamB}</h6>
                             </div>

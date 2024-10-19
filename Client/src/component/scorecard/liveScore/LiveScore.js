@@ -8,6 +8,7 @@ import CurrentOver from '../update_score/CurrentOver';
 function LiveScore() {
     const location = useLocation();
     const socket = useContext(SocketContext);
+    const [overCompleted, setOverCompleted] = useState();
 
     const [data, setData] = useState({
         teamARun: 0,
@@ -27,17 +28,19 @@ function LiveScore() {
             console.log("Socket is not initialised yet in scoreUpdate Page");
         } else {
             socket.on('scoreUpdate', (data) => {
+                setOverCompleted(false);
                 setData(data);
             });
+            socket.on('showOverCompleteAnimation', (data) => {
+                setOverCompleted(data);
+            })
         }
     }, [socket]);
 
+    const onClose = () => {
+        setOverCompleted(false);
+    }
 
-    // useEffect(() => {
-
-
-    //     return () => socket.off('scoreUpdate');
-    // }, []);
 
     return (
         <div className='container'>
@@ -80,16 +83,16 @@ function LiveScore() {
                 <center><small>Group Stage Match</small></center>
             </div>
             <center>
-            <div className=' d-flex my-3 flex-column'>
-                <p><strong>This Over</strong></p>
-                <div className='d-flex justify-content-center'>
-                    {
-                        data.currentOverRuns.map((ball, index) => (
-                            <CurrentOver ball={ball} key={index} />
-                        ))
-                    }
+                <div className=' d-flex my-3 flex-column'>
+                    <p><strong>This Over</strong></p>
+                    <div className='d-flex justify-content-center'>
+                        {
+                            data.currentOverRuns.map((ball, index) => (
+                                <CurrentOver ball={ball} key={index} />
+                            ))
+                        }
+                    </div>
                 </div>
-            </div>
             </center>
             <div className='row'>
                 <div className='row justify-content-center my-3'>
@@ -105,7 +108,22 @@ function LiveScore() {
                     </div>
                 </div>
             </div>
-
+            {
+                overCompleted && (
+                    <div className="overlay">
+                        <div className="animation-container">
+                            <dotlottie-player
+                                src="https://lottie.host/ddf6eab6-2458-448f-bf8d-60cf395f331b/egaxVjBVrg.json"
+                                background="transparent"
+                                speed="1"
+                                style={{ width: '600px', height: '600px' }}
+                                loop={true}
+                                autoplay
+                            ></dotlottie-player>
+                        </div>
+                    </div>
+                )
+            }
 
 
 

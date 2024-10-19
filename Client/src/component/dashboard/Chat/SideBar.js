@@ -73,15 +73,16 @@ const SideBar = ({ setSelectedFriend, setMessages }) => {
             name: teamName,
             members: selectedFriends
         };
-       // Send request to create a room and invite friends
-    //    socket.emit('createRoom', {
-    //         teamName: newTeam.name,
-    //         selectedFriends: newTeam.members
-    //     }, (roomId) => {
-    //         console.log('Room created with ID:', roomId);
+        console.log("New Team",newTeam);
+    //    Send request to create a room and invite friends
+       socket.emit('createRoom', {
+            teamName: newTeam.name,
+            selectedFriends: newTeam.members
+        }, (roomId) => {
+            console.log('Room created with ID:', roomId);
 
-    //         // Optionally, you can navigate to the room chat or update the UI
-    //     });
+            // Optionally, you can navigate to the room chat or update the UI
+        });
         // Add your API call here to save the new team.
         setIsCreatingTeam(false);
         setTeamName('');

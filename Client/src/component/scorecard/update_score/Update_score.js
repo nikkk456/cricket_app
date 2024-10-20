@@ -58,7 +58,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
   }, [])
 
 
-
+  // To send the data to the Live page 
   useEffect(() => {
     let Data = {
       teamARun: teamAScore,
@@ -75,6 +75,12 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
     }
     socket.emit('updateScore', Data);
   }, [balls, totalRun])
+
+  // To send the live page that over is completed and Next over will be start
+  useEffect(() => {
+    const isoverCompleted = true;
+    socket.emit('overcompleted', isoverCompleted);
+  }, [overCompleted])
 
   // To set the next Batsman
   useEffect(() => {
@@ -328,7 +334,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
     // axios.post('/api/update-score', { runs: newRuns, balls: newBalls, striker: newStriker, nonStriker: newNonStriker, bowler })
     //   .then(response => setMatchData(response.data));
   };
-  console.log("This is Total Run " + totalRun + " This is total Wicket  " + wickets + " this is stricker and non striker", strikerbatsman, nonstrikerbatsman + "The Match Winner is ", matchWinner);
+  // console.log("This is Total Run " + totalRun + " This is total Wicket  " + wickets + " this is stricker and non striker", strikerbatsman, nonstrikerbatsman + "The Match Winner is ", matchWinner);
   const handleWicket = () => {
     let newWickets = wickets + 1;
     let currentBall = currentOverBalls + 1;
@@ -506,7 +512,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
   };
   const handleWideOrNoBall = (run) => {
     setTotalRun(totalRun + run);
-    setCurrentOverRuns((prevOverRuns) => [...prevOverRuns, "wide"]);
+    setCurrentOverRuns((prevOverRuns) => [...prevOverRuns, `${run}wide`]);
     if (innings == 1 && firstInnings == challenge.teamA) {
       setTeamAScore(teamAScore + run);
       setTeamBPlayersData(prevTeamBPlayers => {
@@ -562,11 +568,139 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
         });
       });
     }
-
-
-    // axios.post('/api/update-score', { runs: runs + run, balls, bowler })
-    //   .then(response => setMatchData(response.data));
   };
+  const handleNoBall = (run) => {
+    const newRuns = totalRun + run;
+    setTotalRun(totalRun + run);
+    setCurrentOverRuns((prevOverRuns) => [...prevOverRuns, `${run}noball`]);
+    if (innings == 1 && firstInnings == challenge.teamA) {
+      setTeamAScore(teamAScore + run);
+      setTeamAPlayersData(prevTeamAPlayers => {
+        return prevTeamAPlayers.map(player => {
+          if (player.playerName === strikerbatsman) {
+            // Return a new player object with updated score
+            return {
+              ...player,
+              playersScore: player.playersScore + run,
+              playersSix: run === 6 ? player.playersSix + 1 : player.playersSix,
+              playersFours: run === 4 ? player.playersFours + 1 : player.playersFours,
+            };
+          }
+          return player;
+        });
+      });
+      setTeamBPlayersData(prevTeamBPlayers => {
+        return prevTeamBPlayers.map(player => {
+          if (player.playerName === bowler) {
+            return {
+              ...player,
+              playersRunConceeded: player.playersRunConceeded + run,
+            };
+          }
+          return player;
+        });
+      });
+      checkOddRuns(run);
+    }
+    else if (innings == 1 && firstInnings == challenge.teamB) {
+      setTeamBScore(teamBScore + run);
+      setTeamBPlayersData(prevTeamBPlayers => {
+        return prevTeamBPlayers.map(player => {
+          if (player.playerName === strikerbatsman) {
+            // Return a new player object with updated score
+            return {
+              ...player,
+              playersScore: player.playersScore + run,
+              playersSix: run === 6 ? player.playersSix + 1 : player.playersSix,
+              playersFours: run === 4 ? player.playersFours + 1 : player.playersFours,
+            };
+          }
+          return player;
+        });
+      });
+      setTeamAPlayersData(prevTeamAPlayers => {
+        return prevTeamAPlayers.map(player => {
+          if (player.playerName === bowler) {
+            return {
+              ...player,
+              playersRunConceeded: player.playersRunConceeded + run,
+            };
+          }
+          return player;
+        });
+      });
+      checkOddRuns(run);
+    }
+    else if (innings == 2 && secondInnings == challenge.teamB) {
+      setTeamBScore(teamBScore + run);
+      setTeamBPlayersData(prevTeamBPlayers => {
+        return prevTeamBPlayers.map(player => {
+          if (player.playerName === strikerbatsman) {
+            // Return a new player object with updated score
+            return {
+              ...player,
+              playersScore: player.playersScore + run,
+              playersSix: run === 6 ? player.playersSix + 1 : player.playersSix,
+              playersFours: run === 4 ? player.playersFours + 1 : player.playersFours,
+            };
+          }
+          return player;
+        });
+      });
+      setTeamAPlayersData(prevTeamAPlayers => {
+        return prevTeamAPlayers.map(player => {
+          if (player.playerName === bowler) {
+            return {
+              ...player,
+              playersRunConceeded: player.playersRunConceeded + run,
+            };
+          }
+          return player;
+        });
+      });
+      checkOddRuns(run);
+      if (newRuns > teamAScore) {
+        setWinningWickets(challenge.teamBPlayers.length - teamBWickets - 1);
+        setMatchWinner(challenge.teamB);
+        setInnings(0);
+      }
+    }
+    else {
+      setTeamAScore(teamAScore + run);
+      setTeamAPlayersData(prevTeamAPlayers => {
+        return prevTeamAPlayers.map(player => {
+          if (player.playerName === strikerbatsman) {
+            // Return a new player object with updated score
+            return {
+              ...player,
+              playersScore: player.playersScore + run,
+              playersSix: run === 6 ? player.playersSix + 1 : player.playersSix,
+              playersFours: run === 4 ? player.playersFours + 1 : player.playersFours,
+            };
+          }
+          return player;
+        });
+      });
+      setTeamBPlayersData(prevTeamBPlayers => {
+        return prevTeamBPlayers.map(player => {
+          if (player.playerName === bowler) {
+            return {
+              ...player,
+              playersRunConceeded: player.playersRunConceeded + run,
+            };
+          }
+          return player;
+        });
+      });
+      checkOddRuns(run);
+      if (newRuns > teamBScore) {
+        setWinningWickets(challenge.teamAPlayers.length - teamAWickets - 1);
+        console.log("This is winning wickets of teamA", winningwickets);
+        setMatchWinner(challenge.teamA);
+        setInnings(0);
+      }
+    }
+  }
   const oversPlayed = Math.floor(balls / 6);
 
 
@@ -588,7 +722,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
   }, [wickets, balls])
 
   //To set Everything zero
-  useEffect(()=>{
+  useEffect(() => {
     setNextBatsman();
     setNextBowler();
     setWicketTaken(false);
@@ -627,8 +761,9 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
                   <div className={`overlay ${wicketTaken ? '' : 'hidden'}`}>
                     <div class="card" style={{ width: "18rem", height: "15.65rem" }}>
                       <div class="card-body d-flex " style={{ flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                        <h4 className="card-title text-center" style={{marginBottom:"1.5rem"}}>Select Next Batsman</h4>
                         <center><img src={"https://github.com/mdo.png"} alt="Team" width="50" height="50" style={{ boxShadow: "0px 0px 4px 2px grey" }} className="rounded-circle mx-2" /></center>
-                        <h4 class="card-title text-center my-2">{nextBatsman? nextBatsman.playerName:"No batsman Selected"}</h4>
+                        <h4 class="card-title text-center my-2">{nextBatsman ? nextBatsman.playerName : "No batsman Selected"}</h4>
                         <div className='d-flex my-3'>
                           <div className="dropdown">
                             <button
@@ -693,8 +828,9 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
                   <div className={`overlay ${overCompleted ? '' : 'hidden'}`}>
                     <div class="card" style={{ width: "18rem", height: "15.65rem" }}>
                       <div class="card-body d-flex " style={{ flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                        <h4 className="card-title text-center"  style={{marginBottom:"1.5rem"}}>Select Next Bowler</h4>
                         <center><img src={"https://github.com/mdo.png"} alt="Team" width="50" height="50" style={{ boxShadow: "0px 0px 4px 2px grey" }} className="rounded-circle mx-2" /></center>
-                        <h4 class="card-title text-center my-2">{nextBowler? nextBowler.playerName:"No Bowler Selected"}</h4>
+                        <h4 class="card-title text-center my-2">{nextBowler ? nextBowler.playerName : "No Bowler Selected"}</h4>
                         <div className='d-flex my-3'>
                           <div className="dropdown">
                             <button
@@ -755,7 +891,11 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
                   </div>
                   :
                   <>
-                    <HandleBall handleBallInput={handleBallInput} handleWicket={handleWicket} handleWideOrNoBall={handleWideOrNoBall} />
+                    {
+                      bowler && nonstrikerbatsman && strikerbatsman ? <>
+                        <HandleBall handleBallInput={handleBallInput} handleWicket={handleWicket} handleWideOrNoBall={handleWideOrNoBall} handleNoBall={handleNoBall} />
+                      </> : ""
+                    }
                   </>
               }
 
@@ -785,8 +925,9 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
                   <div className={`overlay ${wicketTaken ? '' : 'hidden'}`}>
                     <div class="card" style={{ width: "18rem", height: "15.65rem" }}>
                       <div class="card-body d-flex " style={{ flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                        <h4 className="card-title text-center" style={{marginBottom:"1.5rem"}}>Select Next Batsman</h4>
                         <center><img src={"https://github.com/mdo.png"} alt="Team" width="50" height="50" style={{ boxShadow: "0px 0px 4px 2px grey" }} className="rounded-circle mx-2" /></center>
-                        <h4 class="card-title text-center my-2">{nextBatsman? nextBatsman.playerName:"No batsman Selected"}</h4>
+                        <h4 class="card-title text-center my-2">{nextBatsman ? nextBatsman.playerName : "No batsman Selected"}</h4>
                         <div className='d-flex my-3'>
                           <div className="dropdown">
                             <button
@@ -848,11 +989,12 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
               }
               {
                 overCompleted ?
-                <div className={`overlay ${overCompleted ? '' : 'hidden'}`}>
+                  <div className={`overlay ${overCompleted ? '' : 'hidden'}`}>
                     <div class="card" style={{ width: "18rem", height: "15.65rem" }}>
                       <div class="card-body d-flex " style={{ flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                      <h4 className="card-title text-center" style={{marginBottom:"1.5rem"}}>Select Next Bowler</h4>
                         <center><img src={"https://github.com/mdo.png"} alt="Team" width="50" height="50" style={{ boxShadow: "0px 0px 4px 2px grey" }} className="rounded-circle mx-2" /></center>
-                        <h4 class="card-title text-center my-2">{nextBowler?nextBowler.playerName:"No Bowler Selected"}</h4>
+                        <h4 class="card-title text-center my-2">{nextBowler ? nextBowler.playerName : "No Bowler Selected"}</h4>
                         <div className='d-flex my-3'>
                           <div className="dropdown">
                             <button
@@ -911,9 +1053,13 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
                       </div>
                     </div>
                   </div>
-                   :
+                  :
                   <>
-                    <HandleBall handleBallInput={handleBallInput} handleWicket={handleWicket} handleWideOrNoBall={handleWideOrNoBall} />
+                    {
+                      bowler && nonstrikerbatsman && strikerbatsman ? <>
+                        <HandleBall handleBallInput={handleBallInput} handleWicket={handleWicket} handleWideOrNoBall={handleWideOrNoBall} handleNoBall={handleNoBall} />
+                      </> : ""
+                    }
                   </>
               }
 

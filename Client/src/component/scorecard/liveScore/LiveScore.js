@@ -3,11 +3,13 @@ import { SocketContext } from '../../../context/SocketContext';
 import LiveOverview from './LiveOverview';
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import CurrentOver from '../update_score/CurrentOver';
+import LiveCommentary from './LiveCommentary';
 
 
 function LiveScore() {
     const location = useLocation();
     const socket = useContext(SocketContext);
+    const [overCompleted, setOverCompleted] = useState();
 
     const [data, setData] = useState({
         teamARun: 0,
@@ -27,17 +29,19 @@ function LiveScore() {
             console.log("Socket is not initialised yet in scoreUpdate Page");
         } else {
             socket.on('scoreUpdate', (data) => {
+                setOverCompleted(false);
                 setData(data);
             });
+            socket.on('showOverCompleteAnimation', (data) => {
+                setOverCompleted(data);
+            })
         }
     }, [socket]);
 
+    const onClose = () => {
+        setOverCompleted(false);
+    }
 
-    // useEffect(() => {
-
-
-    //     return () => socket.off('scoreUpdate');
-    // }, []);
 
     return (
         <div className='container'>
@@ -80,16 +84,16 @@ function LiveScore() {
                 <center><small>Group Stage Match</small></center>
             </div>
             <center>
-            <div className=' d-flex my-3 flex-column'>
-                <p><strong>This Over</strong></p>
-                <div className='d-flex justify-content-center'>
-                    {
-                        data.currentOverRuns.map((ball, index) => (
-                            <CurrentOver ball={ball} key={index} />
-                        ))
-                    }
+                <div className=' d-flex my-3 flex-column'>
+                    <p><strong>This Over</strong></p>
+                    <div className='d-flex justify-content-center'>
+                        {
+                            data.currentOverRuns.map((ball, index) => (
+                                <CurrentOver ball={ball} key={index} />
+                            ))
+                        }
+                    </div>
                 </div>
-            </div>
             </center>
             <div className='row'>
                 <div className='row justify-content-center my-3'>
@@ -98,14 +102,29 @@ function LiveScore() {
                             <li className="nav-item mx-2">
                                 <Link className={location.pathname.includes('/liveoverview') ? "nav-link active" : 'nav-link'} to="liveoverview">Overview</Link>
                             </li>
-                            {/* <li className="nav-item mx-2">
-                                <Link className={location.pathname.includes('/score_card') ? "nav-link active" : 'nav-link'} to="score_card">Score-Card</Link>
-                            </li> */}
+                            <li className="nav-item mx-2">
+                                <Link className={location.pathname.includes('/commentary') ? "nav-link active" : 'nav-link'} to="commentary">Commentary</Link>
+                            </li>
                         </ul>
                     </div>
                 </div>
             </div>
-
+            {
+                overCompleted && (
+                    <div className="overlay">
+                        <div className="animation-container">
+                            <dotlottie-player
+                                src="https://lottie.host/ddf6eab6-2458-448f-bf8d-60cf395f331b/egaxVjBVrg.json"
+                                background="transparent"
+                                speed="1"
+                                style={{ width: '600px', height: '600px' }}
+                                loop={true}
+                                autoplay
+                            ></dotlottie-player>
+                        </div>
+                    </div>
+                )
+            }
 
 
 
@@ -118,7 +137,7 @@ function LiveScore() {
 
             <Routes>
                 <Route path='liveoverview' element={<LiveOverview teamAPlayersData={data.teamAPlayersData} teamBPlayersData={data.teamBPlayersData} challenge={data.challenge} />} />
-                {/* <Route path='score_card/*' element={<Score_Card />} /> */}
+                <Route path='commentary' element={<LiveCommentary currentOverRun={data.currentOverRuns}/>}/>
             </Routes>
         </div>
     );

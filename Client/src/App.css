@@ -339,6 +339,21 @@ height: 100%;
   display: none; /* Hide the overlay when not visible */
 }
 
+.animation-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.current-over-item {
+  flex: 0 0 45px; /* Prevent shrinking and ensure consistent width */
+  height: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 5px;
+}
 
 /* For Mobile Screen */
 @media only screen and (max-width: 767px) {

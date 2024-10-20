@@ -26,6 +26,14 @@ function App() {
       socket.on('receiveNotification', (data) => {
         alert(data.message); // Handle notification (e.g., show in UI)
       });
+      socket.on('joinRoomRequest', (data) => {
+        console.log("Join room request received:", data);
+        const userConfirmed = window.confirm(`You have been invited to join the room "${data.teamName}". Do you want to join?`);
+        if (userConfirmed) {
+          // Emit joinRoom event to the server
+          socket.emit('joinRoom', { roomId: data.roomId });
+        }
+      });
     }
   }, [socket]);
   return (

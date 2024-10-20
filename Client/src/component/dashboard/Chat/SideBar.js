@@ -7,6 +7,7 @@ import Cookies from 'js-cookie';
 import { SocketContext } from '../../../context/SocketContext';
 
 const SideBar = ({ setSelectedFriend, setMessages }) => {
+    // const user_id = Cookies.get("user_id");
     const socket = useContext(SocketContext);
     const location = useLocation();
     const [searchTerm, setSearchTerm] = useState('');
@@ -71,17 +72,21 @@ const SideBar = ({ setSelectedFriend, setMessages }) => {
     const handleSubmitTeam = () => {
         const newTeam = {
             name: teamName,
-            members: selectedFriends
+            members: selectedFriends,
         };
+        console.log(newTeam);
        // Send request to create a room and invite friends
-    //    socket.emit('createRoom', {
-    //         teamName: newTeam.name,
-    //         selectedFriends: newTeam.members
-    //     }, (roomId) => {
-    //         console.log('Room created with ID:', roomId);
+       socket.emit('createRoom', {
+            teamName: newTeam.name,
+            selectedFriends: newTeam.members,
+            created_by:Cookies.get("user_id")
+        }, (roomId) => {
+            console.log('Room created with ID:', roomId);
+            // Optionally, you can navigate to the room chat or update the UI
+        });
+        
 
-    //         // Optionally, you can navigate to the room chat or update the UI
-    //     });
+
         // Add your API call here to save the new team.
         setIsCreatingTeam(false);
         setTeamName('');

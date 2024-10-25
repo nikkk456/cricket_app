@@ -3,14 +3,17 @@ import io from 'socket.io-client';
 
 export const SocketContext = createContext(null);
 
-
 export const SocketProvider = ({ children, userId }) => {
     const [isSocketReady, setIsSocketReady] = useState(false);
     const socket = useRef(null);
 
     useEffect(() => {
         console.log('Initializing socket...');
-        socket.current = io('http://localhost:8080'); // Replace with your server URL
+        
+        // Initialize socket and send userId on connection
+        socket.current = io('http://localhost:8080', {
+            query: { userId } // Send userId as part of the connection
+        });
 
         socket.current.on('connect', () => {
             console.log('Socket connected:', socket.current.id);
@@ -21,10 +24,16 @@ export const SocketProvider = ({ children, userId }) => {
             console.error('Socket connection error:', err);
         });
 
-        if (userId) {
-            console.log('Joining room with userId:', userId);
-            socket.current.emit('joinRoom', userId);
-        }
+        // Listen for any notifications or room join requests from the server
+        socket.current.on('receiveNotification', (data) => {
+            console.log('Notification received:', data);
+            // Handle the notification in your UI (e.g., show a toast or alert)
+        });
+
+        socket.current.on('joinRoomRequest', (data) => {
+            console.log('Join room request received:', data);
+            // Handle the join room request in your UI (e.g., show a prompt)
+        });
 
         return () => {
             if (socket.current) {
@@ -40,5 +49,4 @@ export const SocketProvider = ({ children, userId }) => {
             {children}
         </SocketContext.Provider>
     );
-
 };

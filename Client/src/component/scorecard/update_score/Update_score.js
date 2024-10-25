@@ -120,7 +120,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
     }
   }, [overCompleted])
 
-
+  // To change the strike of batsman 
   const checkOddRuns = (run) => {
     if (run % 2 !== 0) {
       // Change striker if odd runs
@@ -510,6 +510,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
     //     setNextBatsman('');
     //   });
   };
+  // ye sirf wide ke liye likha hau name change krenge baad me 
   const handleWideOrNoBall = (run) => {
     setTotalRun(totalRun + run);
     setCurrentOverRuns((prevOverRuns) => [...prevOverRuns, `${run}wide`]);
@@ -526,6 +527,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
           return player; // Always return player, even if it's not the bowler
         });
       });
+      checkOddRuns(run-1);
     } else if (innings == 1 && firstInnings == challenge.teamB) {
       setTeamBScore(teamBScore + run);
       setTeamAPlayersData(prevTeamAPlayers => {
@@ -539,6 +541,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
           return player; // Always return player, even if it's not the bowler
         });
       });
+      checkOddRuns(run-1);
     }
 
     if (innings == 2 && secondInnings == challenge.teamA) {
@@ -554,6 +557,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
           return player; // Always return player, even if it's not the bowler
         });
       });
+      checkOddRuns(run-1);
     } else if (innings == 2 && secondInnings == challenge.teamB) {
       setTeamBScore(teamBScore + run);
       setTeamAPlayersData(prevTeamAPlayers => {
@@ -567,8 +571,11 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
           return player; // Always return player, even if it's not the bowler
         });
       });
+      checkOddRuns(run-1);
     }
   };
+
+  //Function only for noball
   const handleNoBall = (run) => {
     const newRuns = totalRun + run;
     setTotalRun(totalRun + run);
@@ -581,9 +588,9 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
             // Return a new player object with updated score
             return {
               ...player,
-              playersScore: player.playersScore + run,
-              playersSix: run === 6 ? player.playersSix + 1 : player.playersSix,
-              playersFours: run === 4 ? player.playersFours + 1 : player.playersFours,
+              playersScore: player.playersScore + run -1, // because noball run is not counted as individual run
+              playersSix: run === 7 ? player.playersSix + 1 : player.playersSix,
+              playersFours: run === 5 ? player.playersFours + 1 : player.playersFours,
             };
           }
           return player;
@@ -600,7 +607,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
           return player;
         });
       });
-      checkOddRuns(run);
+      checkOddRuns(run-1);
     }
     else if (innings == 1 && firstInnings == challenge.teamB) {
       setTeamBScore(teamBScore + run);
@@ -610,9 +617,9 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
             // Return a new player object with updated score
             return {
               ...player,
-              playersScore: player.playersScore + run,
-              playersSix: run === 6 ? player.playersSix + 1 : player.playersSix,
-              playersFours: run === 4 ? player.playersFours + 1 : player.playersFours,
+              playersScore: player.playersScore + run-1,
+              playersSix: run === 7 ? player.playersSix + 1 : player.playersSix,
+              playersFours: run === 5 ? player.playersFours + 1 : player.playersFours,
             };
           }
           return player;
@@ -629,7 +636,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
           return player;
         });
       });
-      checkOddRuns(run);
+      checkOddRuns(run-1);
     }
     else if (innings == 2 && secondInnings == challenge.teamB) {
       setTeamBScore(teamBScore + run);
@@ -639,9 +646,9 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
             // Return a new player object with updated score
             return {
               ...player,
-              playersScore: player.playersScore + run,
-              playersSix: run === 6 ? player.playersSix + 1 : player.playersSix,
-              playersFours: run === 4 ? player.playersFours + 1 : player.playersFours,
+              playersScore: player.playersScore + run -1,
+              playersSix: run === 7 ? player.playersSix + 1 : player.playersSix,
+              playersFours: run === 5 ? player.playersFours + 1 : player.playersFours,
             };
           }
           return player;
@@ -658,7 +665,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
           return player;
         });
       });
-      checkOddRuns(run);
+      checkOddRuns(run-1);
       if (newRuns > teamAScore) {
         setWinningWickets(challenge.teamBPlayers.length - teamBWickets - 1);
         setMatchWinner(challenge.teamB);
@@ -673,9 +680,9 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
             // Return a new player object with updated score
             return {
               ...player,
-              playersScore: player.playersScore + run,
-              playersSix: run === 6 ? player.playersSix + 1 : player.playersSix,
-              playersFours: run === 4 ? player.playersFours + 1 : player.playersFours,
+              playersScore: player.playersScore + run -1 ,
+              playersSix: run === 7 ? player.playersSix + 1 : player.playersSix,
+              playersFours: run === 5 ? player.playersFours + 1 : player.playersFours,
             };
           }
           return player;
@@ -692,7 +699,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
           return player;
         });
       });
-      checkOddRuns(run);
+      checkOddRuns(run-1);
       if (newRuns > teamBScore) {
         setWinningWickets(challenge.teamAPlayers.length - teamAWickets - 1);
         console.log("This is winning wickets of teamA", winningwickets);

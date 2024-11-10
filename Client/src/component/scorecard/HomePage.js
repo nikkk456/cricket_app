@@ -3,8 +3,6 @@ import RecentMatch from './RecentMatch'
 import LeaderBoard from './LeaderBoard'
 import Select from 'react-select';
 import { Route, Routes, useNavigate } from 'react-router-dom'
-import ScoreUpdate from './ScoreUpdate';
-import LiveScore from './liveScore/LiveScore';
 import { ScoreCardContext } from '../../context/ScoreCardContext';
 
 const HomePage = () => {

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { SocketContext } from '../../../context/SocketContext';
 import LiveOverview from './LiveOverview';
-import { Link, Route, Routes, useLocation } from 'react-router-dom';
+import { Link, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import CurrentOver from '../update_score/CurrentOver';
 import LiveCommentary from './LiveCommentary';
 
@@ -10,6 +10,7 @@ function LiveScore() {
     const location = useLocation();
     const socket = useContext(SocketContext);
     const [overCompleted, setOverCompleted] = useState();
+    const {matchID} = useParams();
 
     const [data, setData] = useState({
         teamARun: 0,
@@ -28,7 +29,9 @@ function LiveScore() {
         if (!socket) {
             console.log("Socket is not initialised yet in scoreUpdate Page");
         } else {
+            socket.emit('joinMatch', matchID);
             socket.on('scoreUpdate', (data) => {
+                console.log("this is data Nikhil", data);
                 setOverCompleted(false);
                 setData(data);
             });
@@ -36,13 +39,11 @@ function LiveScore() {
                 setOverCompleted(data);
             })
         }
+        // return () => {
+        //     socket.off('scoreUpdate');
+        //     socket.off('showOverCompleteAnimation');
+        //   };
     }, [socket]);
-
-    const onClose = () => {
-        setOverCompleted(false);
-    }
-
-
     return (
         <div className='container'>
             <div className='row text-center'>

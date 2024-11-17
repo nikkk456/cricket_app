@@ -5,13 +5,14 @@ import Cookies from 'js-cookie';
 
 
 
-const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inputValue, onInputChange ,messages , onKeyDown}) => {
-  console.log(messages);
+const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat, onSendmsg, inputValue, onInputChange, messages, onKeyDown }) => {
+  // console.log(messages);
+  console.log("this is selectedFriend", selectedFriend);
   const user_id = Cookies.get('user_id');
   // console.log(selectedFriend.id);
   const chatContainerRef = useRef(null);
   const navigate = useNavigate();
-  const scrollUp = ()=>{
+  const scrollUp = () => {
     console.log("Scroll Up is called");
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -19,7 +20,7 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inpu
   }
   const handleKeyDown = (e) => {
     onKeyDown(e); // Call the existing onKeyDown function
-      scrollUp(); // Scroll up after handling the key down event
+    scrollUp(); // Scroll up after handling the key down event
   };
   useEffect(() => {
     //To get recent messages on screen and then scroll up for older chats
@@ -53,14 +54,20 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inpu
       <div className='row text-white chat-box-header'>
         {
           mobileChat &&
-            <div className='col-1 p-0' style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-chevron-left" viewBox="0 0 16 16" onClick={()=>{setSelectedFriend(null)}}>
-                <path fillRule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
-              </svg>
-            </div> 
+          <div className='col-1 p-0' style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-chevron-left" viewBox="0 0 16 16" onClick={() => { setSelectedFriend(null) }}>
+              <path fillRule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+            </svg>
+          </div>
         }
         <div className='col-md-4 col-4 rounded-circle chat-profile'>
-          <img src="https://github.com/mdo.png" className='rounded-circle me-2' alt='...' style={{ width: "100%" }} />
+          <img
+            src={selectedFriend.profilePicture ? selectedFriend.profilePicture : "https://github.com/mdo.png"}
+            className="rounded-circle me-2"
+            alt="Profile"
+            style={{ width: "100%", objectFit:"cover" }}
+          />
+
         </div>
         <div className='col-md-6 col-6' style={{ display: "flex", alignItems: "center", cursor: "pointer" }} onClick={() => { navigate('/playerprofile/1/about') }}>
           <h5>{name}</h5>
@@ -82,7 +89,7 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inpu
         </div>
       </div>
       {/* Chat BOX started Here  */}
-      <div className='row' style={{height:"80vh"}}>
+      <div className='row' style={{ height: "80vh" }}>
         <div className="chat-box no-scrollbar chat-box-background" ref={chatContainerRef}>
           {messages.length != 0 ? messages.map((msg, index) => (
             <div key={index} className={`message ${msg.sender != user_id ? 'left' : 'right'}`}>
@@ -107,9 +114,9 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inpu
                 </>
               }
             </div>
-             )) : <div className='h-100 d-flex justify-content-center align-items-center' style={{ marginTop: "-90px" }}>
+          )) : <div className='h-100 d-flex justify-content-center align-items-center' style={{ marginTop: "-90px" }}>
             <p>Start the conversation...</p>
-              </div>}
+          </div>}
         </div>
       </div>
 
@@ -140,6 +147,7 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inpu
             type="text"
             className="form-control"
             id="message"
+            autoComplete='off'
             style={{ borderRadius: "10px" }}
             aria-describedby="emailHelp"
             placeholder='Type a message'

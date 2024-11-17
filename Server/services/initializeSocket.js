@@ -21,14 +21,8 @@ function initializeSocket(server) {
 
         // Listen for score updates from the admin/scorer
         socket.on('updateScore', (data) => {
-            // console.log("this is data", data);
             io.to(data.matchId).emit('scoreUpdate', data);  // Only emit to the specific room
         });
-        // socket.on('updateScore', (newScore) => {
-        //     liveScore = newScore;
-        //     // Emit the new score to all connected clients
-        //     io.emit('scoreUpdate', liveScore);
-        // });
 
         socket.on('overcompleted', (data) => {
             console.log("This is data --------->", data);
@@ -40,12 +34,6 @@ function initializeSocket(server) {
             io.to(data.matchID).emit('showWicketTakenAnimation', data.isWicketTaken);  // Only emit to the specific room
         });
 
-
-        // socket.on('overcompleted', (data)=>{
-        //     io.emit('showOverCompleteAnimation', data);
-        // })
-
-        // Example of global event listener
         socket.on('disconnect', () => {
             console.log('A user disconnected');
         });

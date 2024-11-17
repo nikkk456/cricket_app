@@ -21,7 +21,14 @@ const UserChat = () => {
 
     // Emit event to join the chat room when a user selects a friend
     if (selectedFriend) {
-      const chatRoom = [userID, selectedFriend.id].sort().join('_');
+      console.log("hiii");
+      console.log(selectedFriend);
+      var chatRoom = [userID, selectedFriend.id].sort().join('_');
+      console.log(chatRoom);
+      if(selectedFriend.room_id){
+        chatRoom = selectedFriend.room_id;
+      }
+      console.log(chatRoom);
       socket.emit("joinRoom", { user_id: userID, chat_id: chatRoom });
     }
 
@@ -64,6 +71,7 @@ const UserChat = () => {
     const message = {
       sender: Cookies.get("user_id"),
       receiver: selectedFriend.id,
+      room_id:selectedFriend.room_id,
       messageText: inputValue,
       timestamp: new Date().toISOString(),
     };

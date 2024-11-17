@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
 import UserChatProfile from './UserChatProfile';
-import teamsData from './TeamData.json';
+// import teamsData from './TeamData.json';
 import axiosinstance from '../../../axios/axiosInstance'
 import Cookies from 'js-cookie';
 import { SocketContext } from '../../../context/SocketContext';
@@ -10,17 +10,19 @@ const SideBar = ({ setSelectedFriend, setMessages }) => {
     // const user_id = Cookies.get("user_id");
     const socket = useContext(SocketContext);
     const location = useLocation();
+    const [teamsData,setTeamsdata] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [friendslist, setfriendslist] = useState([]);
     const [isCreatingTeam, setIsCreatingTeam] = useState(false);
     const [teamName, setTeamName] = useState('');
     const [selectedFriends, setSelectedFriends] = useState([]);
+    const user_id = { "user_id": Cookies.get('user_id') };
 
     useEffect(() => {
         if (!socket) {
             console.log("Socket is not initialized yet");
           }
-        const user_id = { "user_id": Cookies.get('user_id') };
+      
         axiosinstance.post("/friends/list", user_id, {
             headers: {
                 authorization: Cookies.get("uid")
@@ -32,13 +34,28 @@ const SideBar = ({ setSelectedFriend, setMessages }) => {
         });
     }, []);
 
+    useEffect(()=>{
+        axiosinstance.post("/groups/groupslist",user_id,{
+            headers:{
+                authorization: Cookies.get("uid")
+            }
+        }).then((response)=>{
+           console.log(response);
+           setTeamsdata(Object.values(response.data.result));
+        }).catch((err)=>{
+            console.log(err);
+        });
+    },[selectedFriends]);
+
     const filteredFriends = friendslist.filter(friend =>
         friend.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const handleFriendClick = (friend) => {
+        console.log(friend);
         setMessages([]);
         setSelectedFriend(friend);
+        if(!friend.room_id){
         axiosinstance.post("/chats/getchats", { friend_id: friend.id }, {
             headers: {
                 authorization: Cookies.get("uid"),
@@ -51,6 +68,20 @@ const SideBar = ({ setSelectedFriend, setMessages }) => {
         }).catch((err) => {
             console.log(err);
         });
+    }else{
+        axiosinstance.post("/chats/roomchats", { room_id: friend.room_id }, {
+            headers: {
+                authorization: Cookies.get("uid"),
+                user_id: Cookies.get("user_id")
+            }
+        }).then((response) => {
+            const updatedFriend = { ...friend, chat: response.data };
+            setSelectedFriend(updatedFriend);
+            setMessages((prevMessages) => [...prevMessages, ...response.data]);
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
     };
 
     const handleCreateTeam = () => {
@@ -187,8 +218,8 @@ const SideBar = ({ setSelectedFriend, setMessages }) => {
                             <div className='row chat-list mt-3 no-scrollbar' style={{ maxHeight: "60vh", overflowY: "scroll" }}>
                                 {
                                     teamsData.map((data, index) => (
-                                        <div key={index}>
-                                            <UserChatProfile name={data.name} lastMessage={data.lastMessage} lastActive="12:14" />
+                                            <div key={index} onClick={() => handleFriendClick(data)}>
+                                            <UserChatProfile name={data.team_name} lastMessage={data.lastMessage} lastActive="12:14" />
                                         </div>
                                     ))
                                 }

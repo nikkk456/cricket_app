@@ -17,8 +17,9 @@ import ScoreUpdate from './component/scorecard/ScoreUpdate';
 import CoinToss from './component/scorecard/CoinToss';
 import LiveScore from './component/scorecard/liveScore/LiveScore';
 
-function App() {
+function App(userId) {
   const socket = useContext(SocketContext);
+
   useEffect(() => {
     if (!socket) {
       console.log("Socket is not initialised yet");
@@ -34,6 +35,11 @@ function App() {
           socket.emit('joinRoom', { roomId: data.roomId });
         }
       });
+
+    socket.emit("userOnline",userId.userId,(response)=>{
+        console.log(response);
+    });
+    
     }
   }, [socket]);
   return (

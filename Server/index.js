@@ -27,10 +27,13 @@ const users_route = require("./routes/user.routes.js");
 const friend = require("./routes/friends.routes.js");
 const notification = require("./routes/notification.routes.js");
 const chats = require("./routes/chats.routes.js");
+const groups = require("./routes/groups.routes.js");
 app.use("/api/friends", friend);
 app.use("/api/user", users_route);
 app.use("/api/notification",notification);
 app.use("/api/chats",chats);
+app.use("/api/groups",groups);
+
 
 // app.post('/api/generate-referral', (req, res) => {
 //     const userId = req.body.userId; // Assume you have user ID in session or token
@@ -43,7 +46,9 @@ const initializeSocket = require('./services/initializeSocket');
 const handleChatSockets = require('./services/chatSocket');
 const handleFriendRequestSockets = require('./services/friendRequestSocket');
 const handlecreateteam = require('./services/createteamservice.js');
+const notification_group = require('./services/notifications.js');
 const io = initializeSocket(server);
+notification_group(io);
 handleChatSockets(io);
 handleFriendRequestSockets(io);
 handlecreateteam(io);

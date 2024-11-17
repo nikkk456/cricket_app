@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import EmojiPicker from 'emoji-picker-react';
 import { Link, useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+
 
 
 const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inputValue, onInputChange ,messages , onKeyDown}) => {
   console.log(messages);
+  const user_id = Cookies.get('user_id');
   // console.log(selectedFriend.id);
   const chatContainerRef = useRef(null);
   const navigate = useNavigate();
@@ -82,9 +85,9 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inpu
       <div className='row' style={{height:"80vh"}}>
         <div className="chat-box no-scrollbar chat-box-background" ref={chatContainerRef}>
           {messages.length != 0 ? messages.map((msg, index) => (
-            <div key={index} className={`message ${msg.sender == selectedFriend.id ? 'left' : 'right'}`}>
+            <div key={index} className={`message ${msg.sender != user_id ? 'left' : 'right'}`}>
               {
-                msg.sender == selectedFriend.id ? <>
+                msg.sender != user_id ? <>
                   <span style={{ display: "flex", alignItems: "flex-start" }}>
                     <svg viewBox="0 0 8 13" height="13" width="8" preserveAspectRatio="xMidYMid meet" className="" version="1.1" x="0px" y="0px" enableBackground="new 0 0 8 13"><title>tail-in</title><path opacity="0.13" fill="#0000000" d="M1.533,3.568L8,12.193V1H2.812 C1.042,1,0.474,2.156,1.533,3.568z"></path><path fill="currentColor" d="M1.533,2.568L8,11.193V0L2.812,0C1.042,0,0.474,1.156,1.533,2.568z"></path>
                     </svg>

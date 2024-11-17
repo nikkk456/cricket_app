@@ -35,6 +35,8 @@ export const SocketProvider = ({ children, userId }) => {
             // Handle the join room request in your UI (e.g., show a prompt)
         });
 
+       
+
         return () => {
             if (socket.current) {
                 console.log('Disconnecting socket...');

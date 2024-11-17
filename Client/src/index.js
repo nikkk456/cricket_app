@@ -12,6 +12,7 @@ import { ScoreCardProvider } from './context/ScoreCardContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const user_id = Cookies.get('user_id');
+console.log(user_id);
 root.render(
   // <React.StrictMode>
   <AuthProvider>
@@ -19,7 +20,7 @@ root.render(
       <SocketProvider userId={user_id}>
         <ScoreCardProvider>
           <BrowserRouter>
-            <App />
+            <App userId={user_id}/>
           </BrowserRouter>
         </ScoreCardProvider>
       </SocketProvider>

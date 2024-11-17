@@ -16,6 +16,7 @@ function handleChatSockets(io) {
 
         // Handle sending and receiving messages
         socket.on('sendMessage', async (data) => {
+            console.log(data);
             const { sender, receiver, messageText, timestamp } = data;
 
             try {
@@ -24,15 +25,24 @@ function handleChatSockets(io) {
                 }
 
                 // Generate chat room ID
-                const chatRoom = [sender, receiver].sort().join('_'); // Example: "5_16"
-
+                var  chatRoom = data.room_id;
+                if(!data.room_id){
+                    var chatRoom = [sender, receiver].sort().join('_'); // Example: "5_16"
+                }
                 // Save message to database
                 const insertMessageQuery = "INSERT INTO messages (sender, receiver, messageText, timestamp) VALUES (?, ?, ?, ?)";
                 await new Promise((resolve, reject) => {
+                    if(data.room_id){
+                        conn.query(insertMessageQuery, [sender, chatRoom, messageText, timestamp], (err, result) => {
+                            if (err) return reject(err);
+                            resolve(result);
+                    });
+                }else{
                     conn.query(insertMessageQuery, [sender, receiver, messageText, timestamp], (err, result) => {
                         if (err) return reject(err);
                         resolve(result);
-                    });
+                });
+                }
                 });
 
                 // Emit message to the chat room

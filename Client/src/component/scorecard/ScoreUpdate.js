@@ -16,10 +16,11 @@ function ScoreUpdate() {
     const [teamBWickets, setTeamBWickets] = useState(0);
     const [teamAOvers, setTeamAOvers] = useState(0);
     const [teamBOvers, setTeamBOvers] = useState(0);
+    const [currentRunRate, setCurrentRunRate] = useState(0);
+    const [requiredRunRate, setRequiredRunRate] = useState(0);
     const { challenge, setChallenge } = useContext(ScoreCardContext);
-    const { teamA, teamB, overs, tossWinner } = useParams();
+    const { teamA, teamB, overs, matchID } = useParams();
     const socket = useContext(SocketContext);
-    console.log(challenge);
     useEffect(() => {
         if (!socket) {
             console.log("Socket is not initialised yet in scoreUpdate Page");
@@ -49,7 +50,10 @@ function ScoreUpdate() {
         playersMaidenOver:0,
         playersRunConceeded:0,
         playersWickettaken:0,
+        playersRunOutWicket:0,
         playersEconomy:0,
+        playerRunOutBy: "",
+        playerCaughtBy: "",
 
     };
 
@@ -63,11 +67,31 @@ function ScoreUpdate() {
         playerName: player.value // set the playerName
     }));
 
+    const handleLiveScore = () => {
+        const url = `${window.location.origin}/scorecard/${matchID}/livescore`;
+        
+        // Copy URL to clipboard
+        navigator.clipboard.writeText(url).then(() => {
+            console.log("URL copied to clipboard");
+        }).catch((error) => {
+            console.error("Failed to copy URL to clipboard:", error);
+        });
+        
+        // Navigate to the URL
+        window.open(url);
+    };
+    
+
 
     return (
         <div className='container'>
-            <div className='row text-center'>
+            <div className='row'>
+                <div className='col-md-7 text-end'>
                 <h2>Update Live Score</h2>
+                </div>
+                <div className='col-md-5'>
+                <button className='btn btn-dark' onClick={handleLiveScore}>Live Score</button>
+                </div>                
             </div>
             <div className='row'>
                 <div className='col-md-6 coll-6'>
@@ -102,7 +126,7 @@ function ScoreUpdate() {
             </div>
             <div className='row justify-content-center align-items-center'>
                 <center><small>Toss Winner: {challenge.tossWinner}</small></center>
-                <center><small>Group Stage Match</small></center>
+                <center><small>Current Run Rate: {currentRunRate}</small></center>
             </div>
             <div className='row'>
                 <div className='row justify-content-center my-3'>
@@ -127,7 +151,7 @@ function ScoreUpdate() {
             <Routes>
                 <Route path='overview' element={<Overview teamA={teamA} teamB={teamB} overs={overs} />} />
                 <Route path='score_card/*' element={<Score_Card />} />
-                <Route path='update_score' element={<Update_score teamAScore={teamAScore} teamBScore={teamBScore} teamAWickets={teamAWickets} teamBWickets={teamBWickets} setTeamAScore={setTeamAScore} setTeamBScore={setTeamBScore} setTeamAWickets={setTeamAWickets} setTeamBWickets={setTeamBWickets} setTeamAOvers={setTeamAOvers} setTeamBOvers={setTeamBOvers} teamAPlayers={teamAPlayers} teamBPlayers={teamBPlayers} teamAOvers={teamAOvers} teamBOvers={teamBOvers} />} />
+                <Route path='update_score' element={<Update_score teamAScore={teamAScore} teamBScore={teamBScore} teamAWickets={teamAWickets} teamBWickets={teamBWickets} setTeamAScore={setTeamAScore} setTeamBScore={setTeamBScore} setTeamAWickets={setTeamAWickets} setTeamBWickets={setTeamBWickets} setTeamAOvers={setTeamAOvers} setTeamBOvers={setTeamBOvers} teamAPlayers={teamAPlayers} teamBPlayers={teamBPlayers} teamAOvers={teamAOvers} teamBOvers={teamBOvers} setCurrentRunRate={setCurrentRunRate} setRequiredRunRate={setRequiredRunRate} />} />
             </Routes>
         </div>
     );

@@ -21,6 +21,9 @@ const CurrentOver = ({ ball }) => {
             if (ball.includes('noball')) {
                 return `${ball[0]-1}Nb`;
             }
+            if (ball.includes('Wicket')) {
+                return `W`;
+            }
         }
         return ball; // For normal numbers
     };

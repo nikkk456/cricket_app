@@ -4,8 +4,11 @@ import TeamA from './TeamA';
 import TeamB from './TeamB';
 import { SocketContext } from '../../../context/SocketContext';
 import HandleBall from './HandleBall';
+import CatchSelection from './CatchSelection';
+import NextStrickerBatsman from './NextStrickerBatsman';
+import { useParams } from 'react-router-dom';
 
-const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setTeamAScore, setTeamBScore, setTeamBWickets, setTeamAWickets, setTeamBOvers, setTeamAOvers, teamAPlayers, teamBPlayers, teamAOvers, teamBOvers }) => {
+const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setTeamAScore, setTeamBScore, setTeamBWickets, setTeamAWickets, setTeamBOvers, setTeamAOvers, teamAPlayers, teamBPlayers, teamAOvers, teamBOvers, setCurrentRunRate, setRequiredRunRate }) => {
   const socket = useContext(SocketContext);
   const [teamAPlayersData, setTeamAPlayersData] = useState(teamAPlayers);
   const [teamBPlayersData, setTeamBPlayersData] = useState(teamBPlayers);
@@ -30,7 +33,12 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
   const [winningwickets, setWinningWickets] = useState(0);
   const [nextBatsman, setNextBatsman] = useState();
   const [nextBowler, setNextBowler] = useState();
-
+  const [caughtOut, setCaughtOut] = useState(false);
+  const [runOut, setRunOut] = useState(false);
+  const [runoutbatsman, setRunOutBatsman] = useState();
+  const [runoutfielder, setRunOutFielder] = useState();
+  const [nonstrickerout, setNonStrickerOut] = useState(false);
+  const {matchID} = useParams();
   useEffect(() => {
     if (!socket) {
       console.log("Socket is not initialised yet in scoreUpdate Page");
@@ -60,7 +68,9 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
 
   // To send the data to the Live page 
   useEffect(() => {
+    socket.emit('joinMatch', matchID);
     let Data = {
+      matchId: matchID,
       teamARun: teamAScore,
       teamBRun: teamBScore,
       teamAWickets: teamAWickets,
@@ -82,7 +92,16 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
     socket.emit('overcompleted', isoverCompleted);
   }, [overCompleted])
 
-  // To set the next Batsman
+  useEffect(()=>{
+    const over = balls/6;
+    const remaining_balls = balls - over*6 ;
+    const origOver = over + remaining_balls;
+
+    const currentRunRate = totalRun/origOver;
+    setCurrentRunRate(isNaN(currentRunRate)?0:currentRunRate.toFixed(2));
+  }, [balls, totalRun])
+
+  // To set the next stricker Batsman
   useEffect(() => {
     if (innings == 1 && firstInnings == challenge.teamA) {
       const firstPlayerNotOut = teamAPlayersData.find(player => player.playersOutBy === "" && player.playerName !== nonstrikerbatsman);
@@ -100,6 +119,25 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
       setNextBatsman(firstPlayerNotOut);
     }
   }, [wicketTaken])
+
+  // to set next nonstrikerbatsman
+  useEffect(() => {
+    if (innings == 1 && firstInnings == challenge.teamA) {
+      const firstPlayerNotOut = teamAPlayersData.find(player => player.playersOutBy === "" && player.playerName !== nonstrikerbatsman);
+      setNextBatsman(firstPlayerNotOut);
+    } else if (innings == 1 && firstInnings == challenge.teamB) {
+      const firstPlayerNotOut = teamBPlayersData.find(player => player.playersOutBy === "" && player.playerName !== nonstrikerbatsman);
+      setNextBatsman(firstPlayerNotOut);
+    }
+    else if (innings == 2 && secondInnings == challenge.teamA) {
+      const firstPlayerNotOut = teamAPlayersData.find(player => player.playersOutBy === "" && player.playerName !== nonstrikerbatsman);
+      setNextBatsman(firstPlayerNotOut);
+    }
+    else {
+      const firstPlayerNotOut = teamBPlayersData.find(player => player.playersOutBy === "" && player.playerName !== nonstrikerbatsman);
+      setNextBatsman(firstPlayerNotOut);
+    }
+  }, [nonstrickerout])
 
   //To set the next Bowler
   useEffect(() => {
@@ -120,7 +158,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
     }
   }, [overCompleted])
 
-
+  // To change the strike of batsman 
   const checkOddRuns = (run) => {
     if (run % 2 !== 0) {
       // Change striker if odd runs
@@ -334,8 +372,9 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
     // axios.post('/api/update-score', { runs: newRuns, balls: newBalls, striker: newStriker, nonStriker: newNonStriker, bowler })
     //   .then(response => setMatchData(response.data));
   };
-  // console.log("This is Total Run " + totalRun + " This is total Wicket  " + wickets + " this is stricker and non striker", strikerbatsman, nonstrikerbatsman + "The Match Winner is ", matchWinner);
-  const handleWicket = () => {
+
+  // To tackle with wicket 
+  const handleWicket = (type) => {
     let newWickets = wickets + 1;
     let currentBall = currentOverBalls + 1;
     let currentWicket = currentOverWicket + 1;
@@ -344,16 +383,21 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
     let teamBPlayers = challenge.teamBPlayers;
     setCurrentOverWicket(currentWicket);
     setCurrentOverBalls(currentBall);
-    setWicketTaken(true);
+    if (type == 'C') {
+      setCaughtOut(true);
+    } else if (type === 'R') {
+      setRunOut(true);
+    } else if (type == 'B') {
+      setWicketTaken(true);
+    }
     setCurrentOverRuns((prevOverRuns) => [...prevOverRuns, "Wicket"]);
     setWickets(wickets + 1);
     setBalls(balls + 1);
     if (innings == 1 && firstInnings == challenge.teamA) {
       setTeamAWickets(newWickets);
       setTeamAOvers(newBalls);
-
-      //To set the Players Wicket taken by 
       setTeamAPlayersData(prevTeamAPlayers => {
+        console.log("Uske baad hum log set krne lage players ko!");
         return prevTeamAPlayers.map(player => {
           if (player.playerName === strikerbatsman) {
             // Return a new player object with updated score
@@ -510,6 +554,20 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
     //     setNextBatsman('');
     //   });
   };
+
+  //For RUnOut
+  const handleRunOut = () => {
+    setRunOut(false);
+    if (runoutbatsman == nonstrikerbatsman) {
+      console.log("hii nikhil")
+      setNonStrickerOut(true);
+    } else if (runoutbatsman == strikerbatsman) {
+      console.log("Nikhil idhr aagya hai")
+      setWicketTaken(true);
+    }
+  }
+
+  // ye sirf wide ke liye likha hau name change krenge baad me 
   const handleWideOrNoBall = (run) => {
     setTotalRun(totalRun + run);
     setCurrentOverRuns((prevOverRuns) => [...prevOverRuns, `${run}wide`]);
@@ -526,6 +584,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
           return player; // Always return player, even if it's not the bowler
         });
       });
+      checkOddRuns(run - 1);
     } else if (innings == 1 && firstInnings == challenge.teamB) {
       setTeamBScore(teamBScore + run);
       setTeamAPlayersData(prevTeamAPlayers => {
@@ -539,6 +598,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
           return player; // Always return player, even if it's not the bowler
         });
       });
+      checkOddRuns(run - 1);
     }
 
     if (innings == 2 && secondInnings == challenge.teamA) {
@@ -554,6 +614,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
           return player; // Always return player, even if it's not the bowler
         });
       });
+      checkOddRuns(run - 1);
     } else if (innings == 2 && secondInnings == challenge.teamB) {
       setTeamBScore(teamBScore + run);
       setTeamAPlayersData(prevTeamAPlayers => {
@@ -567,8 +628,11 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
           return player; // Always return player, even if it's not the bowler
         });
       });
+      checkOddRuns(run - 1);
     }
   };
+
+  //Function only for noball
   const handleNoBall = (run) => {
     const newRuns = totalRun + run;
     setTotalRun(totalRun + run);
@@ -581,9 +645,9 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
             // Return a new player object with updated score
             return {
               ...player,
-              playersScore: player.playersScore + run,
-              playersSix: run === 6 ? player.playersSix + 1 : player.playersSix,
-              playersFours: run === 4 ? player.playersFours + 1 : player.playersFours,
+              playersScore: player.playersScore + run - 1, // because noball run is not counted as individual run
+              playersSix: run === 7 ? player.playersSix + 1 : player.playersSix,
+              playersFours: run === 5 ? player.playersFours + 1 : player.playersFours,
             };
           }
           return player;
@@ -600,7 +664,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
           return player;
         });
       });
-      checkOddRuns(run);
+      checkOddRuns(run - 1);
     }
     else if (innings == 1 && firstInnings == challenge.teamB) {
       setTeamBScore(teamBScore + run);
@@ -610,9 +674,9 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
             // Return a new player object with updated score
             return {
               ...player,
-              playersScore: player.playersScore + run,
-              playersSix: run === 6 ? player.playersSix + 1 : player.playersSix,
-              playersFours: run === 4 ? player.playersFours + 1 : player.playersFours,
+              playersScore: player.playersScore + run - 1,
+              playersSix: run === 7 ? player.playersSix + 1 : player.playersSix,
+              playersFours: run === 5 ? player.playersFours + 1 : player.playersFours,
             };
           }
           return player;
@@ -629,7 +693,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
           return player;
         });
       });
-      checkOddRuns(run);
+      checkOddRuns(run - 1);
     }
     else if (innings == 2 && secondInnings == challenge.teamB) {
       setTeamBScore(teamBScore + run);
@@ -639,9 +703,9 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
             // Return a new player object with updated score
             return {
               ...player,
-              playersScore: player.playersScore + run,
-              playersSix: run === 6 ? player.playersSix + 1 : player.playersSix,
-              playersFours: run === 4 ? player.playersFours + 1 : player.playersFours,
+              playersScore: player.playersScore + run - 1,
+              playersSix: run === 7 ? player.playersSix + 1 : player.playersSix,
+              playersFours: run === 5 ? player.playersFours + 1 : player.playersFours,
             };
           }
           return player;
@@ -658,7 +722,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
           return player;
         });
       });
-      checkOddRuns(run);
+      checkOddRuns(run - 1);
       if (newRuns > teamAScore) {
         setWinningWickets(challenge.teamBPlayers.length - teamBWickets - 1);
         setMatchWinner(challenge.teamB);
@@ -673,9 +737,9 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
             // Return a new player object with updated score
             return {
               ...player,
-              playersScore: player.playersScore + run,
-              playersSix: run === 6 ? player.playersSix + 1 : player.playersSix,
-              playersFours: run === 4 ? player.playersFours + 1 : player.playersFours,
+              playersScore: player.playersScore + run - 1,
+              playersSix: run === 7 ? player.playersSix + 1 : player.playersSix,
+              playersFours: run === 5 ? player.playersFours + 1 : player.playersFours,
             };
           }
           return player;
@@ -692,7 +756,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
           return player;
         });
       });
-      checkOddRuns(run);
+      checkOddRuns(run - 1);
       if (newRuns > teamBScore) {
         setWinningWickets(challenge.teamAPlayers.length - teamAWickets - 1);
         console.log("This is winning wickets of teamA", winningwickets);
@@ -726,9 +790,14 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
     setNextBatsman();
     setNextBowler();
     setWicketTaken(false);
+    setCaughtOut(false); // But isko change krna padega qki agar last ball pe CaughtOut ho to kya krenge 
+
+    setRunOut(false);
     setOverCompleted(false);
   }, [inningsOver])
 
+
+  // if Match winner is decided 
   if (matchWinner) {
     return (
       <div className='container'>
@@ -736,7 +805,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
       </div>
     )
   }
-
+  console.log("This is teamAplayersData and teamBplayersData", teamAPlayersData, teamBPlayersData);
   return (
     <div>
       {
@@ -757,11 +826,172 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
               <h2>Select Run per Over's Ball </h2>
               <h5>Select run on {(balls - (Math.floor(balls / 6) * 6)) + 1} ball  of {Math.floor(balls / 6) + 1} Over</h5>
               {
-                wicketTaken ?
-                  <div className={`overlay ${wicketTaken ? '' : 'hidden'}`}>
+                caughtOut ?
+                  <CatchSelection caughtOut={caughtOut} firstInnings={firstInnings} challenge={challenge} teamAPlayersData={teamAPlayersData} teamBPlayersData={teamBPlayersData} strikerbatsman={strikerbatsman} setTeamAPlayersData={setTeamAPlayersData} setTeamBPlayersData={setTeamBPlayersData} setWicketTaken={setWicketTaken} setCaughtOut={setCaughtOut}
+                  />
+                  : ""
+              }
+              {
+                runOut ?
+                  <div className={`overlay ${runOut ? '' : 'hidden'}`}>
                     <div class="card" style={{ width: "18rem", height: "15.65rem" }}>
                       <div class="card-body d-flex " style={{ flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                        <h4 className="card-title text-center" style={{marginBottom:"1.5rem"}}>Select Next Batsman</h4>
+                        <h4 className="card-title text-center" style={{ marginBottom: "1.5rem" }}>Who gets Run-Out ?
+                        </h4>
+                        <div className="dropdown">
+                          <button
+                            className="btn btn-dark btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            select Player
+                          </button>
+                          <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            {
+                              firstInnings === challenge.teamA ?
+                                teamAPlayersData.filter(player => player.playerName == nonstrikerbatsman || player.playerName == strikerbatsman).map((element, index) => (
+                                  <li key={index} onClick={() => {
+                                    setRunOutBatsman(element.playerName);
+                                  }}>
+                                    <div className="dropdown-item d-flex align-items-center py-2 px-3 my-0 friendListItem hover-effect">
+                                      <img
+                                        src={"https://github.com/mdo.png"}
+                                        className="rounded-circle me-3"
+                                        alt={"..."}
+                                        style={{ width: "35px", height: "35px", objectFit: "cover" }}
+                                      />
+                                      <h6 className="mb-0" style={{ fontWeight: "600", color: "#050505" }}>
+                                        {element.playerName}
+                                      </h6>
+                                    </div>
+                                  </li>
+                                ))
+                                :
+                                teamBPlayersData.map((element, index) => (
+                                  <li key={index} onClick={() => {
+                                    setRunOutBatsman(element.playerName);
+                                  }}>
+                                    <div className="dropdown-item d-flex align-items-center py-2 px-3 my-0 friendListItem hover-effect">
+                                      <img
+                                        src={"https://github.com/mdo.png"}
+                                        className="rounded-circle me-3"
+                                        alt={"..."}
+                                        style={{ width: "35px", height: "35px", objectFit: "cover" }}
+                                      />
+                                      <h6 className="mb-0" style={{ fontWeight: "600", color: "#050505" }}>
+                                        {element.playerName}
+                                      </h6>
+                                    </div>
+                                  </li>
+                                ))
+                            }
+                          </ul>
+                        </div>
+                        <h4 className="card-title text-center" style={{ marginBottom: "1.5rem" }}>
+                          Who did the Run-Out ?
+                        </h4>
+                        <div className="dropdown">
+                          <button
+                            className="btn btn-dark btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            select Player
+                          </button>
+                          <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            {
+                              firstInnings === challenge.teamA ?
+                                teamBPlayersData.map((element, index) => (
+                                  <li key={index} onClick={() => {
+                                    setRunOutFielder(element.playerName);
+                                    setTeamAPlayersData(prevTeamAPlayers => {
+                                      return prevTeamAPlayers.map(player => {
+                                        if (player.playerName === runoutbatsman) {
+                                          return {
+                                            ...player,
+                                            playerRunOutBy: element.playerName,
+                                          };
+                                        }
+                                        return player
+                                      });
+                                    });
+                                    setTeamBPlayersData(prevTeamBPlayers => {
+                                      return prevTeamBPlayers.map(player => {
+                                        return {
+                                          ...player,
+                                          playersRunOutWicket: player.playersRunOutWicket + 1,
+                                        };
+                                      });
+                                    });
+                                  }}>
+                                    <div className="dropdown-item d-flex align-items-center py-2 px-3 my-0 friendListItem hover-effect">
+                                      <img
+                                        src={"https://github.com/mdo.png"}
+                                        className="rounded-circle me-3"
+                                        alt={"..."}
+                                        style={{ width: "35px", height: "35px", objectFit: "cover" }}
+                                      />
+                                      <h6 className="mb-0" style={{ fontWeight: "600", color: "#050505" }}>
+                                        {element.playerName}
+                                      </h6>
+                                    </div>
+                                  </li>
+                                ))
+                                :
+                                teamAPlayersData.map((element, index) => (
+                                  <li key={index} onClick={() => {
+                                    setRunOutFielder(element.playerName);
+                                    setTeamBPlayersData(prevTeamBPlayers => {
+                                      return prevTeamBPlayers.map(player => {
+                                        if (runoutbatsman == player.playerName) {
+                                          return {
+                                            ...player,
+                                            playerRunOutBy: element.playerName,
+                                          };
+                                        }
+                                        return player;
+                                      });
+                                    });
+                                    setTeamAPlayersData(prevTeamAPlayers => {
+                                      return prevTeamAPlayers.map(player => {
+                                        return {
+                                          ...player,
+                                          playersRunOutWicket: player.playersRunOutWicket + 1,
+                                        };
+                                      });
+                                    });
+                                  }}>
+                                    <div className="dropdown-item d-flex align-items-center py-2 px-3 my-0 friendListItem hover-effect">
+                                      <img
+                                        src={"https://github.com/mdo.png"}
+                                        className="rounded-circle me-3"
+                                        alt={"..."}
+                                        style={{ width: "35px", height: "35px", objectFit: "cover" }}
+                                      />
+                                      <h6 className="mb-0" style={{ fontWeight: "600", color: "#050505" }}>
+                                        {element.playerName}
+                                      </h6>
+                                    </div>
+                                  </li>
+                                ))
+                            }
+                          </ul>
+                        </div>
+
+                        <button className='btn-dark' onClick={handleRunOut}>
+                          Continue
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  : ""
+              }
+              {
+                wicketTaken ?
+                  <NextStrickerBatsman wicketTaken={wicketTaken} nextBatsman={nextBatsman} strikerBatsman={strikerbatsman} nonStrikerBatsman={nonstrikerbatsman} setStrikerBatsman={setStrikerBatsman} setWicketTaken={setWicketTaken} firstInnings={firstInnings} secondInnings={secondInnings} challenge={challenge} teamAPlayersData={teamAPlayersData} teamBPlayersData={teamBPlayersData}
+                  />
+                  : ""
+              }
+              {
+                nonstrickerout ?
+                  <div className={`overlay ${nonstrickerout ? '' : 'hidden'}`}>
+                    <div class="card" style={{ width: "18rem", height: "15.65rem" }}>
+                      <div class="card-body d-flex " style={{ flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                        <h4 className="card-title text-center" style={{ marginBottom: "1.5rem" }}>Select Next Batsman</h4>
                         <center><img src={"https://github.com/mdo.png"} alt="Team" width="50" height="50" style={{ boxShadow: "0px 0px 4px 2px grey" }} className="rounded-circle mx-2" /></center>
                         <h4 class="card-title text-center my-2">{nextBatsman ? nextBatsman.playerName : "No batsman Selected"}</h4>
                         <div className='d-flex my-3'>
@@ -780,7 +1010,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
                                 firstInnings === challenge.teamA ?
                                   teamAPlayersData.filter(player => player.playersOutBy === "" && player.playerName !== strikerbatsman && player.playerName !== nonstrikerbatsman)
                                     .map((element, index) => (
-                                      <li key={index} onClick={() => { setStrikerBatsman(element.playerName); setWicketTaken(false) }}>
+                                      <li key={index} onClick={() => { setNonStrikerBatsman(element.playerName); setNonStrickerOut(false) }}>
                                         <div className="dropdown-item d-flex align-items-center py-2 px-3 my-0 friendListItem hover-effect">
                                           <img
                                             src={"https://github.com/mdo.png"}
@@ -798,7 +1028,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
                                   teamBPlayersData
                                     .filter(player => player.playersOutBy === "" && player.playerName !== strikerbatsman && player.playerName !== nonstrikerbatsman)
                                     .map((element, index) => (
-                                      <li key={index} onClick={() => { setStrikerBatsman(element.playerName); setWicketTaken(false) }}>
+                                      <li key={index} onClick={() => { setNonStrikerBatsman(element.playerName); setNonStrickerOut(false) }}>
                                         <div className="dropdown-item d-flex align-items-center py-2 px-3 my-0 friendListItem hover-effect">
                                           <img
                                             src={"https://github.com/mdo.png"}
@@ -816,19 +1046,20 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
                             </ul>
                           </div>
                           <div>
-                            <button className='btn btn-dark btn-sm mx-2' onClick={() => { setWicketTaken(false); setStrikerBatsman(nextBatsman.playerName) }}>Continue</button>
+                            <button className='btn btn-dark btn-sm mx-2' onClick={() => { setNonStrickerOut(false); setNonStrikerBatsman(nextBatsman.playerName) }}>Continue</button>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div> : ""
+                  </div>
+                  : ""
               }
               {
                 overCompleted ?
                   <div className={`overlay ${overCompleted ? '' : 'hidden'}`}>
                     <div class="card" style={{ width: "18rem", height: "15.65rem" }}>
                       <div class="card-body d-flex " style={{ flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                        <h4 className="card-title text-center"  style={{marginBottom:"1.5rem"}}>Select Next Bowler</h4>
+                        <h4 className="card-title text-center" style={{ marginBottom: "1.5rem" }}>Select Next Bowler</h4>
                         <center><img src={"https://github.com/mdo.png"} alt="Team" width="50" height="50" style={{ boxShadow: "0px 0px 4px 2px grey" }} className="rounded-circle mx-2" /></center>
                         <h4 class="card-title text-center my-2">{nextBowler ? nextBowler.playerName : "No Bowler Selected"}</h4>
                         <div className='d-flex my-3'>
@@ -921,11 +1152,96 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
               <h2>Select Run per Over's Ball </h2>
               <h5>Select run on {(balls - (Math.floor(balls / 6) * 6)) + 1} ball  of {Math.floor(balls / 6) + 1} Over</h5>
               {
+                caughtOut ?
+                  <div className={`overlay ${caughtOut ? '' : 'hidden'}`}>
+                    <div class="card" style={{ width: "18rem", height: "12.65rem" }}>
+                      <div class="card-body d-flex " style={{ flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                        <h4 className="card-title text-center" style={{ marginBottom: "1.5rem" }}>Who takes this Catch?
+                        </h4>
+                        <div className="dropdown">
+                          <button
+                            className="btn btn-dark btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            select Player
+                          </button>
+                          <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            {
+                              secondInnings === challenge.teamA ?
+                                teamBPlayersData.map((element, index) => (
+                                  <li key={index} onClick={() => {
+                                    setTeamAPlayersData(prevTeamAPlayers => {
+                                      return prevTeamAPlayers.map(player => {
+                                        if (player.playerName === strikerbatsman) {
+                                          // Return a new player object with updated score
+                                          return {
+                                            ...player,
+                                            playerCaughtBy: element.playerName,
+                                          };
+                                        }
+                                        return player; // Return the other players unchanged
+                                      });
+                                    }); setWicketTaken(true); setCaughtOut(false);
+                                  }}>
+                                    <div className="dropdown-item d-flex align-items-center py-2 px-3 my-0 friendListItem hover-effect">
+                                      <img
+                                        src={"https://github.com/mdo.png"}
+                                        className="rounded-circle me-3"
+                                        alt={"..."}
+                                        style={{ width: "35px", height: "35px", objectFit: "cover" }}
+                                      />
+                                      <h6 className="mb-0" style={{ fontWeight: "600", color: "#050505" }}>
+                                        {element.playerName}
+                                      </h6>
+                                    </div>
+                                  </li>
+                                ))
+                                :
+                                teamAPlayersData.map((element, index) => (
+                                  <li key={index} onClick={() => {
+                                    setTeamBPlayersData(prevTeamBPlayers => {
+                                      return prevTeamBPlayers.map(player => {
+                                        if (player.playerName === strikerbatsman) {
+                                          return {
+                                            ...player,
+                                            playerCaughtBy: element.playerName,
+                                          };
+                                        }
+                                        return player;
+                                      });
+                                    }); setWicketTaken(true); setCaughtOut(false);
+                                  }}>
+                                    <div className="dropdown-item d-flex align-items-center py-2 px-3 my-0 friendListItem hover-effect">
+                                      <img
+                                        src={"https://github.com/mdo.png"}
+                                        className="rounded-circle me-3"
+                                        alt={"..."}
+                                        style={{ width: "35px", height: "35px", objectFit: "cover" }}
+                                      />
+                                      <h6 className="mb-0" style={{ fontWeight: "600", color: "#050505" }}>
+                                        {element.playerName}
+                                      </h6>
+                                    </div>
+                                  </li>
+                                ))
+                            }
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  : ""
+              }
+              {
                 wicketTaken ?
-                  <div className={`overlay ${wicketTaken ? '' : 'hidden'}`}>
+                  <NextStrickerBatsman wicketTaken={wicketTaken} nextBatsman={nextBatsman} strikerBatsman={strikerbatsman} nonStrikerBatsman={nonstrikerbatsman} setStrikerBatsman={setStrikerBatsman} setWicketTaken={setWicketTaken} firstInnings={firstInnings} secondInnings={secondInnings} challenge={challenge} teamAPlayersData={teamAPlayersData} teamBPlayersData={teamBPlayersData}
+                  />
+                  : ""
+              }
+              {
+                nonstrickerout ?
+                  <div className={`overlay ${nonstrickerout ? '' : 'hidden'}`}>
                     <div class="card" style={{ width: "18rem", height: "15.65rem" }}>
                       <div class="card-body d-flex " style={{ flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                        <h4 className="card-title text-center" style={{marginBottom:"1.5rem"}}>Select Next Batsman</h4>
+                        <h4 className="card-title text-center" style={{ marginBottom: "1.5rem" }}>Select Next Batsman</h4>
                         <center><img src={"https://github.com/mdo.png"} alt="Team" width="50" height="50" style={{ boxShadow: "0px 0px 4px 2px grey" }} className="rounded-circle mx-2" /></center>
                         <h4 class="card-title text-center my-2">{nextBatsman ? nextBatsman.playerName : "No batsman Selected"}</h4>
                         <div className='d-flex my-3'>
@@ -944,7 +1260,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
                                 secondInnings === challenge.teamA ?
                                   teamAPlayersData.filter(player => player.playersOutBy === "" && player.playerName !== strikerbatsman && player.playerName !== nonstrikerbatsman)
                                     .map((element, index) => (
-                                      <li key={index} onClick={() => { setStrikerBatsman(element.playerName); setWicketTaken(false) }}>
+                                      <li key={index} onClick={() => { setNonStrikerBatsman(element.playerName); setNonStrickerOut(false) }}>
                                         <div className="dropdown-item d-flex align-items-center py-2 px-3 my-0 friendListItem hover-effect">
                                           <img
                                             src={"https://github.com/mdo.png"}
@@ -962,7 +1278,7 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
                                   teamBPlayersData
                                     .filter(player => player.playersOutBy === "" && player.playerName !== strikerbatsman && player.playerName !== nonstrikerbatsman)
                                     .map((element, index) => (
-                                      <li key={index} onClick={() => { setStrikerBatsman(element.playerName); setWicketTaken(false) }}>
+                                      <li key={index} onClick={() => { setNonStrikerBatsman(element.playerName); setNonStrickerOut(false) }}>
                                         <div className="dropdown-item d-flex align-items-center py-2 px-3 my-0 friendListItem hover-effect">
                                           <img
                                             src={"https://github.com/mdo.png"}
@@ -980,19 +1296,20 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
                             </ul>
                           </div>
                           <div>
-                            <button className='btn btn-dark btn-sm mx-2' onClick={() => { setWicketTaken(false); setStrikerBatsman(nextBatsman.playerName) }}>Continue</button>
+                            <button className='btn btn-dark btn-sm mx-2' onClick={() => { setNonStrickerOut(false); setNonStrikerBatsman(nextBatsman.playerName) }}>Continue</button>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div> : ""
+                  </div>
+                  : ""
               }
               {
                 overCompleted ?
                   <div className={`overlay ${overCompleted ? '' : 'hidden'}`}>
                     <div class="card" style={{ width: "18rem", height: "15.65rem" }}>
                       <div class="card-body d-flex " style={{ flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                      <h4 className="card-title text-center" style={{marginBottom:"1.5rem"}}>Select Next Bowler</h4>
+                        <h4 className="card-title text-center" style={{ marginBottom: "1.5rem" }}>Select Next Bowler</h4>
                         <center><img src={"https://github.com/mdo.png"} alt="Team" width="50" height="50" style={{ boxShadow: "0px 0px 4px 2px grey" }} className="rounded-circle mx-2" /></center>
                         <h4 class="card-title text-center my-2">{nextBowler ? nextBowler.playerName : "No Bowler Selected"}</h4>
                         <div className='d-flex my-3'>

@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import coinSound from './coin-flip-sound.mp3'; // Add your sound file here
 import { useNavigate, useParams } from 'react-router-dom';
 import { ScoreCardContext } from '../../context/ScoreCardContext';
+import { v4 as uuidv4 } from 'uuid';
 
 const CoinToss = () => {
     const { teamA, teamB,overs } = useParams();
@@ -48,7 +49,8 @@ const CoinToss = () => {
             alert("Please select one option");
             return;
         }else{
-            navigate(`/scorecard/${challenge.teamA}/vs/${challenge.teamB}/${challenge.tossWinner}/${challenge.overs}/scoreUpdate`);
+            const matchID = uuidv4();
+            navigate(`/scorecard/${challenge.teamA}/vs/${challenge.teamB}/${challenge.tossWinner}/${challenge.overs}/${matchID}/scoreUpdate`);
         }
     }
 

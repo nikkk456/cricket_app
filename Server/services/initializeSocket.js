@@ -31,7 +31,13 @@ function initializeSocket(server) {
         // });
 
         socket.on('overcompleted', (data) => {
-            io.to(data.matchId).emit('showOverCompleteAnimation', data);  // Only emit to the specific room
+            console.log("This is data --------->", data);
+            io.to(data.matchID).emit('showOverCompleteAnimation', data.isoverCompleted);  // Only emit to the specific room
+        });
+
+
+        socket.on('wicketTaken', (data) => {
+            io.to(data.matchID).emit('showWicketTakenAnimation', data.isWicketTaken);  // Only emit to the specific room
         });
 
 

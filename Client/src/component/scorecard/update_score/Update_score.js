@@ -88,10 +88,23 @@ const Update_score = ({ teamAScore, teamBScore, teamAWickets, teamBWickets, setT
 
   // To send the live page that over is completed and Next over will be start
   useEffect(() => {
-    const isoverCompleted = true;
-    socket.emit('overcompleted', isoverCompleted);
+    const data = {
+      matchID: matchID,
+      isoverCompleted: true
+    }
+    socket.emit('overcompleted', data);
   }, [overCompleted])
 
+  // To send the live page that wicket is taken and next batsman will come 
+  useEffect(()=>{
+    const data = {
+      matchID: matchID,
+      isWicketTaken: true
+    }
+    socket.emit('wicketTaken', data);
+  }, [wicketTaken, runOut, caughtOut])
+
+  // to set the currentRunRate 
   useEffect(()=>{
     const over = balls/6;
     const remaining_balls = balls - over*6 ;

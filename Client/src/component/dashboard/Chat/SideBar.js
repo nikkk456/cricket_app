@@ -51,6 +51,12 @@ const SideBar = ({ setSelectedFriend, setMessages }) => {
         friend.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    const filteredTeamsData = teamsData.filter(team=>
+        team.team_name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    console.log("this is teamsDataa", teamsData);
+
     const handleFriendClick = (friend) => {
         setMessages([]);
         setSelectedFriend(friend);
@@ -189,7 +195,7 @@ const SideBar = ({ setSelectedFriend, setMessages }) => {
                                 className="row chat-list no-scrollbar"
                                 style={{ flex: "1 1 auto", overflowY: "auto", maxHeight: "60vh" }}
                             >
-                                {teamsData.slice().reverse().map((data, index) => (
+                                {filteredTeamsData.slice().reverse().map((data, index) => (
                                     <div key={index} onClick={() => handleFriendClick(data)}>
                                         <UserChatProfile name={data.team_name} lastMessage={data.lastMessage} lastActive="12:14" />
                                     </div>
@@ -217,21 +223,6 @@ const SideBar = ({ setSelectedFriend, setMessages }) => {
                                         onChange={handleTeamNameChange}
                                     />
                                     <div className="friends-list no-scrollbar" style={{ maxHeight: "200px", overflowY: "auto", }}>
-                                        {/* {filteredFriends.map(friend => (
-                                            <div key={friend.id} className="form-check">
-                                                <input
-                                                    className="form-check-input"
-                                                    type="checkbox"
-                                                    value={friend.id}
-                                                    id={`friend-${friend.id}`}
-                                                    checked={selectedFriends.includes(friend.id)}
-                                                    onChange={() => handleFriendSelection(friend.id)}
-                                                />
-                                                <label className="form-check-label" htmlFor={`friend-${friend.id}`}>
-                                                    {friend.name}
-                                                </label>
-                                            </div>
-                                        ))} */}
                                         {filteredFriends.map(friend => (
                                             <div
                                                 key={friend.id}

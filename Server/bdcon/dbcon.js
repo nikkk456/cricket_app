@@ -1,11 +1,11 @@
 const mysql = require("mysql");
-
+require('dotenv').config();
 const conn = mysql.createPool({
     connectionLimit: 10, // Adjust this number based on your needs
-    host: "62.72.28.103",
-    user: "u908545758_cricket_app",
-    password: "Cricket_app&7677",
-    database: "u908545758_cricket_app"
+    host: process.env.HOST,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASES
 });
 
 // conn.connect(err => {

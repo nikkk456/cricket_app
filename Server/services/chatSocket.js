@@ -8,7 +8,7 @@ function handleChatSockets(io) {
         socket.on('joinRoom', ({ user_id, chat_id }) => {
             if (user_id && chat_id) {
                 socket.join(chat_id);
-                console.log(`User ${user_id} joined room ${chat_id}`);
+                console.log(`Userchatsocket ${user_id} joined room ${chat_id}`);
             } else {
                 console.warn('No user ID or chat ID provided for joinRoom');
             }

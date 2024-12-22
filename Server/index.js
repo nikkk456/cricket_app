@@ -2,12 +2,17 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const http = require('http');
-// const initializeSocket = require('./services/friendRequestSocket.js'); // Import the socket service
 
 const app = express();
 const server = http.createServer(app);
 
-app.use(cors());
+app.use(cors({
+    // origin: 'https://cricfight.in', // Allow only this origin for CORS
+    origin: '*',
+    methods: ['GET', 'POST'],
+    credentials: true
+}));
+
 
 // Middleware configuration for JSON body parsing
 app.use(express.json({ limit: '10mb' }));
@@ -34,12 +39,6 @@ app.use("/api/notification",notification);
 app.use("/api/chats",chats);
 app.use("/api/groups",groups);
 
-
-// app.post('/api/generate-referral', (req, res) => {
-//     const userId = req.body.userId; // Assume you have user ID in session or token
-//     const referralCode = userId+"_"+uuidv4();
-//         res.json({ referralCode });
-// });
 
 // Initialize Socket.io
 const initializeSocket = require('./services/initializeSocket');

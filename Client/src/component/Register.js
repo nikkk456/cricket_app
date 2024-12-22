@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import OTPInput from './OTPInput';
 import axiosinstance from '../axios/axiosInstance';
@@ -56,6 +57,7 @@ const Register = () => {
       }
     }).catch((err) => {
       console.log(err);
+      toast(err.response.data.msg);
       if (err.response.status == 400) {
         Setresponse(err.response.data.msg);
         console.log(err.response.data.msg);
@@ -83,6 +85,7 @@ const Register = () => {
       }
 
     }).catch((err) => {
+      toast(err.response.data.msg);
       console.log(err);
     })
   };
@@ -94,6 +97,7 @@ const Register = () => {
   };
   return (
     <div className='container my-3'>
+      <ToastContainer />
       <div className='bona-nova-sc-bold text-center text-red'>
         <h1>You're just a step away from cricket greatness!</h1>
       </div>

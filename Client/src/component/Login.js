@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import Cookies from 'js-cookie';
+import { ToastContainer, toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import Toast from './Toast'
@@ -36,7 +35,9 @@ const Login = () => {
             login(response.data);
             navigate("/")
         }).catch((err) => {
-            console.log(err);
+            setShowLoader(false);
+            toast(err.response.data.msg);
+            console.log(err.response.data.msg);
         });
     }
 
@@ -53,6 +54,7 @@ const Login = () => {
                 showToast ? <Toast show={showToast} message="Internal server error" error="502 Server Error " /> : ""
             }
             <div className='container  my-3'>
+                <ToastContainer />
                 <div className='bona-nova-sc-bold text-center text-red'>
                     <h1>Welcome back Captain!</h1>
                 </div>
@@ -61,11 +63,11 @@ const Login = () => {
                         <img src='./Image/cricketer_with_bat.jpg' alt='Cricket_with_Bat' className='img-fluid' width="100%" />
                     </div>
                     {
-                        showLoader ? 
-                            <div className='col-md-8' style={{display:"flex", alignItems:"center"}}>
+                        showLoader ?
+                            <div className='col-md-8' style={{ display: "flex", alignItems: "center" }}>
                                 <dotlottie-player src="https://lottie.host/fb5d52f2-d675-4352-a182-ee4e1c88bea9/SpTQ74uC8Z.json" background="transparent" speed="1" style={{ width: "300px", height: "100px" }} loop autoplay></dotlottie-player>
-                            </div> 
-                        :
+                            </div>
+                            :
                             <div className='col-md-8'>
                                 <form className='p-4 login-form'>
                                     {/* Sign in with Google and Facebook */}

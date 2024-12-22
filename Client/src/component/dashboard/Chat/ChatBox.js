@@ -1,17 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import EmojiPicker from 'emoji-picker-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 
 
-const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inputValue, onInputChange ,messages , onKeyDown}) => {
-  console.log(messages);
+const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat, onSendmsg, inputValue, onInputChange, messages, onKeyDown }) => {
   const user_id = Cookies.get('user_id');
-  // console.log(selectedFriend.id);
+  // check where the url contains the team Chat or not 
+  const iscontainTeamChat = window.location.pathname.includes("teamschat");
   const chatContainerRef = useRef(null);
   const navigate = useNavigate();
-  const scrollUp = ()=>{
+  const scrollUp = () => {
     console.log("Scroll Up is called");
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
@@ -19,7 +19,7 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inpu
   }
   const handleKeyDown = (e) => {
     onKeyDown(e); // Call the existing onKeyDown function
-      scrollUp(); // Scroll up after handling the key down event
+    scrollUp(); // Scroll up after handling the key down event
   };
   useEffect(() => {
     //To get recent messages on screen and then scroll up for older chats
@@ -53,17 +53,23 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inpu
       <div className='row text-white chat-box-header'>
         {
           mobileChat &&
-            <div className='col-1 p-0' style={{display:"flex", alignItems:"center", justifyContent:"center"}}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-chevron-left" viewBox="0 0 16 16" onClick={()=>{setSelectedFriend(null)}}>
-                <path fillRule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
-              </svg>
-            </div> 
+          <div className='col-1 p-0' style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-chevron-left" viewBox="0 0 16 16" onClick={() => { setSelectedFriend(null) }}>
+              <path fillRule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0" />
+            </svg>
+          </div>
         }
         <div className='col-md-4 col-4 rounded-circle chat-profile'>
-          <img src="https://github.com/mdo.png" className='rounded-circle me-2' alt='...' style={{ width: "100%" }} />
+          <img
+            src={selectedFriend.profilePicture ? selectedFriend.profilePicture : "https://github.com/mdo.png"}
+            className="rounded-circle me-2"
+            alt="Profile"
+            style={{ width: "100%", objectFit: "cover" }}
+          />
+
         </div>
         <div className='col-md-6 col-6' style={{ display: "flex", alignItems: "center", cursor: "pointer" }} onClick={() => { navigate('/playerprofile/1/about') }}>
-          <h5>{name}</h5>
+          <h6>{selectedFriend.name || selectedFriend.team_name}</h6>
         </div>
         <div className='col-md-1 chat-triple-dot'>
           <div className="dropdown">
@@ -82,24 +88,37 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inpu
         </div>
       </div>
       {/* Chat BOX started Here  */}
-      <div className='row' style={{height:"80vh"}}>
+      <div className='row' style={{ height: "80vh" }}>
         <div className="chat-box no-scrollbar chat-box-background" ref={chatContainerRef}>
           {messages.length != 0 ? messages.map((msg, index) => (
             <div key={index} className={`message ${msg.sender != user_id ? 'left' : 'right'}`}>
               {
-                msg.sender != user_id ? <>
-                  <span style={{ display: "flex", alignItems: "flex-start" }}>
+                msg.sender != user_id ? <div style={{ display: "flex", flexDirection: "column" }}>
+                  {
+                    iscontainTeamChat ?
+                      <small style={{ fontSize: "small", color: "#ECDFCC" }} >
+                        {/* Yaha name aaega sender ka BE se  */}
+                        {msg.sender}
+                      </small>
+                      : ""
+                  }
+                  <div style={{ display: "flex", alignItems: "flex-start" }}>
                     <svg viewBox="0 0 8 13" height="13" width="8" preserveAspectRatio="xMidYMid meet" className="" version="1.1" x="0px" y="0px" enableBackground="new 0 0 8 13"><title>tail-in</title><path opacity="0.13" fill="#0000000" d="M1.533,3.568L8,12.193V1H2.812 C1.042,1,0.474,2.156,1.533,3.568z"></path><path fill="currentColor" d="M1.533,2.568L8,11.193V0L2.812,0C1.042,0,0.474,1.156,1.533,2.568z"></path>
                     </svg>
-                  </span>
-                  <div className="message-content-left">
-                    <p style={{ margin: "0px" }}>{msg.messageText}</p>
-                    <small style={{ fontSize: "x-small" }}>{new Date(msg.timestamp).toLocaleTimeString()}</small>
+                    <div className="message-content-left">
+                      <p style={{ margin: "0px" }}>{msg.messageText}</p>
+                      <small style={{ fontSize: "x-small" }}>
+                        {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </small>
+                    </div>
                   </div>
-                </> : <>
+                </div> : <>
                   <div className="message-content-right">
                     <p style={{ margin: "0px" }}>{msg.messageText}</p>
-                    <small style={{ fontSize: "x-small" }}>{new Date(msg.timestamp).toLocaleTimeString()}</small>
+                    <small style={{ fontSize: "x-small" }}>
+                      {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </small>
+
                   </div>
                   <span style={{ display: "flex", alignItems: "flex-start" }}>
                     <svg viewBox="0 0 8 13" height="13" width="8" preserveAspectRatio="xMidYMid meet" className="" version="1.1" x="0px" y="0px" enableBackground="new 0 0 8 13"><title>tail-out</title><path opacity="0.13" d="M5.188,1H0v11.193l6.467-8.625 C7.526,2.156,6.958,1,5.188,1z"></path><path fill="currentColor" d="M5.188,0H0v11.193l6.467-8.625C7.526,1.156,6.958,0,5.188,0z"></path></svg>
@@ -107,9 +126,9 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inpu
                 </>
               }
             </div>
-             )) : <div className='h-100 d-flex justify-content-center align-items-center' style={{ marginTop: "-90px" }}>
-            <p>Start the conversation...</p>
-              </div>}
+          )) : <div className='h-100 d-flex justify-content-center align-items-center' style={{ color:"white" }}>
+            <h5>Start the conversation...</h5>
+          </div>}
         </div>
       </div>
 
@@ -140,6 +159,7 @@ const ChatBox = ({ selectedFriend, setSelectedFriend, mobileChat ,onSendmsg,inpu
             type="text"
             className="form-control"
             id="message"
+            autoComplete='off'
             style={{ borderRadius: "10px" }}
             aria-describedby="emailHelp"
             placeholder='Type a message'

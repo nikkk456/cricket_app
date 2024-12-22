@@ -10,7 +10,8 @@ function LiveScore() {
     const location = useLocation();
     const socket = useContext(SocketContext);
     const [overCompleted, setOverCompleted] = useState();
-    const {matchID} = useParams();
+    const [wicketTaken, setWicketTaken] = useState();
+    const { matchID } = useParams();
 
     const [data, setData] = useState({
         teamARun: 0,
@@ -37,7 +38,13 @@ function LiveScore() {
             });
             socket.on('showOverCompleteAnimation', (data) => {
                 setOverCompleted(data);
+                console.log("Ye hai over complete hone ka ", data);
             })
+            socket.on('showWicketTakenAnimation', (data) => {
+                setWicketTaken(data);
+                console.log("Ye hai wicket complete hone ka ", data);
+            })
+
         }
         // return () => {
         //     socket.off('scoreUpdate');
@@ -127,6 +134,16 @@ function LiveScore() {
                 )
             }
 
+            {
+                wicketTaken && (
+                    <div className="overlay">
+                        <div className="animation-container">
+                            <dotlottie-player src="https://lottie.host/952cc7b1-dd50-4067-8039-5ca02bb2a6c5/wjNWja8u2a.json" background="transparent" speed="1" style={{ width: "600px", height: "600px" }} loop={true} autoplay></dotlottie-player>
+                        </div>
+                    </div>
+                )
+            }
+
 
 
 
@@ -138,7 +155,7 @@ function LiveScore() {
 
             <Routes>
                 <Route path='liveoverview' element={<LiveOverview teamAPlayersData={data.teamAPlayersData} teamBPlayersData={data.teamBPlayersData} challenge={data.challenge} />} />
-                <Route path='commentary' element={<LiveCommentary currentOverRun={data.currentOverRuns}/>}/>
+                <Route path='commentary' element={<LiveCommentary currentOverRun={data.currentOverRuns} />} />
             </Routes>
         </div>
     );
